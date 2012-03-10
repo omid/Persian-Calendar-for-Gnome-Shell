@@ -1,4 +1,4 @@
 To install:
-1- Create a directory with the name of "PersianCalendar@oxygenws.com" at "~/.local/share/gnome-shell/extensions/" directory
+1- Create a directory in "~/.local/share/gnome-shell/extensions/" and name it "PersianCalendar@oxygenws.com"
 2- Copy all files here to the above directory ("~/.local/share/gnome-shell/extensions/PersianCalendar@oxygenws.com/")
 3- Restart the gnome-shell. (ALT+F2, r, Enter)
