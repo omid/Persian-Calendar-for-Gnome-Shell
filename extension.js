@@ -44,8 +44,6 @@ PCalendar.prototype = {
 
         this._date = new PopupMenuItem(toFaDigit(_date));
         this.menu.addMenuItem(this._date);
-        
-        MainLoop.timeout_add(300000, this._updateDate);
     },
 
     _updateDate: function() {
@@ -57,7 +55,7 @@ PCalendar.prototype = {
 		_indicator.label.set_text(toFaDigit(_day));
 		_indicator._date.label.set_text(toFaDigit(_date));
 		
-        MainLoop.timeout_add(300000, _indicator._updateDate);
+		return true;
 	}
 };
 
@@ -182,12 +180,15 @@ function init(metadata) {
 }
 
 let _indicator;
+let _timer;
 
 function enable() {
   _indicator = new PCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
+  MainLoop.timeout_add(300000, _indicator._updateDate);
 }
 
 function disable() {
   _indicator.destroy();
+  _timer.disable();
 }
