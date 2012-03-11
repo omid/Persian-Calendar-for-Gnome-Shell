@@ -185,7 +185,7 @@ let _timer;
 function enable() {
   _indicator = new PCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
-  MainLoop.timeout_add(300000, _indicator._updateDate);
+  _timer = MainLoop.timeout_add(300000, _indicator._updateDate);
 }
 
 function disable() {
