@@ -190,5 +190,5 @@ function enable() {
 
 function disable() {
   _indicator.destroy();
-  _timer.disable();
+  MainLoop.source_remove(_timer);
 }
