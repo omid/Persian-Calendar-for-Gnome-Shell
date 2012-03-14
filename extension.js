@@ -4,7 +4,9 @@ const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
 const MainLoop = imports.mainloop;
 
-//const PersianDate = pcalendar.persian_calendar.PersianDate;
+const Extension = imports.ui.extensionSystem.extensions["PersianCalendar@oxygenws.com"];
+
+const PersianDate = Extension.PersianDate.PersianDate;
 
 function PopupMenuItem(label) {
     this._init(label);
@@ -16,175 +18,118 @@ PopupMenuItem.prototype = {
     _init: function(text) {
         PopupMenu.PopupBaseMenuItem.prototype._init.call(this);
 
-        this.label = new St.Label({ text: text });
-        this.label.set_direction(St.TextDirection.RTL);
+        this.label = new St.Label({ text: text, style: 'direction: rtl;' });
+        this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
         this.addActor(this.label);
     }
 };
 
-function PCalendar() {
+function PersianCalendar() {
     this._init();
 }
 
-PCalendar.prototype = {
+PersianCalendar.prototype = {
     __proto__: PanelMenu.Button.prototype,
 
     _init: function() {
         PanelMenu.Button.prototype._init.call(this, 0.0);
-        
-        var _date = new Date();
-        _date = PersianDate.gregorianToPersian(_date.getFullYear(),_date.getMonth()+1,_date.getDate());
-        var _day = _date[2] + '';
-        //_date = _date[0] + '/' + PersianDate.p_month_names[_date[1]-1] + '/' + _date[2];
-        _date = _date[0] + ' / ' + _date[1] + ' / ' + _date[2];
 
-        this.label = new St.Label({ text: toFaDigit(_day) });
-        this.label.set_direction(St.TextDirection.RTL);
+        this.label = new St.Label({ text: '', style: 'direction: rtl' });
+        this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
         this.actor.add_actor(this.label);
 
-        this._date = new PopupMenuItem(toFaDigit(_date));
+        this._date = new PopupMenuItem('');
         this.menu.addMenuItem(this._date);
     },
 
     _updateDate: function() {
 		var _date = new Date();
         _date = PersianDate.gregorianToPersian(_date.getFullYear(),_date.getMonth()+1,_date.getDate());
-        var _day = _date[2] + '';
-        _date = _date[0] + ' / ' + _date[1] + ' / ' + _date[2];
+        var _day = strFormat(_date[2] + '');
+        _date = strFormat(_date[2] + ' ' + PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
 
-		_indicator.label.set_text(toFaDigit(_day));
-		_indicator._date.label.set_text(toFaDigit(_date));
+		_indicator.label.set_text(_day);
+		_indicator._date.label.set_text(_date);
 		
 		return true;
 	}
 };
 
-function toFaDigit (digit) {
-	return digit.replace(/\d+/g, function(digit) {
-		var ret = '';
-
-		for (var i = 0, len = digit.length; i < len; i++) {
-			ret += String.fromCharCode(digit.charCodeAt(i) + 1728);
-		}
-
-		return ret;
-	});
+function strFormat(str, convert_numbers) {
+	if(!convert_numbers){
+		convert_numbers = true;
+	}
+	
+	var enums   = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+	var pnums   = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+	
+	var ncodes = ['\u06F0', '\u06F1', '\u06F2', '\u06F3', '\u06F4',
+	              '\u06F5', '\u06F6', '\u06F7', '\u06F8', '\u06F9'];
+				  
+	var chars = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د',
+				 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع',
+				 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی'];
+	
+	var ccodes = ['\u0622', '\u0627', '\u0628', '\u067E', '\u062A',
+		 		  '\u062B', '\u062C', '\u0686', '\u062D', '\u062E',
+				  '\u062F', '\u0630', '\u0631', '\u0632', '\u0698',
+				  '\u0633', '\u0634', '\u0635', '\u0636', '\u0637',
+				  '\u0638', '\u0639', '\u063A', '\u0641', '\u0642',
+				  '\u06A9', '\u06AF', '\u0644', '\u0645', '\u0646',
+				  '\u0648', '\u0647', '\u0649'];
+				  
+	if(convert_numbers){
+		str = str_replace(enums, ncodes, str);
+		str = str_replace(pnums, ncodes, str);
+	}
+	
+	return str_replace(chars, ccodes, str);
 }
 
-let PersianDate = {
-    g_days_in_month: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-    p_days_in_month: [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29],
-    p_month_names: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
-};
-
-PersianDate.persianToGregorian = function(p_y, p_m, p_d)
-{
-    p_y = parseInt(p_y);
-    p_m = parseInt(p_m);
-    p_d = parseInt(p_d);
-    var py = p_y-979;
-    var pm = p_m-1;
-    var pd = p_d-1;
-
-    var p_day_no = 365*py + parseInt(py / 33)*8 + parseInt((py%33+3) / 4);
-    for (var i=0; i < pm; ++i) p_day_no += PersianDate.p_days_in_month[i];
-
-    p_day_no += pd;
-
-    var g_day_no = p_day_no+79;
-
-    var gy = 1600 + 400 * parseInt(g_day_no / 146097); /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
-    g_day_no = g_day_no % 146097;
-
-    var leap = true;
-    if (g_day_no >= 36525) /* 36525 = 365*100 + 100/4 */
-    {
-        g_day_no--;
-        gy += 100*parseInt(g_day_no/  36524); /* 36524 = 365*100 + 100/4 - 100/100 */
-        g_day_no = g_day_no % 36524;
-
-        if (g_day_no >= 365)
-            g_day_no++;
-        else
-            leap = false;
+/* copied from http://phpjs.org/functions/str_replace */
+function str_replace (search, replace, subject, count) {
+    var i = 0,
+        j = 0,
+        temp = '',
+        repl = '',
+        sl = 0,
+        fl = 0,
+        f = [].concat(search),
+        r = [].concat(replace),
+        s = subject,
+        ra = Object.prototype.toString.call(r) === '[object Array]',
+        sa = Object.prototype.toString.call(s) === '[object Array]';
+    s = [].concat(s);
+    if (count) {
+        this.window[count] = 0;
     }
 
-    gy += 4*parseInt(g_day_no/ 1461); /* 1461 = 365*4 + 4/4 */
-    g_day_no %= 1461;
-
-    if (g_day_no >= 366) {
-        leap = false;
-
-        g_day_no--;
-        gy += parseInt(g_day_no/ 365);
-        g_day_no = g_day_no % 365;
+    for (i = 0, sl = s.length; i < sl; i++) {
+        if (s[i] === '') {
+            continue;
+        }
+        for (j = 0, fl = f.length; j < fl; j++) {
+            temp = s[i] + '';
+            repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0];
+            s[i] = (temp).split(f[j]).join(repl);
+            if (count && s[i] !== temp) {
+                this.window[count] += (temp.length - s[i].length) / f[j].length;
+            }
+        }
     }
-
-    for (var i = 0; g_day_no >= PersianDate.g_days_in_month[i] + (i == 1 && leap); i++)
-        g_day_no -= PersianDate.g_days_in_month[i] + (i == 1 && leap);
-    var gm = i+1;
-    var gd = g_day_no+1;
-
-    return [gy, gm, gd];
-}
-
-PersianDate.checkDate = function(p_y, p_m, p_d)
-{
-    return !(p_y < 0 || p_y > 32767 || p_m < 1 || p_m > 12 || p_d < 1 || p_d >
-        (PersianDate.p_days_in_month[p_m-1] + (p_m == 12 && !((p_y-979)%33%4))));
-}
-
-PersianDate.gregorianToPersian = function(g_y, g_m, g_d)
-{
-    g_y = parseInt(g_y);
-    g_m = parseInt(g_m);
-    g_d = parseInt(g_d);
-    var gy = g_y-1600;
-    var gm = g_m-1;
-    var gd = g_d-1;
-
-    var g_day_no = 365*gy+parseInt((gy+3) / 4)-parseInt((gy+99)/100)+parseInt((gy+399)/400);
-
-    for (var i=0; i < gm; ++i)
-    g_day_no += PersianDate.g_days_in_month[i];
-    if (gm>1 && ((gy%4==0 && gy%100!=0) || (gy%400==0)))
-    /* leap and after Feb */
-    ++g_day_no;
-    g_day_no += gd;
-
-    var p_day_no = g_day_no-79;
-
-    var p_np = parseInt(p_day_no/ 12053);
-    p_day_no %= 12053;
-
-    var py = 979+33*p_np+4*parseInt(p_day_no/1461);
-
-    p_day_no %= 1461;
-
-    if (p_day_no >= 366) {
-        py += parseInt((p_day_no-1)/ 365);
-        p_day_no = (p_day_no-1)%365;
-    }
-
-    for (var i = 0; i < 11 && p_day_no >= PersianDate.p_days_in_month[i]; ++i) {
-        p_day_no -= PersianDate.p_days_in_month[i];
-    }
-    var pm = i+1;
-    var pd = p_day_no+1;
-
-
-    return [py, pm, pd];
-}
-
-function init(metadata) {
+    return sa ? s : s[0];
 }
 
 let _indicator;
 let _timer;
 
+function init(metadata) {
+}
+
 function enable() {
-  _indicator = new PCalendar;
+  _indicator = new PersianCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
+  _indicator._updateDate();
   _timer = MainLoop.timeout_add(300000, _indicator._updateDate);
 }
 
