@@ -4,9 +4,9 @@ const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
 const MainLoop = imports.mainloop;
 
-const Extension = imports.ui.extensionSystem.extensions["PersianCalendar@oxygenws.com"];
-
-const PersianDate = Extension.PersianDate.PersianDate;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const PersianDate = Me.imports.PersianDate;
 
 function PopupMenuItem(label) {
     this._init(label);
@@ -19,7 +19,7 @@ PopupMenuItem.prototype = {
         PopupMenu.PopupBaseMenuItem.prototype._init.call(this);
 
         this.label = new St.Label({ text: text, style: 'direction: rtl;' });
-        this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
+        //this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
         this.addActor(this.label);
     }
 };
@@ -35,7 +35,7 @@ PersianCalendar.prototype = {
         PanelMenu.Button.prototype._init.call(this, 0.0);
 
         this.label = new St.Label({ text: '', style: 'direction: rtl' });
-        this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
+        //this.label.set_direction(St.TextDirection.RTL); // it should be RTL, but it is not RTL!!
         this.actor.add_actor(this.label);
 
         this._date = new PopupMenuItem('');
@@ -44,9 +44,9 @@ PersianCalendar.prototype = {
 
     _updateDate: function() {
 		var _date = new Date();
-        _date = PersianDate.gregorianToPersian(_date.getFullYear(),_date.getMonth()+1,_date.getDate());
+        _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(),_date.getMonth()+1,_date.getDate());
         var _day = strFormat(_date[2] + '');
-        _date = strFormat(_date[2] + ' ' + PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
+        _date = strFormat(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
 
 		_indicator.label.set_text(_day);
 		_indicator._date.label.set_text(_date);
@@ -86,6 +86,7 @@ function strFormat(str, convert_numbers) {
 	return str_replace(chars, ccodes, str);
 }
 
+// to make it compatible with gnome-shell 3.3, I include this class to this file!
 /* copied from http://phpjs.org/functions/str_replace */
 function str_replace (search, replace, subject, count) {
     var i = 0,
