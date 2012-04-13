@@ -96,7 +96,9 @@ PersianDate.gregorianToPersian = function(g_y, g_m, g_d)
         py += parseInt((p_day_no-1)/ 365);
         p_day_no = (p_day_no-1)%365;
     }
-
+    
+    var day_in_year = p_day_no+1;
+    
     for (var i = 0; i < 11 && p_day_no >= PersianDate.p_days_in_month[i]; ++i) {
         p_day_no -= PersianDate.p_days_in_month[i];
     }
@@ -104,5 +106,5 @@ PersianDate.gregorianToPersian = function(g_y, g_m, g_d)
     var pd = p_day_no+1;
 
 
-    return [py, pm, pd];
+    return [py, pm, pd, day_in_year];
 }
