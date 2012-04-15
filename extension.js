@@ -46,10 +46,10 @@ PersianCalendar.prototype = {
         this.actor.add_actor(this.label);
         
         this._eventsList = Array();
-        this._eventsList.push(new persian.persian);
+        this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         this._eventsList.push(new world.world);
         this._eventsList.push(new iranSolar.iranSolar);
-        //this._eventsList.push(new iranLunar);
+        //this._eventsList.push(new iranLunar.iranLunar(PersianDate.PersianDate));
         
         this._today  = '';
         
@@ -59,15 +59,15 @@ PersianCalendar.prototype = {
 
     _updateDate: function() {
         this._isHoliday = false;
-        this._date = new Date();
+        let _date = new Date();
         this._events = '';
         
         // if it is friday
-        if(this._date.getDay() == 5) this._isHoliday = true;
+        if(_date.getDay() == 5) this._isHoliday = true;
         
         // convert to Persian
-        this._date = PersianDate.PersianDate.gregorianToPersian(this._date.getFullYear(), this._date.getMonth() + 1, this._date.getDate());
-        this._day_in_year = this._date[3];
+        _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
+        this._day_in_year = _date[3];
         
         // if today is "today" just return, don't change anything!
         if(this._today == this._day_in_year){
@@ -78,13 +78,14 @@ PersianCalendar.prototype = {
         this._today = this._day_in_year;
         
         // set indicator label and popupmenu
-        var _day = strFormat(this._date[2] + '');
-        this._date = strFormat(this._date[2] + ' ' + PersianDate.PersianDate.p_month_names[this._date[1]-1] + ' ' + this._date[0]);
+        var _day = strFormat(_date[2] + '');
+        _date = strFormat(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
         
         // get events of today
         this._eventsList.forEach(function(el){
             el.events.forEach(this._checkEvent, this);
         }, this);
+        this._events = this._events != '' ? "\n" + this._events : ''
         
         // is holiday?
         if(this._isHoliday){
@@ -94,9 +95,9 @@ PersianCalendar.prototype = {
         }
         
         this.label.set_text(_day);
-        this.popupMenuLabel.label.set_text(this._date + "\n" + this._events);
+        this.popupMenuLabel.label.set_text(_date + this._events);
         
-        notify(this, this._date, this._events);
+        notify(this, _date, this._events);
         
         return true;
     },
@@ -240,7 +241,7 @@ function enable() {
   _indicator = new PersianCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
   _indicator._updateDate();
-  _timer = MainLoop.timeout_add(300000, Lang.bind(_indicator, _indicator._updateDate));
+  _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
 function disable() {

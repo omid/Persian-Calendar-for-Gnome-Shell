@@ -1,7 +1,7 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-function persian() {
-    this._init();
+function persian(pdate) {
+    this._init(pdate);
 };
 
 persian.prototype = {
@@ -79,40 +79,40 @@ persian.prototype = {
         [365, 'گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان / زادروز زرتشت / جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه / آتش افروزی بر بام‌ها در استقبال از نوروز', false],
     ],
     
-    _init: function() {
+    _init: function(pdate) {
+		let date = new Date();
+		let date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
+		let year = date[0];
+		
+		var first_wednesday_of_year;
+		var last_wednesday_of_year;
+		
+        // find first wednesday of the year
+        for(let i=1; i<=7; i++){
+			let p_ts = pdate.persianToGregorian(year, 1, i);
+            p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2], 5); /* do not remove this 5 :D */
+            if(p_ts.getDay() == 3){
+				let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
+                first_wednesday_of_year = dummy_date[3];
+                break;
+            }
+        }
+
+        // find last wednesday of the year
+        let leap = ((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
+        
+        for(let i=1; i<=7; i++){
+			let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
+            p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2]);
+            if(p_ts.getDay() == 3){
+				let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
+                last_wednesday_of_year = dummy_date[3];
+                break;
+            }
+        }
+
+        this.events.push([first_wednesday_of_year, 'جشن نخستین چهارشنبه سال', false]);
+        this.events.push([last_wednesday_of_year - 1, 'چارشنبه سوری، جشن شب چهارشنبه آخر', false]);
+        this.events.push([last_wednesday_of_year, 'چارشنبه آخر', false]);
     }
 };
-
-/* huh, my old php codes, I should change them to JS!
-if(!isset($year)){
-    $year = persian_calendar::date('Y', '', false);
-}
-
-// find first wednesday of the year
-for($i=1; $i<=7; $i++){
-    $p_ts = persian_calendar::mktime(0, 0, 0, 1, $i, $year);
-    if(persian_calendar::date('N', $p_ts, false) == 4){
-        $first_wednesday_of_year = persian_calendar::date('z', $p_ts, false) + 1;
-        break;
-    }
-}
-
-// find last wednesday of the year
-$leap = persian_calendar::date('L');
-
-for($i=0; $i<7; $i++){
-    $p_ts = persian_calendar::mktime(0, 0, 0, 12, 29 + $leap - $i, $year);
-    if(persian_calendar::date('N', $p_ts, false) == 4){
-        $last_wednesday_of_year = persian_calendar::date('z', $p_ts, false) + 1;
-        break;
-    }
-}
-
-$p_events[] = [$first_wednesday_of_year, 'جشن نخستین چهارشنبه سال', false);
-$p_events[] = [$last_wednesday_of_year - 1, 'چارشنبه سوری، جشن شب چهارشنبه آخر', false);
-$p_events[] = [$last_wednesday_of_year, 'چارشنبه آخر', false);
-
-$events[] = $p_events;
-
-unset($p_events);
-*/
