@@ -184,7 +184,7 @@ function enable() {
   _indicator = new PersianCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
   _indicator._updateDate();
-  _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
+  _timer = MainLoop.timeout_add(300000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
 function disable() {
