@@ -4,6 +4,7 @@ const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
 const MainLoop = imports.mainloop;
 const Lang = imports.lang;
+const MessageTray = imports.ui.messageTray;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -44,13 +45,13 @@ PersianCalendar.prototype = {
         this.label = new St.Label({ text: '', style: 'direction: rtl' });
         this.actor.add_actor(this.label);
         
-        this._events = Array();
-        this._events.push(new persian.persian);
-        this._events.push(new world.world);
-        this._events.push(new iranSolar.iranSolar);
-        //this._events.push(new iranLunar);
+        this._eventsList = Array();
+        this._eventsList.push(new persian.persian);
+        this._eventsList.push(new world.world);
+        this._eventsList.push(new iranSolar.iranSolar);
+        //this._eventsList.push(new iranLunar);
         
-        this.today = '';
+        this._today  = '';
         
         this.popupMenuLabel = new PopupMenuItem('');
         this.menu.addMenuItem(this.popupMenuLabel);
@@ -59,7 +60,7 @@ PersianCalendar.prototype = {
     _updateDate: function() {
         this._isHoliday = false;
         this._date = new Date();
-        this._day_in_year;
+        this._events = '';
         
         // if it is friday
         if(this._date.getDay() == 5) this._isHoliday = true;
@@ -69,19 +70,19 @@ PersianCalendar.prototype = {
         this._day_in_year = this._date[3];
         
         // if today is "today" just return, don't change anything!
-        if(this.today == this._day_in_year){
+        if(this._today == this._day_in_year){
             return true;
         }
         
         // set today as "today"
-        this.today = this._day_in_year;
+        this._today = this._day_in_year;
         
         // set indicator label and popupmenu
         var _day = strFormat(this._date[2] + '');
         this._date = strFormat(this._date[2] + ' ' + PersianDate.PersianDate.p_month_names[this._date[1]-1] + ' ' + this._date[0]);
         
         // get events of today
-        this._events.forEach(function(el){
+        this._eventsList.forEach(function(el){
             el.events.forEach(this._checkEvent, this);
         }, this);
         
@@ -93,14 +94,16 @@ PersianCalendar.prototype = {
         }
         
         this.label.set_text(_day);
-        this.popupMenuLabel.label.set_text(this._date);
+        this.popupMenuLabel.label.set_text(this._date + "\n" + this._events);
+        
+        notify(this, this._date, this._events);
         
         return true;
     },
     
     _checkEvent: function(el) {
         if(this._day_in_year == el[0]){
-            this._date = this._date + "\n" + strFormat(el[1]);
+            this._events = this._events + "\n" + strFormat(el[1]);
             this._isHoliday = this._isHoliday || el[2];
         }
     }
@@ -173,6 +176,59 @@ function str_replace (search, replace, subject, count) {
     }
     return sa ? s : s[0];
 }
+
+
+function NotificationSource() {
+    this._init();
+};
+
+NotificationSource.prototype = {
+     __proto__:  MessageTray.Source.prototype,
+
+    _init: function() {
+        MessageTray.Source.prototype._init.call(this, "");
+
+        let icon = new St.Icon({ icon_name: 'starred',
+                                 icon_type: St.IconType.SYMBOLIC,
+                                 icon_size: this.ICON_SIZE
+                               });
+        this._setSummaryIcon(icon);
+    }
+};
+
+let msg_source;
+
+function ensureMessageSource() {
+    if (!msg_source) {
+        msg_source = new NotificationSource();
+        msg_source.connect('destroy', Lang.bind(this, function() {
+            msg_source = null;
+        }));
+        Main.messageTray.add(msg_source);
+    }
+};
+
+function notify(device, title, text) {
+    if (device._notification)
+        device._notification.destroy();
+    
+    // must call after destroying previous notification,
+    // or msg_source will be cleared 
+    ensureMessageSource();
+    let icon = new St.Icon({ icon_name: 'starred',
+                             icon_type: St.IconType.SYMBOLIC,
+                             icon_size: msg_source.ICON_SIZE
+                           });
+    device._notification = new MessageTray.Notification(msg_source, title,
+                                                        text, { icon: icon });
+    device._notification.setUrgency(MessageTray.Urgency.LOW);
+    device._notification.setTransient(true);
+    device._notification.connect('destroy', function() {
+        device._notification = null;
+    });
+    msg_source.notify(device._notification);
+};
+
 
 let _indicator;
 let _timer;
