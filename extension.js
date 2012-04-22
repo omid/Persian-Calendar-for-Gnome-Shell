@@ -119,7 +119,8 @@ function strFormat(str, convert_numbers) {
                   
     var chars = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د',
                  'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع',
-                 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی'];
+                 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی',
+                 '،', '؟', '‌'/*zwnj*/];
     
     var ccodes = ['\u0622', '\u0627', '\u0628', '\u067E', '\u062A',
                    '\u062B', '\u062C', '\u0686', '\u062D', '\u062E',
@@ -127,7 +128,8 @@ function strFormat(str, convert_numbers) {
                   '\u0633', '\u0634', '\u0635', '\u0636', '\u0637',
                   '\u0638', '\u0639', '\u063A', '\u0641', '\u0642',
                   '\u06A9', '\u06AF', '\u0644', '\u0645', '\u0646',
-                  '\u0648', '\u0647', '\u06CC'];
+                  '\u0648', '\u0647', '\u06CC', '\u060C', '\u061F',
+                  '\u200C'];
                   
     if(convert_numbers){
         str = str_replace(enums, ncodes, str);
@@ -182,7 +184,7 @@ function enable() {
   _indicator = new PersianCalendar;
   Main.panel.addToStatusArea('persian_calendar', _indicator);
   _indicator._updateDate();
-  _timer = MainLoop.timeout_add(300000, Lang.bind(_indicator, _indicator._updateDate));
+  _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
 function disable() {
