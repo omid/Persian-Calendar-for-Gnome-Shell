@@ -10,12 +10,14 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const PersianDate = Me.imports.PersianDate;
+const HijriDate = Me.imports.HijriDate;
 
 // events
 const persian = Me.imports.events.persian;
 const world = Me.imports.events.world;
 const iranSolar = Me.imports.events.iranSolar;
-//const iranLunar = Me.imports.events.iranLunar;
+const iranLunar = Me.imports.events.iranLunar;
+const persianPersonage = Me.imports.events.persianPersonage;
 
 function PopupMenuItem(label) {
     this._init(label);
@@ -49,9 +51,11 @@ PersianCalendar.prototype = {
         this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         this._eventsList.push(new world.world);
         this._eventsList.push(new iranSolar.iranSolar);
-        //this._eventsList.push(new iranLunar.iranLunar(PersianDate.PersianDate));
+        this._eventsList.push(new iranLunar.iranLunar());
+        this._eventsList.push(new persianPersonage.persianPersonage());
         
         this._today  = '';
+        this.today  = [3];
         
         this.popupMenuLabel = new PopupMenuItem('');
         this.menu.addMenuItem(this.popupMenuLabel);
@@ -65,26 +69,30 @@ PersianCalendar.prototype = {
         // if it is friday
         if(_date.getDay() == 5) this._isHoliday = true;
         
+        // store gregorian date of today
+        this.today[0] = [_date.getFullYear(), _date.getMonth() + 1, _date.getDate()];
+        
         // convert to Persian
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
-        this._day_in_year = _date[3];
+         // store persian date of today
+         this.today[1] = _date;
+         // store persian date of today
+         this.today[2] = HijriDate.HijriDate.ToHijri(this.today[0][0], this.today[0][1], this.today[0][2]);
         
         // if today is "today" just return, don't change anything!
-        if(this._today == this._day_in_year){
+        if(this._today == _date[3]){
             return true;
         }
         
         // set today as "today"
-        this._today = this._day_in_year;
+        this._today = _date[3];
         
         // set indicator label and popupmenu
         var _day = strFormat(_date[2] + '');
         _date = strFormat(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
         
         // get events of today
-        this._eventsList.forEach(function(el){
-            el.events.forEach(this._checkEvent, this);
-        }, this);
+        this._eventsList.forEach(this._checkEvent, this);
         this._events = this._events != '' ? "\n" + this._events : ''
         
         // is holiday?
@@ -103,9 +111,22 @@ PersianCalendar.prototype = {
     },
     
     _checkEvent: function(el) {
-        if(this._day_in_year == el[0]){
-            this._events = this._events + "\n" + strFormat(el[1]);
-            this._isHoliday = this._isHoliday || el[2];
+        let type = 0;
+        
+        switch(el.type){
+            case 'gregorian':
+                type = 0; break;
+            case 'persian':
+                type = 1; break;
+            case 'hijri':
+                type = 2; break;
+        }
+        
+        // if event is available, set event
+        // and if it is holiday, set today as holiday!
+        if(el.events[this.today[type][1]] && el.events[this.today[type][1]][this.today[type][2]]){
+            this._events = this._events + "\n" + strFormat(el.events[this.today[type][1]][this.today[type][2]][0]);
+            this._isHoliday = this._isHoliday || el.events[this.today[type][1]][this.today[type][2]][1];
         }
     }
 };
@@ -124,7 +145,7 @@ function strFormat(str, convert_numbers) {
     var chars = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د',
                  'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع',
                  'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی',
-                 '،', '؟', '‌'/*zwnj*/];
+                 '،', '؟', '‌'/*zwnj*/, 'َ', 'ِ', 'ُ'];
     
     var ccodes = ['\u0622', '\u0627', '\u0628', '\u067E', '\u062A',
                    '\u062B', '\u062C', '\u0686', '\u062D', '\u062E',
@@ -133,7 +154,7 @@ function strFormat(str, convert_numbers) {
                   '\u0638', '\u0639', '\u063A', '\u0641', '\u0642',
                   '\u06A9', '\u06AF', '\u0644', '\u0645', '\u0646',
                   '\u0648', '\u0647', '\u06CC', '\u060C', '\u061F',
-                  '\u200C'];
+                  '\u200C', '\u064E', '\u0650', '\u064F'];
                   
     if(convert_numbers){
         str = str_replace(enums, ncodes, str);
@@ -143,7 +164,6 @@ function strFormat(str, convert_numbers) {
     return str_replace(chars, ccodes, str);
 }
 
-// to make it compatible with gnome-shell 3.3, I include this class to this file!
 /* copied from http://phpjs.org/functions/str_replace */
 function str_replace (search, replace, subject, count) {
     var i = 0,
