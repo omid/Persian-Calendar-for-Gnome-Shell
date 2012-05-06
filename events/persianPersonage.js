@@ -1,10 +1,10 @@
 // copyright http://www.farhangiran.com
 
-function persianPersons() {
+function persianPersonage() {
     this._init();
 };
 
-persianPersons.prototype = {
+persianPersonage.prototype = {
     name: 'شخصیت‌های ایرانی',
     type: 'persian',
     /* [month][day] = [title, isHoliday] */
