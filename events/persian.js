@@ -6,113 +6,117 @@ function persian(pdate) {
 
 persian.prototype = {
     name: 'مناسبت‌های ملی',
-    events: [
-        // farvardin // +0
-        [1, 'جشن نوروز', false],
-        [6, 'روز امید / روز شادباش‌نویسی', false],
-        [10, 'جشن آبان‌گاه', false],
-        [13, 'جشن سیزده‌به‌در', false],
-        [17, 'سروش روز، جشن سروش‌گان', false],
-        [19, 'فروردین روز، جشن فروردین‌گان', false],
-        // ordibehesht // +31
-        [33, 'جشن گیاه‌آوری', false],
-        [34, 'اردیبهشت روز، جشن اردیبهشت‌گان', false],
-        [41, 'جشن چهلم نوروز', false],
-        [46, 'گاهنبار میدیوزَرِم، جشن میانه بهار، جشن بهاربد / روز پیام‌آوری زرتشت', false],
-        // khordad // +62
-        [63, 'ارغاسوان، جشن گرما', false],
-        [68, 'خرداد روز، جشن خردادگان', false],
-        // tir // +93
-        [94, 'جشن آب‌پاشونک، جشن آغاز تابستان / سال نو در گاهشماری گاهنباری', false],
-        [99, 'جشن نیلوفر', false],
-        [106, 'تیرروز، جشن تیرگان', false],
-        [108, 'جشن خام‌خواری', false],
-        // mordad // +124
-        [131, 'مردادروز، جشن مردادگان', false],
-        [134, 'جشن چهلم تابستان', false],
-        [139, 'گاهنبار میدیوشِم، جشن میانه تابستان', false],
-        [142, 'جشن مَی‌خواره', false],
-        // shahrivar // +155
-        [156, 'فغدیه، جشن خنکی هوا', false],
-        [158, 'جشن کشمین', false],
-        [159, 'شهریورروز، جشن شهریورگان / زادروز داراب (کوروش) / عروج مانی', false],
-        [163, 'خزان جشن', false],
-        [170, 'بازار جشن', false],
-        [186, 'گاهنبار پَتیَه‌شَهیم، جشن پایان تابستان', false],
-        // mehr // +186
-        [187, 'جشن میتراکانا / سال نو هخامنشی', false],
-        [195, 'آیین قالیشویان اردهال، بازماندی از تیرگان', false],
-        [199, 'تیرروز، جشن تیرروزی', false],
-        [202, 'مهرروز، جشن مهرگان', false],
-        [207, 'رام روز، جشن رام روزی / جشن پیروزی کاوه و فریدون', false],
-        // aban // +216
-        [226, 'آبان روز، جشن آبان‌گان', false],
-        [231, 'گاهنبار اَیاثرَم، جشن میانه پاییز', false],
-        // azar // +246
-        [247, 'آذر جشن', false],
-        [255, 'آذر روز، جشن آذرگان', false],
-        [276, 'جشن شب یلدا (چله) / گاهنبار میدیارِم، جشن میانه سال گاهنباری و پایان پاییز', false],
-        // dey // +276
-        [277, 'روز میلاد خورشید، جشن خرم روز / نخستین جشن دی‌گان', false],
-        [281, 'بازار جشن', false],
-        [284, 'دی به آذر روز، دومین جشن دی‌گان', false],
-        [290, 'سیر روز، جشن گیاه‌خواری', false],
-        [291, 'جشن پیکرتراشی / دی به مهر روز، سومین جشن دی‌گان', false],
-        [292, 'جشن درامزینان، جشن درفش‌ها', false],
-        [299, 'دی به دین روز، چهارمین جشن دی‌گان', false],
-        // bahman // +306
-        [307, 'زادروز فردوسی', false],
-        [308, 'بهمن روز، جشن بهمن‌گان', false],
-        [310, 'شهریور روز، آغاز پادشاهی داراب (کوروش)', false],
-        [311, 'جشن نوسَره', false],
-        [316, 'آبان روز، جشن سَدَه، آتش افروزی بر بام‌ها / نمایش بازی همگانی', false],
-        [321, 'جشن میانه زمستان', false],
-        [328, 'بادروز، جشن بادروزی', false],
-        // esfand // +336
-        [337, 'جشن اسفندی / جشن آبسالان، بهار جشن / نمایش بازی همگانی', false],
-        [341, 'اسفند روز، جشن اسفندگان، گرامی‌داشت زمین و بانوان / جشن برزگران', false],
-        [346, 'جشن وخشنکام', false],
-        [355, 'جشن نوروز رودها', false],
-        [356, 'جشن گلدان', false],
-        [361, 'پایان سرایش شاهنامه فردوسی', false],
-        [362, 'فروردگان', false],
-        [365, 'گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان / زادروز زرتشت / جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه / آتش افروزی بر بام‌ها در استقبال از نوروز', false],
-    ],
+    type: 'persian',
+    /* [month][day] = [title, isHoliday] */
+    events: [[],[],[],[],[],[],[],[],[],[],[],[],[]],
     
     _init: function(pdate) {
-		let date = new Date();
-		let date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
-		let year = date[0];
-		
-		var first_wednesday_of_year;
-		var last_wednesday_of_year;
-		
+        this.events[1][1] = ['جشن نوروز', false];
+        this.events[1][6] = ['روز امید / روز شادباش‌نویسی', false];
+        this.events[1][10] = ['جشن آبان‌گاه', false];
+        this.events[1][13] = ['جشن سیزده‌به‌در', false];
+        this.events[1][17] = ['سروش روز، جشن سروش‌گان', false];
+        this.events[1][19] = ['فروردین روز، جشن فروردین‌گان', false];
+        this.events[2][2] = ['جشن گیاه‌آوری', false];
+        this.events[2][3] = ['اردیبهشت روز، جشن اردیبهشت‌گان', false];
+        this.events[2][10] = ['جشن چهلم نوروز', false];
+        this.events[2][15] = ['گاهنبار میدیوزَرِم، جشن میانه بهار، جشن بهاربد / روز پیام‌آوری زرتشت', false];
+        this.events[3][1] = ['ارغاسوان، جشن گرما', false];
+        this.events[3][6] = ['خرداد روز، جشن خردادگان', false];
+        this.events[4][1] = ['جشن آب‌پاشونک، جشن آغاز تابستان / سال نو در گاهشماری گاهنباری', false];
+        this.events[4][6] = ['جشن نیلوفر', false];
+        this.events[4][13] = ['تیرروز، جشن تیرگان', false];
+        this.events[4][15] = ['جشن خام‌خواری', false];
+        this.events[5][7] = ['مردادروز، جشن مردادگان', false];
+        this.events[5][10] = ['جشن چهلم تابستان', false];
+        this.events[5][15] = ['گاهنبار میدیوشِم، جشن میانه تابستان', false];
+        this.events[5][18] = ['جشن مَی‌خواره', false];
+        this.events[6][1] = ['فغدیه، جشن خنکی هوا', false];
+        this.events[6][3] = ['جشن کشمین', false];
+        this.events[6][4] = ['شهریورروز، جشن شهریورگان / زادروز داراب (کوروش) / عروج مانی', false];
+        this.events[6][8] = ['خزان جشن', false];
+        this.events[6][15] = ['بازار جشن', false];
+        this.events[6][31] = ['گاهنبار پَتیَه‌شَهیم، جشن پایان تابستان', false];
+        this.events[7][1] = ['جشن میتراکانا / سال نو هخامنشی', false];
+        this.events[7][14] = ['تیرروز، جشن تیرروزی', false];
+        this.events[7][13] = ['آیین قالیشویان اردهال، بازماندی از تیرگان', false];
+        this.events[7][16] = ['مهرروز، جشن مهرگان', false];
+        this.events[7][21] = ['رام روز، جشن رام روزی / جشن پیروزی کاوه و فریدون', false];
+        this.events[8][10] = ['آبان روز، جشن آبان‌گان', false];
+        this.events[8][15] = ['گاهنبار اَیاثرَم، جشن میانه پاییز', false];
+        this.events[9][1] = ['آذر جشن', false];
+        this.events[9][9] = ['آذر روز، جشن آذرگان', false];
+        this.events[9][30] = ['جشن شب یلدا (چله) / گاهنبار میدیارِم، جشن میانه سال گاهنباری و پایان پاییز', false];
+        this.events[10][1] = ['روز میلاد خورشید، جشن خرم روز / نخستین جشن دی‌گان', false];
+        this.events[10][5] = ['بازار جشن', false];
+        this.events[10][8] = ['دی به آذر روز، دومین جشن دی‌گان', false];
+        this.events[10][14] = ['سیر روز، جشن گیاه‌خواری', false];
+        this.events[10][15] = ['جشن پیکرتراشی / دی به مهر روز، سومین جشن دی‌گان', false];
+        this.events[10][16] = ['جشن درامزینان، جشن درفش‌ها', false];
+        this.events[10][23] = ['دی به دین روز، چهارمین جشن دی‌گان', false];
+        this.events[11][2] = ['بهمن روز، جشن بهمن‌گان', false];
+        this.events[11][4] = ['شهریور روز، آغاز پادشاهی داراب (کوروش)', false];
+        this.events[11][5] = ['جشن نوسَره', false];
+        this.events[11][10] = ['آبان روز، جشن سَدَه، آتش افروزی بر بام‌ها / نمایش بازی همگانی', false];
+        this.events[11][15] = ['جشن میانه زمستان', false];
+        this.events[11][22] = ['بادروز، جشن بادروزی', false];
+        this.events[12][1] = ['جشن اسفندی / جشن آبسالان، بهار جشن / نمایش بازی همگانی', false];
+        this.events[12][5] = ['اسفند روز، جشن اسفندگان، گرامی‌داشت زمین و بانوان / جشن برزگران', false];
+        this.events[12][10] = ['جشن وخشنکام', false];
+        this.events[12][19] = ['جشن نوروز رودها', false];
+        this.events[12][20] = ['جشن گلدان', false];
+        this.events[12][25] = ['پایان سرایش شاهنامه فردوسی', false];
+        this.events[12][26] = ['فروردگان', false];
+        
+        let date = new Date();
+        let date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        let year = date[0];
+        
+        var first_wednesday_of_year;
+        var first_saturday_of_year;
+        var last_wednesday_of_year;
+        var last_day_of_year;
+        
+        // find first saturday of the year
+        // and
         // find first wednesday of the year
         for(let i=1; i<=7; i++){
-			let p_ts = pdate.persianToGregorian(year, 1, i);
+            let p_ts = pdate.persianToGregorian(year, 1, i);
             p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2], 5); /* do not remove this 5 :D */
             if(p_ts.getDay() == 3){
-				let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                first_wednesday_of_year = dummy_date[3];
-                break;
+                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
+                first_wednesday_of_year = dummy_date[2];
+            }
+            if(p_ts.getDay() == 6){
+                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
+                first_saturday_of_year = dummy_date[2];
             }
         }
 
+        // find last day of the year
+        // and
         // find last wednesday of the year
         let leap = ((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
         
-        for(let i=1; i<=7; i++){
-			let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
+        if(!last_day_of_year){
+            last_day_of_year = 29 + leap;
+        }
+        
+        for(let i=0; i<6; i++){
+            let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
+            
             p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2]);
             if(p_ts.getDay() == 3){
-				let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                last_wednesday_of_year = dummy_date[3];
+                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
+                last_wednesday_of_year = dummy_date[2];
                 break;
             }
         }
-
-        this.events.push([first_wednesday_of_year, 'جشن نخستین چهارشنبه سال', false]);
-        this.events.push([last_wednesday_of_year - 1, 'چارشنبه سوری، جشن شب چهارشنبه آخر', false]);
-        this.events.push([last_wednesday_of_year, 'چارشنبه آخر', false]);
+        
+        this.events[1][first_saturday_of_year] = ['جشن نخستین شنبه سال', false];
+        this.events[1][first_wednesday_of_year] = ['جشن نخستین چهارشنبه سال', false];
+        this.events[12][last_day_of_year] = ['گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان / زادروز زرتشت / جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه / آتش افروزی بر بام‌ها در استقبال از نوروز', false];
+        this.events[12][last_wednesday_of_year - 1] = ['چارشنبه سوری، جشن شب چهارشنبه آخر', false];
+        this.events[12][last_wednesday_of_year] = ['چارشنبه آخر', false];
     }
 };
