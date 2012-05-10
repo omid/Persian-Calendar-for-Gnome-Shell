@@ -14,6 +14,7 @@ HijriDate.intPart = function (floatNum)
 
 HijriDate.ToHijri = function (y, m, d)
 {
+    let jd, l, n, j;
     if ((y>1582)||((y==1582)&&(m>10))||((y==1582)&&(m==10)&&(d>14))) {
         jd=HijriDate.intPart((1461*(y+4800+HijriDate.intPart((m-14)/12)))/4)+HijriDate.intPart((367*(m-2-12*(HijriDate.intPart((m-14)/12))))/12)-HijriDate.intPart( (3* (HijriDate.intPart(  (y+4900+    HijriDate.intPart( (m-14)/12)     )/100)    )   ) /4)+d-32075;
     } else {
@@ -33,6 +34,7 @@ HijriDate.ToHijri = function (y, m, d)
 
 HijriDate.fromHijri = function (y, m, d)
 {
+    let jd, l, n, j, i;
     jd=HijriDate.intPart((11*y+3)/30)+354*y+30*m-HijriDate.intPart((m-1)/2)+d+1948440-385;
     if (jd> 2299160) {
         l=jd+68569;
