@@ -46,18 +46,16 @@ Calendar.prototype = {
         this.actor.connect('scroll-event', Lang.bind(this, this._onScroll));
 
         this._buildHeader ();
-        this.setDate (this._selectedDate, true);
+        this.setDate (this._selectedDate);
     },
 
     // Sets the calendar to show a specific date
-    setDate: function(date, forceReload) {
+    setDate: function(date) {
         if (!_sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
-            this._update(forceReload);
-            //this.emit('selected-date-changed', this._selectedDate);
+            this._update();
         } else {
-            if (forceReload)
-                this._update(forceReload);
+            this._update();
         }
     },
 
@@ -118,7 +116,7 @@ Calendar.prototype = {
             newDate[1]--;
         }
 
-        this.setDate(newDate, true);
+        this.setDate(newDate);
    },
 
    _onNextMonthButtonClicked: function() {
@@ -132,10 +130,10 @@ Calendar.prototype = {
             newDate[1]++;
         }
 
-       this.setDate(newDate, true);
+       this.setDate(newDate);
     },
 
-    _update: function(forceReload) {
+    _update: function() {
         let now = new Date();
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
         
@@ -162,11 +160,11 @@ Calendar.prototype = {
         let ev = new Events.Events();
         let events;
         while (true) {
-            p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
+            let p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
             let button = new St.Button({ label: str.format(p_iter[2]) });
 
             button.connect('clicked', Lang.bind(this, function() {
-                this.setDate(p_iter, false);
+                this.setDate(p_iter);
             }));
             
             // find events and holidays
