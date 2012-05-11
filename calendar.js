@@ -204,7 +204,7 @@ Calendar.prototype = {
         }
         
         // add event box for selected date
-        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate[0], this._selectedDate[1], this._selectedDate[0]);
+        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate[0], this._selectedDate[1], this._selectedDate[2]);
         g_selectedDate = new Date(g_selectedDate[0], g_selectedDate[1] - 1, g_selectedDate[2]);
         events = ev.getEvents(g_selectedDate);
         
