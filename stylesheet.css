@@ -1,3 +1,7 @@
 .holiday {
     text-decoration: underline;
 }
+
+.calendar-day-right {
+    border-right-width: 1px;
+}
