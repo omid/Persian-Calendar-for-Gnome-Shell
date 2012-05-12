@@ -1,5 +1,5 @@
-function iranLunar() {
-    this._init();
+function iranLunar(pdate) {
+    this._init(pdate);
 };
 
 iranLunar.prototype = {
@@ -23,29 +23,25 @@ iranLunar.prototype = {
         [338, 'میلاد حضرت رسول اکرم و امام جعفر صادق', true],
     ],
     
-    _init: function() {
+    _init: function(pdate) {
+        /* @TODO if there is two leap year in the delta then what should I do? in the lunar calendars we have leap years or not? */
+        // events in lunar system shifts back 10 days each year!
+        let date = new Date();
+		let date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
+		let year = date[0];
+		
+        let delta = year - 1389;
+        let leap = ((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
+        
+        if(leap) leap = 1;
+        else leap = 0;
+        
+        this.events.forEach(function(el, i) {
+            el[0] = el[0] - (delta * 10);
+            while (el[0] <= 0) {
+                el[0] += 365 + leap;
+            }
+            this.events[i] = el;
+        }, this);
     }
 };
-
-/* huh, my old php codes, I should change them to JS!
-/* @TODO if there is two leap year in the delta then what should I do? in the lunar calendars we have leap years or not? */
-/*// events in lunar system shifts back 10 days each year!
-if(!isset($year)){
-    $year = persian_calendar::date('Y', '', false);
-}
-
-$delta = $year - 1389;
-$leap = persian_calendar::date('L');
-
-foreach($l_events as $index => $e){
-    $e['day'] = $e['day'] - ($delta * 10);
-    while ($e['day'] <= 0) {
-        $e['day'] += 365 + $leap;
-    }
-    $l_events[$index] = $e;
-}
-
-$events[] = $l_events;
-
-unset($l_events);
-*/
