@@ -4,6 +4,7 @@ const PanelMenu = imports.ui.panelMenu;
 const MainLoop = imports.mainloop;
 const Lang = imports.lang;
 const MessageTray = imports.ui.messageTray;
+const Pango = imports.gi.Pango;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -24,7 +25,7 @@ PersianCalendar.prototype = {
     _init: function() {
         PanelMenu.Button.prototype._init.call(this, 0.0);
 
-        this.label = new St.Label({ text: '', style: 'direction: rtl' });
+        this.label = new St.Label({ style: 'direction: rtl' });
         this.actor.add_actor(this.label);
         
         this._today  = '';
@@ -33,18 +34,28 @@ PersianCalendar.prototype = {
         let vbox = new St.BoxLayout({vertical: true});
         this.menu.addActor(vbox);
         
-        this.popupMenuLabel = new St.Label();
-        this.popupMenuLabel.style_class = 'datemenu-date-label';
-        vbox.add(this.popupMenuLabel, { expand: true, x_fill: false, x_align: St.Align.MIDDLE });
+        this.popupMenuLabel = new St.Label({ style_class: 'calendar-top-label' });
+        this.popupMenuLabel.clutter_text.line_wrap = true;
+        this.popupMenuLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+        this.popupMenuLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        vbox.add(this.popupMenuLabel, { x_align: St.Align.MIDDLE });
         
         this._calendar = new Calendar.Calendar();
-        vbox.add(this._calendar.actor)
+        vbox.add(this._calendar.actor, {x_fill: false,
+                                        x_align: St.Align.MIDDLE })
+        
+        let bottomLabel = new St.Label({ style_class: 'calendar-bottom-label' });
+        bottomLabel.clutter_text.line_wrap = true;
+        bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+        bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+        vbox.add(bottomLabel, { x_align: St.Align.MIDDLE });
+        this._calendar.setBottomLabel(bottomLabel);
         
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
             if (isOpen) {
                 let now = new Date();
                 now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
-                this._calendar.setDate(now, true);
+                this._calendar.setDate(now);
             }
         }));
     },
