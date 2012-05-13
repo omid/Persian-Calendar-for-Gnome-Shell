@@ -2,6 +2,25 @@
     text-decoration: underline;
 }
 
-.calendar-day-right {
-    border-right-width: 1px;
+.calendar-dates {
+    font-size: 7.5pt;
+    color: #666666;
+    padding-bottom: 3px;
+    padding-top: 3px;
+}
+
+.calendar-dates:hover {
+    background-color: rgba(128, 128, 128, .1);
+}
+
+.calendar-top-label, .calendar-bottom-label {
+    width: 200px;
+    padding: .4em 1.75em;
+    color: #cccccc;
+    font-size: 0.9em;
+}
+
+.calendar-bottom-label {
+    color: #666666;
+    font-size: 7.5pt;
 }
