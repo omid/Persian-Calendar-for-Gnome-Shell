@@ -1,16 +1,19 @@
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+const extension = ExtensionUtils.getCurrentExtension();
+const convenience = extension.imports.convenience;
 
-const PersianDate = Me.imports.PersianDate;
-const HijriDate = Me.imports.HijriDate;
+const PersianDate = extension.imports.PersianDate;
+const HijriDate = extension.imports.HijriDate;
 
-const persian = Me.imports.events.persian;
-const world = Me.imports.events.world;
-const iranSolar = Me.imports.events.iranSolar;
-const iranLunar = Me.imports.events.iranLunar;
-const persianPersonage = Me.imports.events.persianPersonage;
+const persian = extension.imports.events.persian;
+const world = extension.imports.events.world;
+const iranSolar = extension.imports.events.iranSolar;
+const iranLunar = extension.imports.events.iranLunar;
+const persianPersonage = extension.imports.events.persianPersonage;
 
-const str = Me.imports.strFunctions;
+const str = extension.imports.strFunctions;
+
+const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 function Events() {
     this._init();
@@ -20,11 +23,21 @@ Events.prototype = {
     
     _init: function() {
         this._eventsList = Array();
-        this._eventsList.push(new persian.persian(PersianDate.PersianDate));
-        this._eventsList.push(new world.world);
-        this._eventsList.push(new iranSolar.iranSolar);
-        this._eventsList.push(new iranLunar.iranLunar());
-        this._eventsList.push(new persianPersonage.persianPersonage());
+        if(Schema.get_boolean("event-persian")){
+            this._eventsList.push(new persian.persian(PersianDate.PersianDate));
+        }
+        if(Schema.get_boolean("event-world")){
+            this._eventsList.push(new world.world);
+        }
+        if(Schema.get_boolean("event-iran-solar")){
+            this._eventsList.push(new iranSolar.iranSolar);
+        }
+        if(Schema.get_boolean("event-iran-lunar")){
+            this._eventsList.push(new iranLunar.iranLunar());
+        }
+        if(Schema.get_boolean("event-persian-personage")){
+            this._eventsList.push(new persianPersonage.persianPersonage());
+        }
     },
 
     getEvents: function(today) {

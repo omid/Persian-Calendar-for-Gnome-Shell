@@ -5,13 +5,16 @@ const St = imports.gi.St;
 const Pango = imports.gi.Pango;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+const extension = ExtensionUtils.getCurrentExtension();
+const convenience = extension.imports.convenience;
 
-const PersianDate = Me.imports.PersianDate;
-const HijriDate = Me.imports.HijriDate;
+const PersianDate = extension.imports.PersianDate;
+const HijriDate = extension.imports.HijriDate;
 
-const str = Me.imports.strFunctions;
-const Events = Me.imports.Events;
+const str = extension.imports.strFunctions;
+const Events = extension.imports.Events;
+
+const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
 
@@ -209,47 +212,55 @@ Calendar.prototype = {
         let h_selectedDate = HijriDate.HijriDate.ToHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth()+1, g_selectedDate.getDate());
         
         // add persian date
-        let _datesBox_p = new St.BoxLayout();
-        this.actor.add(_datesBox_p, { row: ++row, col: 0, col_span: 7 });
-        let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-dates' });
-        _datesBox_p.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
-        button.connect('clicked', Lang.bind(button, function() {
-            St.Clipboard.get_default().set_text(this.label)
-        }));
+        if(Schema.get_boolean("persian-display")){
+            let _datesBox_p = new St.BoxLayout();
+            this.actor.add(_datesBox_p, { row: ++row, col: 0, col_span: 7 });
+            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
+            _datesBox_p.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
+            button.connect('clicked', Lang.bind(button, function() {
+                St.Clipboard.get_default().set_text(this.label)
+            }));
+        }
         
         // add gregorian date
-        let gregorian_month_name=["January", "February", "March", "April", "May",
-            "June", "July", "August", "September", "October", "November", "December"];
-        let _datesBox_g = new St.BoxLayout();
-        this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
-        let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-dates' });
-        _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
-        button.connect('clicked', Lang.bind(button, function() {
-            St.Clipboard.get_default().set_text(this.label)
-        }));
+        if(Schema.get_boolean("gregorian-display")){
+            let gregorian_month_name=["January", "February", "March", "April", "May",
+                "June", "July", "August", "September", "October", "November", "December"];
+            let _datesBox_g = new St.BoxLayout();
+            this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
+            let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
+            _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
+            button.connect('clicked', Lang.bind(button, function() {
+                St.Clipboard.get_default().set_text(this.label)
+            }));
+        }
         
         // add hijri date
-        let hijri_month_name=["محرم", "صفر", "ربیع‌الاول", "ربیع‌الثانی", "جمادی‌الاول",
-            "جمادی‌الثانی", "رجب", "شعبان", "رمضان", "شوال", "ذوالقعده", "ذوالحجه"];
-        let _datesBox_h = new St.BoxLayout();
-        this.actor.add(_datesBox_h, { row: ++row, col: 0, col_span: 7 });
-        let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-dates' });
-        _datesBox_h.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
-        button.connect('clicked', Lang.bind(button, function() {
-            St.Clipboard.get_default().set_text(this.label)
-        }));
+        if(Schema.get_boolean("hijri-display")){
+            let hijri_month_name=["محرم", "صفر", "ربیع‌الاول", "ربیع‌الثانی", "جمادی‌الاول",
+                "جمادی‌الثانی", "رجب", "شعبان", "رمضان", "شوال", "ذوالقعده", "ذوالحجه"];
+            let _datesBox_h = new St.BoxLayout();
+            this.actor.add(_datesBox_h, { row: ++row, col: 0, col_span: 7 });
+            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
+            _datesBox_h.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
+            button.connect('clicked', Lang.bind(button, function() {
+                St.Clipboard.get_default().set_text(this.label)
+            }));
+        }
         
         // add event box for selected date
         events = ev.getEvents(g_selectedDate);
         
         if(events[0]){
-            this.bottomLabel.set_text(str.format(events[0]));
-        } else {
-            this.bottomLabel.set_text('');
+            let _eventBox = new St.BoxLayout();
+            this.actor.add(_eventBox, { row: ++row, col: 0, col_span: 7 });
+            let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-event-label' });
+            bottomLabel.clutter_text.line_wrap = true;
+            bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
+            bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
+            _eventBox.add(bottomLabel, { x_align: St.Align.MIDDLE });
+            
+            vbox.add(bottomLabel, { x_align: St.Align.MIDDLE });
         }
-    },
-    
-    setBottomLabel: function(ref) {
-        this.bottomLabel = ref;
-    },
+    }
 }

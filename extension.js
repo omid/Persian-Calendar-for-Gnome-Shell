@@ -5,15 +5,16 @@ const MainLoop = imports.mainloop;
 const Lang = imports.lang;
 const MessageTray = imports.ui.messageTray;
 const Pango = imports.gi.Pango;
+const Shell = imports.gi.Shell;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+const extension = ExtensionUtils.getCurrentExtension();
 
-const PersianDate = Me.imports.PersianDate;
-const Calendar = Me.imports.calendar;
+const PersianDate = extension.imports.PersianDate;
+const Calendar = extension.imports.calendar;
 
-const Events = Me.imports.Events;
-const str = Me.imports.strFunctions;
+const Events = extension.imports.Events;
+const str = extension.imports.strFunctions;
 
 function PersianCalendar() {
     this._init();
@@ -24,7 +25,7 @@ PersianCalendar.prototype = {
 
     _init: function() {
         PanelMenu.Button.prototype._init.call(this, 0.0);
-
+        
         this.label = new St.Label({ style: 'direction: rtl' });
         this.actor.add_actor(this.label);
         
@@ -34,22 +35,30 @@ PersianCalendar.prototype = {
         let vbox = new St.BoxLayout({vertical: true});
         this.menu.addActor(vbox);
         
-        this.popupMenuLabel = new St.Label({ style_class: 'calendar-top-label' });
-        this.popupMenuLabel.clutter_text.line_wrap = true;
-        this.popupMenuLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
-        this.popupMenuLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        vbox.add(this.popupMenuLabel, { x_align: St.Align.MIDDLE });
-        
         this._calendar = new Calendar.Calendar();
         vbox.add(this._calendar.actor, {x_fill: false,
                                         x_align: St.Align.MIDDLE })
         
-        let bottomLabel = new St.Label({ style_class: 'calendar-bottom-label' });
-        bottomLabel.clutter_text.line_wrap = true;
-        bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
-        bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-        vbox.add(bottomLabel, { x_align: St.Align.MIDDLE });
-        this._calendar.setBottomLabel(bottomLabel);
+        let hbox = new St.BoxLayout({style_class: 'calendar-preferences-hbox'});
+        vbox.add(hbox, {x_fill: true});
+        
+        let _appSys = Shell.AppSystem.get_default();
+        let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+        
+        let icon = new St.Icon({ icon_name: 'system-run-symbolic',
+				      icon_type: St.IconType.SYMBOLIC,
+				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        
+        let preferencesIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
+        preferencesIcon.connect('clicked', function () {
+            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
+                _gsmPrefs.activate();
+            } else {
+                _gsmPrefs.launch(global.display.get_current_time_roundtrip(),
+                                 [extension.metadata.uuid],-1,null);
+            }
+        });
+        hbox.add(preferencesIcon);
         
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
             if (isOpen) {
@@ -87,13 +96,12 @@ PersianCalendar.prototype = {
         
         // is holiday?
         if(events[1]){
-            this.label.add_style_class_name("holiday");
+            this.label.add_style_class_name("calendar-holiday");
         } else {
-            this.label.remove_style_class_name("holiday");
+            this.label.remove_style_class_name("calendar-holiday");
         }
         
         this.label.set_text(_day);
-        this.popupMenuLabel.set_text(_date + events[0]);
         
         notify(this, _date, events[0]);
         
