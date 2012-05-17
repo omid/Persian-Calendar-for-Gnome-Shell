@@ -1,26 +1,26 @@
-.holiday {
+.calendar-holiday {
     text-decoration: underline;
 }
 
-.calendar-dates {
-    font-size: 7.5pt;
-    color: #666666;
-    padding-bottom: 3px;
-    padding-top: 3px;
+.calendar-event-label, .calendar-date-label {
+    width: 150px;
+    padding: .4em 0;
+    color: #cccccc;
+    font-size: 0.8em;
 }
 
-.calendar-dates:hover {
+.calendar-date-label:hover {
     background-color: rgba(128, 128, 128, .1);
 }
 
-.calendar-top-label, .calendar-bottom-label {
-    width: 200px;
-    padding: .4em 1.75em;
-    color: #cccccc;
-    font-size: 0.9em;
+.calendar-preferences-hbox {
+    padding: 0 1.75em;
 }
 
-.calendar-bottom-label {
-    color: #666666;
-    font-size: 7.5pt;
+.calendar-preferences-button {
+    padding: 2px;
+}
+
+.calendar-preferences-button:hover {
+    background-color: rgba(128, 128, 128, .1);
 }
