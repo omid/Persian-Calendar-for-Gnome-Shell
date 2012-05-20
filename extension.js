@@ -9,12 +9,15 @@ const Shell = imports.gi.Shell;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
+const convenience = extension.imports.convenience;
 
 const PersianDate = extension.imports.PersianDate;
 const Calendar = extension.imports.calendar;
 
 const Events = extension.imports.Events;
 const str = extension.imports.strFunctions;
+
+const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 function PersianCalendar() {
     this._init();
@@ -26,8 +29,68 @@ PersianCalendar.prototype = {
     _init: function() {
         PanelMenu.Button.prototype._init.call(this, 0.0);
         
-        this.label = new St.Label({ style: 'direction: rtl' });
+        this.label = new St.Label();
         this.actor.add_actor(this.label);
+        
+        // some codes for coloring label
+        if(Schema.get_boolean('custom-color')){
+            this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+        }
+        
+        Schema.connect('changed::color', Lang.bind(
+            this, function (schema, key) {
+                if(Schema.get_boolean('custom-color')){
+                    this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+                }
+            }
+        ));
+        
+        Schema.connect('changed::custom-color', Lang.bind(
+            this, function (schema, key) {
+                if(Schema.get_boolean('custom-color')){
+                    this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+                } else {
+                    this.label.set_style('color:');
+                }
+            }
+        ));
+        ///////////////////////////////
+        
+        // some codes for fonts
+        let font = Schema.get_string('font').split(' ');
+        font.pop(); // remove size
+        font = font.join(' ');
+        
+        if(Schema.get_boolean('custom-font')){
+            this.label.set_style('font-family: ' + font);
+        }
+        
+        Schema.connect('changed::font', Lang.bind(
+            this, function (schema, key) {
+                if(Schema.get_boolean('custom-font')){
+                    let font = Schema.get_string('font').split(' ');
+                    font.pop(); // remove size
+                    font = font.join(' ');
+                    
+                    this.label.set_style('font-family: ' + font);
+                }
+            }
+        ));
+        
+        Schema.connect('changed::custom-font', Lang.bind(
+            this, function (schema, key) {
+                if(Schema.get_boolean('custom-font')){
+                    let font = Schema.get_string('font').split(' ');
+                    font.pop(); // remove size
+                    font = font.join(' ');
+                    
+                    this.label.set_style('font-family: ' + font);
+                } else {
+                    this.label.set_style('font-family: ');
+                }
+            }
+        ));
+        ///////////////////////////////
         
         this._today  = '';
         this.today = [3];

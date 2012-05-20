@@ -1,8 +1,4 @@
 <schemalist gettext-domain="gnome-shell-extensions-persian-calendar">
-  <enum id="org.gnome.shell.extensions.persian-calendar.date-format">
-    <value value="1" nick="May 16 2012"/>
-    <value value="2" nick="16/05/2012"/>
-  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
     <key name="hijri-display" type="b">
       <default>true</default>
@@ -44,10 +40,25 @@
       <summary>Display official international events</summary>
       <description>Display official international events.</description>
     </key>
-    <key name="date-format" enum="org.gnome.shell.extensions.persian-calendar.date-format">
-      <default>'May 16 2012'</default>
-      <summary>Date format</summary>
-      <description>Date format of the dates are below the calendar.</description>
+    <key name="custom-color" type="b">
+      <default>false</default>
+      <summary>Use custom color</summary>
+      <description>Use custom color.</description>
+    </key>
+    <key name="custom-font" type="b">
+      <default>false</default>
+      <summary>Use custom font</summary>
+      <description>Use custom font.</description>
+    </key>
+    <key name="color" type="s">
+      <default>'#000000'</default>
+      <summary>Custom color</summary>
+      <description>Custom color.</description>
+    </key>
+    <key name="font" type="s">
+      <default>''</default>
+      <summary>Custom font</summary>
+      <description>Custom font.</description>
     </key>
   </schema>
 </schemalist>
