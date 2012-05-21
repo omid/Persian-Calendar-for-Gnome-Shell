@@ -43,7 +43,8 @@ const App = new Lang.Class({
         this.main_hbox.pack_start(this.vbox3, false, false, 0);
         
         this.vbox1.add(new Gtk.Label({ label: _('Dates to display:')}));
-        this.vbox2.add(new Gtk.Label({ label: _('Events to display:')}));
+        this.vbox2.add(new Gtk.Label({ label: _('Events to display:\n<span size="x-small">("Official" events are needed to find holidays)</span>'),
+                                        use_markup: true}));
         
         let item = new Gtk.CheckButton({label: _('Persian')})
         this.vbox1.add(item)
@@ -101,7 +102,7 @@ const App = new Lang.Class({
         });
         
         // FONT
-        let item = new Gtk.CheckButton({label: _('Use custom font')})
+        /*let item = new Gtk.CheckButton({label: _('Use custom font')})
         this.vbox3.add(item)
         Schema.bind('custom-font', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
 
@@ -118,7 +119,7 @@ const App = new Lang.Class({
         this.vbox3.add(_actor);
         font.connect('font-set', function(font){
             Schema.set_string('font', font.get_font_name());
-        });
+        });*/
         
         this.main_hbox.show_all();
     }

@@ -57,6 +57,7 @@ PersianCalendar.prototype = {
         ///////////////////////////////
         
         // some codes for fonts
+        /*
         let font = Schema.get_string('font').split(' ');
         font.pop(); // remove size
         font = font.join(' ');
@@ -90,6 +91,7 @@ PersianCalendar.prototype = {
                 }
             }
         ));
+        */
         ///////////////////////////////
         
         this._today  = '';

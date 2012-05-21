@@ -45,20 +45,22 @@
       <summary>Use custom color</summary>
       <description>Use custom color.</description>
     </key>
-    <key name="custom-font" type="b">
-      <default>false</default>
-      <summary>Use custom font</summary>
-      <description>Use custom font.</description>
-    </key>
     <key name="color" type="s">
       <default>'#000000'</default>
       <summary>Custom color</summary>
       <description>Custom color.</description>
+    </key>
+    <!--
+    <key name="custom-font" type="b">
+      <default>false</default>
+      <summary>Use custom font</summary>
+      <description>Use custom font.</description>
     </key>
     <key name="font" type="s">
       <default>''</default>
       <summary>Custom font</summary>
       <description>Custom font.</description>
     </key>
+    -->
   </schema>
 </schemalist>
