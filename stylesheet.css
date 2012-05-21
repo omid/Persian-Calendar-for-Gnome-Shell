@@ -9,6 +9,10 @@
     font-size: 0.8em;
 }
 
+.calendar-event-label {
+    height: 6em; /* I cannot make it flexible! I think it's a bug in St library! */
+}
+
 .calendar-date-label:hover {
     background-color: rgba(128, 128, 128, .1);
 }

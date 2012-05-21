@@ -255,12 +255,15 @@ Calendar.prototype = {
             let _eventBox = new St.BoxLayout();
             this.actor.add(_eventBox, { row: ++row, col: 0, col_span: 7 });
             let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-event-label' });
+            
+            /* Wrap truncate some texts!
+             * And I cannot make height of eventBox flexible!
+             * I think it's a bug in St library!
+             **/
             bottomLabel.clutter_text.line_wrap = true;
             bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
             bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-            _eventBox.add(bottomLabel, { x_align: St.Align.MIDDLE });
-            
-            vbox.add(bottomLabel, { x_align: St.Align.MIDDLE });
+            _eventBox.add(bottomLabel, { expand: true, x_fill: true, y_fill: true, x_align: St.Align.MIDDLE });
         }
     }
 }
