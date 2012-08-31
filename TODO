@@ -1,10 +1,14 @@
-1- add an option to change fonts of extension.
-2- add multilingual options.
-3- fix interface for RTLed Gnome.
-4- add unofficial lunar events.
-5- optional date formats.
-6- optional previous/next year.
-7- date convertor.
-8- evolution integration.
-9- customize "day" for panel to "day month" or "day month year".
+// FEATURES
+- customize "day" for panel to "day month" or "day month year".
+- optional date formats.
+- optional previous/next year.
+- date convertor.
+- add unofficial lunar events.
+- add an option to change fonts of extension.
+- add multilingual options.
+- evolution integration.
+
+// BUGS
+- color of texts wont change. So in bright themes you cannot see texts!
+- fix interface for RTLed Gnome.
 
