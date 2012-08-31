@@ -22,6 +22,7 @@ iranLunar.prototype = {
         this.events[8][15] = ['ولادت حضرت قائم', true];
         this.events[9][21] = ['شهادت حضرت علی', true];
         this.events[10][1] = ['عید فطر', true];
+        this.events[10][2] = ['فردای عید فطر!', true];
         this.events[10][25] = ['شهادت امام جعفر صادق', true];
         this.events[12][10] = ['عید قربان', true];
         this.events[12][18] = ['عید غدیر خم', true];
