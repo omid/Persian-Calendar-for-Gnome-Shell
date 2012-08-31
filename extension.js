@@ -107,13 +107,16 @@ PersianCalendar.prototype = {
         let hbox = new St.BoxLayout({style_class: 'calendar-preferences-hbox'});
         vbox.add(hbox, {x_fill: true});
         
-        let _appSys = Shell.AppSystem.get_default();
-        let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
-        
-        let icon = new St.Icon({ icon_name: 'system-run-symbolic',
+        // Add preferences button
+        let icon = new St.Icon({ icon_name: 'emblem-system-symbolic',
 				      icon_type: St.IconType.SYMBOLIC,
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
-        
+        // preferences: emblem-system-symbolic
+        // or: system-run-symbolic
+
+        let _appSys = Shell.AppSystem.get_default();
+        let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+
         let preferencesIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
         preferencesIcon.connect('clicked', function () {
             if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
@@ -125,6 +128,42 @@ PersianCalendar.prototype = {
         });
         hbox.add(preferencesIcon);
         
+        // Add date convertion button
+        /*let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
+				      icon_type: St.IconType.SYMBOLIC,
+				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        // convert icon: emblem-synchronizing-symbolic
+        // or: mail-send-receive-symbolic
+
+        let convertionIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
+        convertionIcon.connect('clicked', function () {
+            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
+                _gsmPrefs.activate();
+            } else {
+                _gsmPrefs.launch(global.display.get_current_time_roundtrip(),
+                                 [extension.metadata.uuid],-1,null);
+            }
+        });
+        hbox.add(convertionIcon);*/
+
+        // Add Nowrooz button
+        let icon = new St.Icon({ icon_name: 'emblem-favorite-symbolic',
+				      icon_type: St.IconType.SYMBOLIC,
+				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        // nowrooz: emblem-favorite-symbolic
+
+        let nowroozIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
+        nowroozIcon.connect('clicked', function () {
+            let now = new Date();
+            let date = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+            let nextYear = ++date[0];
+            date = PersianDate.PersianDate.persianToGregorian(date[0], 1 , 1);
+            let nowrooz = new Date(date[0], date[1], date[2]);
+            let delta = Math.ceil((nowrooz.getTime() - now.getTime()) / 86400000); // days
+            notify(this, str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
+        });
+        hbox.add(nowroozIcon);
+
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
             if (isOpen) {
                 let now = new Date();
@@ -211,7 +250,7 @@ function notify(device, title, text) {
     // must call after destroying previous notification,
     // or msg_source will be cleared 
     ensureMessageSource();
-    let icon = new St.Icon({ icon_name: 'starred',
+    let icon = new St.Icon({ icon_name: 'preferences-system-date-and-time-symbolic',
                              icon_type: St.IconType.SYMBOLIC,
                              icon_size: msg_source.ICON_SIZE
                            });
