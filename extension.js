@@ -19,6 +19,8 @@ const str = extension.imports.strFunctions;
 
 const Schema = convenience.getSettings(extension, 'persian-calendar');
 
+let messageTray;
+
 function PersianCalendar() {
     this._init();
 }
@@ -27,6 +29,7 @@ PersianCalendar.prototype = {
     __proto__: PanelMenu.Button.prototype,
 
     _init: function() {
+        messageTray = new MessageTray.MessageTray();
         PanelMenu.Button.prototype._init.call(this, 0.0);
         
         this.label = new St.Label();
@@ -160,7 +163,7 @@ PersianCalendar.prototype = {
             date = PersianDate.PersianDate.persianToGregorian(date[0], 1 , 1);
             let nowrooz = new Date(date[0], date[1], date[2]);
             let delta = Math.ceil((nowrooz.getTime() - now.getTime()) / 86400000); // days
-            notify(this, str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
+            notify(str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
         });
         hbox.add(nowroozIcon);
 
@@ -207,62 +210,19 @@ PersianCalendar.prototype = {
         
         this.label.set_text(_day);
         
-        notify(this, _date, events[0]);
+        notify(_date, events[0]);
         
         return true;
     }
 };
 
-function NotificationSource() {
-    this._init();
-};
-
-NotificationSource.prototype = {
-     __proto__:  MessageTray.Source.prototype,
-
-    _init: function() {
-        MessageTray.Source.prototype._init.call(this, "");
-
-        let icon = new St.Icon({ icon_name: 'starred',
-                                 icon_type: St.IconType.SYMBOLIC,
-                                 icon_size: this.ICON_SIZE
-                               });
-        this._setSummaryIcon(icon);
-    }
-};
-
-let msg_source;
-
-function ensureMessageSource() {
-    if (!msg_source) {
-        msg_source = new NotificationSource();
-        msg_source.connect('destroy', Lang.bind(this, function() {
-            msg_source = null;
-        }));
-        Main.messageTray.add(msg_source);
-    }
-};
-
-function notify(device, title, text) {
-    if (device._notification)
-        device._notification.destroy();
-    
-    // must call after destroying previous notification,
-    // or msg_source will be cleared 
-    ensureMessageSource();
-    let icon = new St.Icon({ icon_name: 'preferences-system-date-and-time-symbolic',
-                             icon_type: St.IconType.SYMBOLIC,
-                             icon_size: msg_source.ICON_SIZE
-                           });
-    device._notification = new MessageTray.Notification(msg_source, title,
-                                                        text, { icon: icon });
-    device._notification.setUrgency(MessageTray.Urgency.LOW);
-    device._notification.setTransient(true);
-    device._notification.connect('destroy', function() {
-        device._notification = null;
-    });
-    msg_source.notify(device._notification);
-};
+function notify(msg, details) {
+    let source = new MessageTray.SystemNotificationSource();
+    messageTray.add(source);
+    let notification = new MessageTray.Notification(source, msg, details);
+    notification.setTransient(true);
+    source.notify(notification);
+}
 
 
 let _indicator;
