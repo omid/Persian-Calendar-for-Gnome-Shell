@@ -112,7 +112,6 @@ PersianCalendar.prototype = {
         
         // Add preferences button
         let icon = new St.Icon({ icon_name: 'emblem-system-symbolic',
-				      icon_type: St.IconType.SYMBOLIC,
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
         // preferences: emblem-system-symbolic
         // or: system-run-symbolic
@@ -133,7 +132,6 @@ PersianCalendar.prototype = {
         
         // Add date convertion button
         /*let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
-				      icon_type: St.IconType.SYMBOLIC,
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
         // convert icon: emblem-synchronizing-symbolic
         // or: mail-send-receive-symbolic
@@ -151,7 +149,6 @@ PersianCalendar.prototype = {
 
         // Add Nowrooz button
         let icon = new St.Icon({ icon_name: 'emblem-favorite-symbolic',
-				      icon_type: St.IconType.SYMBOLIC,
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
         // nowrooz: emblem-favorite-symbolic
 
