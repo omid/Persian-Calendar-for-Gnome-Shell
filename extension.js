@@ -37,13 +37,13 @@ PersianCalendar.prototype = {
         
         // some codes for coloring label
         if(Schema.get_boolean('custom-color')){
-            this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+            this.label.set_style('color: ' + Schema.get_string('color'));
         }
         
         Schema.connect('changed::color', Lang.bind(
             this, function (schema, key) {
                 if(Schema.get_boolean('custom-color')){
-                    this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+                    this.label.set_style('color: ' + Schema.get_string('color'));
                 }
             }
         ));
@@ -51,7 +51,7 @@ PersianCalendar.prototype = {
         Schema.connect('changed::custom-color', Lang.bind(
             this, function (schema, key) {
                 if(Schema.get_boolean('custom-color')){
-                    this.label.set_style('color: ' + Schema.get_string('color').substr(0, 7));
+                    this.label.set_style('color: ' + Schema.get_string('color'));
                 } else {
                     this.label.set_style('color:');
                 }
@@ -113,8 +113,6 @@ PersianCalendar.prototype = {
         // Add preferences button
         let icon = new St.Icon({ icon_name: 'emblem-system-symbolic',
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
-        // preferences: emblem-system-symbolic
-        // or: system-run-symbolic
 
         let _appSys = Shell.AppSystem.get_default();
         let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
@@ -133,8 +131,6 @@ PersianCalendar.prototype = {
         // Add date convertion button
         /*let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
-        // convert icon: emblem-synchronizing-symbolic
-        // or: mail-send-receive-symbolic
 
         let convertionIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
         convertionIcon.connect('clicked', function () {
@@ -161,6 +157,42 @@ PersianCalendar.prototype = {
             let nowrooz = new Date(date[0], date[1], date[2]);
             let delta = Math.ceil((nowrooz.getTime() - now.getTime()) / 86400000); // days
             notify(str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
+            
+            /* calculate exact hour/minute/second of the next new year.
+            it calculate with some small differences!
+            
+            let now = new Date();
+            let pdate = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+            
+            // 31556912 is length of each Persian year, according to ghiasabadi.com
+            let start_nowrooz = 1269106333000; // in Iran's Timezone! // based on the year 1388
+            let year_delta = pdate[0] - 1389 + 1;
+
+            start_nowrooz = start_nowrooz + (year_delta * 31556912000);
+            if (start_nowrooz <= 0) {
+                start_nowrooz = 0;
+            }
+            
+            let month_delta = 12 - pdate[1];
+            let day_delta, nowrooz;
+            if(month_delta >= 6) {
+                day_delta = 31 - pdate[2];
+            } else {
+                day_delta = 30 - pdate[2];
+            }
+            
+            if(month_delta != 0) {
+                nowrooz = month_delta + ' ماه و ';
+            }
+            
+            nowrooz = nowrooz + day_delta + ' روز مانده به ';
+            nowrooz = nowrooz + 'نوروز سال ' + pdate[0];
+            
+            let nowrooz_time = new Date(start_nowrooz);
+            
+            notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''),
+                str.format('لحظه تحویل سال نو (به زمان ایران): ساعت ' + nowrooz_time.getHours() + ' و ' + nowrooz_time.getMinutes() + ' دقیقه و ' + nowrooz_time.getSeconds() + ' ثانیه'));
+            */
         });
         hbox.add(nowroozIcon);
 

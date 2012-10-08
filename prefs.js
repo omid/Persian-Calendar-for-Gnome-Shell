@@ -2,7 +2,6 @@ const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
 const Gdk = imports.gi.Gdk;
 const GLib = imports.gi.GLib;
-const Clutter = imports.gi.Clutter;
 const Lang = imports.lang;
 
 const SETTINGS_SCHEMA = 'persian-calendar';
@@ -89,16 +88,12 @@ const App = new Lang.Class({
         _actor.add(label);
         _actor.add(color);
         
-        let clutterColor = new Clutter.Color();
-        clutterColor.from_string(Schema.get_string('color'));
-        let _color = new Gdk.RGBA();
-        let ctemp = [clutterColor.red,clutterColor.green,clutterColor.blue,clutterColor.alpha/255];
-        _color.parse('rgba(' + ctemp.join(',') + ')');	
-        color.set_rgba(_color);
+        let _color = getColorByHexadecimal(Schema.get_string('color'));
+        color.set_color(_color);
         
         this.vbox3.add(_actor);
         color.connect('color-set', function(color){
-            Schema.set_string('color', color_to_hex(color.get_rgba()));
+            Schema.set_string('color', getHexadecimalByColor(color.get_color()));
         });
         
         // FONT
@@ -130,8 +125,41 @@ function buildPrefsWidget(){
     return widget.main_hbox;
 };
 
-function color_to_hex(color){
-    output = N_("#%02x%02x%02x%02x").format(color.red * 255, color.green * 255,
-                                            color.blue * 255, color.alpha * 255);
-    return output;
+function _scaleRound(value) {
+    // Based on gtk/gtkcoloreditor.c
+    value = Math.floor((value / 255) + 0.5);
+    value = Math.max(value, 0);
+    value = Math.min(value, 255);
+    return value;
+}
+
+function _dec2Hex(value) {
+    value = value.toString(16);
+
+    while (value.length < 2) {
+        value = '0' + value;
+    }
+
+    return value;
+}
+
+function getColorByHexadecimal(hex) {
+    let colorArray = Gdk.Color.parse(hex);
+    let color = null;
+
+    if (colorArray[0]) {
+        color = colorArray[1];
+    } else {
+        // On any error, default to red
+        color = new Gdk.Color({red: 65535});
+    }
+
+    return color;
+}
+
+function getHexadecimalByColor(color) {
+    let red = _scaleRound(color.red);
+    let green = _scaleRound(color.green);
+    let blue = _scaleRound(color.blue);
+    return "#" + _dec2Hex(red) + _dec2Hex(green) + _dec2Hex(blue);
 }
