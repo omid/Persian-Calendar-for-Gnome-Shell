@@ -19,6 +19,7 @@ iranSolar.prototype = {
         this.events[3][15] = ['قیام خونین ۱۵ خرداد', true];
         this.events[4][7] = ['شهادت دکتر بهشتی', false];
         this.events[6][8] = ['روز مبارزه با تروریسم', false];
+        this.events[9][16] = ['روز دانشجو', false];
         this.events[9][30] = ['شب یلدا', false];
         this.events[11][22] = ['پیروزی انقلاب اسلامی', true];
         this.events[12][29] = ['روز ملی شدن صنعت نفت', true];
