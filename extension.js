@@ -150,6 +150,8 @@ PersianCalendar.prototype = {
 
         let nowroozIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
         nowroozIcon.connect('clicked', function () {
+
+            /*
             let now = new Date();
             let date = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
             let nextYear = ++date[0];
@@ -157,10 +159,10 @@ PersianCalendar.prototype = {
             let nowrooz = new Date(date[0], date[1], date[2]);
             let delta = Math.ceil((nowrooz.getTime() - now.getTime()) / 86400000); // days
             notify(str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
+            */
             
             /* calculate exact hour/minute/second of the next new year.
-            it calculate with some small differences!
-            
+            it calculate with some small differences!*/
             let now = new Date();
             let pdate = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
             
@@ -186,13 +188,16 @@ PersianCalendar.prototype = {
             }
             
             nowrooz = nowrooz + day_delta + ' روز مانده به ';
-            nowrooz = nowrooz + 'نوروز سال ' + pdate[0];
+            nowrooz = nowrooz + 'نوروز سال ' + (pdate[0]+1);
             
             let nowrooz_time = new Date(start_nowrooz);
+
+            notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''));
             
-            notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''),
+            /*notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''),
                 str.format('لحظه تحویل سال نو (به زمان ایران): ساعت ' + nowrooz_time.getHours() + ' و ' + nowrooz_time.getMinutes() + ' دقیقه و ' + nowrooz_time.getSeconds() + ' ثانیه'));
             */
+
         });
         hbox.add(nowroozIcon);
 
