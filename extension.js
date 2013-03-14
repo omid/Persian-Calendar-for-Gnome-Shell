@@ -191,7 +191,7 @@ PersianCalendar.prototype = {
                 nowrooz = '';
             }
             
-            if(nowrooz != 0)
+            if(day_delta != 0)
             {
                 nowrooz = nowrooz + day_delta + ' روز مانده به ';
                 nowrooz = nowrooz + 'نوروز سال ' + (pdate[0]+1);
