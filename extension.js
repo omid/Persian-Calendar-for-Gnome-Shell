@@ -199,7 +199,7 @@ PersianCalendar.prototype = {
             
             let nowrooz_time = new Date(start_nowrooz);
 
-            notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''));
+            notify(str.format(nowrooz) + (day_delta<7?str.format(' - نوروزتان فرخنده باد'):''));
             
             /*notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''),
                 str.format('لحظه تحویل سال نو (به زمان ایران): ساعت ' + nowrooz_time.getHours() + ' و ' + nowrooz_time.getMinutes() + ' دقیقه و ' + nowrooz_time.getSeconds() + ' ثانیه'));
