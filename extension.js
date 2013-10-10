@@ -1,10 +1,12 @@
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
+const PopupMenu = imports.ui.popupMenu;
 const MainLoop = imports.mainloop;
 const Lang = imports.lang;
 const MessageTray = imports.ui.messageTray;
 const Pango = imports.gi.Pango;
+const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -21,18 +23,16 @@ const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 let messageTray;
 
-function PersianCalendar() {
-    this._init();
-}
-
-PersianCalendar.prototype = {
-    __proto__: PanelMenu.Button.prototype,
+const PersianCalendar = new Lang.Class({
+    Name: 'PersianCalendar.PersianCalendar',
+    Extends: PanelMenu.Button,
 
     _init: function() {
         messageTray = new MessageTray.MessageTray();
-        PanelMenu.Button.prototype._init.call(this, 0.0);
+        this.parent(0.0);
         
-        this.label = new St.Label();
+        this.label = new St.Label({y_expand: true,
+                                   y_align: Clutter.ActorAlign.CENTER });
         this.actor.add_actor(this.label);
         
         // some codes for coloring label
@@ -101,8 +101,7 @@ PersianCalendar.prototype = {
         this.today = [3];
         
         let vbox = new St.BoxLayout({vertical: true});
-        this.menu.addActor(vbox);
-        
+		
         this._calendar = new Calendar.Calendar();
         vbox.add(this._calendar.actor, {x_fill: false,
                                         x_align: St.Align.MIDDLE })
@@ -200,14 +199,14 @@ PersianCalendar.prototype = {
             let nowrooz_time = new Date(start_nowrooz);
 
             notify(str.format(nowrooz) + (day_delta<7?str.format(' - نوروزتان فرخنده باد'):''));
-            
-            /*notify(str.format(nowrooz) + (day_delta<7?str.format('نوروزتان فرخنده باد'):''),
-                str.format('لحظه تحویل سال نو (به زمان ایران): ساعت ' + nowrooz_time.getHours() + ' و ' + nowrooz_time.getMinutes() + ' دقیقه و ' + nowrooz_time.getSeconds() + ' ثانیه'));
-            */
 
         });
         hbox.add(nowroozIcon);
-
+        
+        let popopMenuItem = new PopupMenu.PopupBaseMenuItem({hover: false});
+		popopMenuItem.actor.add_child(vbox);
+		this.menu.addMenuItem(popopMenuItem);
+		
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
             if (isOpen) {
                 let now = new Date();
@@ -255,7 +254,7 @@ PersianCalendar.prototype = {
         
         return true;
     }
-};
+});
 
 function notify(msg, details) {
     let source = new MessageTray.SystemNotificationSource();
