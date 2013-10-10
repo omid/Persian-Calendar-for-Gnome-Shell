@@ -2,7 +2,7 @@
     text-decoration: underline;
 }
 
-.calendar-event-label, .calendar-date-label {
+.calendar-date-label {
     width: 150px;
     padding: .4em 0;
     color: #cccccc;
@@ -10,15 +10,14 @@
 }
 
 .calendar-event-label {
-    height: 6em; /* I cannot make it flexible! I think it's a bug in St library! */
+    width: 150px;
+    padding-bottom: 2em;
+    color: #cccccc;
+    font-size: 0.8em;
 }
 
 .calendar-date-label:hover {
     background-color: rgba(128, 128, 128, .1);
-}
-
-.calendar-preferences-hbox {
-    padding: 0 1.75em;
 }
 
 .calendar-preferences-button {
@@ -28,3 +27,4 @@
 .calendar-preferences-button:hover {
     background-color: rgba(128, 128, 128, .1);
 }
+

@@ -42,7 +42,6 @@ Calendar.prototype = {
         this._selectedDate = PersianDate.PersianDate.gregorianToPersian(this._selectedDate.getFullYear(), this._selectedDate.getMonth() + 1, this._selectedDate.getDate());
         
         this.actor = new St.Table({ homogeneous: false,
-                                    style_class: 'calendar',
                                     reactive: true });
 
         this.actor.connect('scroll-event', Lang.bind(this, this._onScroll));
@@ -195,7 +194,19 @@ Calendar.prototype = {
             this.actor.add(button,
                            { row: row, col: 6 - (7 + iter.getDay() - this._weekStart) % 7 });
 
+			let oldd = new Date(iter.getTime());
+
             iter.setTime(iter.getTime() + MSECS_IN_DAY);
+            
+            let newd = new Date(iter.getTime());
+            
+            // I don't know why we need this
+            // maybe because of a bug in JavaScript calculation or something!
+            // By removing this, you will get some rendering error in calendar in Shahrivar of 1392
+            if(oldd.getDate() == newd.getDate()){
+				iter.setTime(iter.getTime() + MSECS_IN_DAY);
+			}
+			
             if (iter.getDay() == this._weekStart) {
                 // We stop on the first "first day of the week" after the month we are displaying
                 if (p_iter[1] > this._selectedDate[1] || p_iter[0] > this._selectedDate[0])
@@ -208,14 +219,15 @@ Calendar.prototype = {
         let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate[0], this._selectedDate[1], this._selectedDate[2]);
         g_selectedDate = new Date(g_selectedDate[0], g_selectedDate[1] - 1, g_selectedDate[2]);
         
-        // find jijri date of today
+        // find hijri date of today
         let h_selectedDate = HijriDate.HijriDate.ToHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth()+1, g_selectedDate.getDate());
         
         // add persian date
         if(Schema.get_boolean("persian-display")){
             let _datesBox_p = new St.BoxLayout();
             this.actor.add(_datesBox_p, { row: ++row, col: 0, col_span: 7 });
-            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
+            //let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
             _datesBox_p.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
@@ -228,10 +240,11 @@ Calendar.prototype = {
                 "June", "July", "August", "September", "October", "November", "December"];
             let _datesBox_g = new St.BoxLayout();
             this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
-            let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
+            //let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + g_selectedDate.getMonth() + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-date-label' });
             _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
-                St.Clipboard.get_default().set_text(this.label)
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
         }
         
@@ -241,7 +254,8 @@ Calendar.prototype = {
                 "جمادی‌الثانی", "رجب", "شعبان", "رمضان", "شوال", "ذوالقعده", "ذوالحجه"];
             let _datesBox_h = new St.BoxLayout();
             this.actor.add(_datesBox_h, { row: ++row, col: 0, col_span: 7 });
-            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
+            //let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
             _datesBox_h.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
