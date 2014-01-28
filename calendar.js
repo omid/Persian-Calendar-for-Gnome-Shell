@@ -241,7 +241,7 @@ Calendar.prototype = {
             let _datesBox_g = new St.BoxLayout();
             this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + g_selectedDate.getMonth() + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth()+1) + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-date-label' });
             _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
