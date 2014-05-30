@@ -80,7 +80,7 @@ Calendar.prototype = {
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({ style_class: 'calendar-day-base calendar-day-heading',
-                                       text: str.format(this.weekdayAbbr[i]) });
+                                       text: this.weekdayAbbr[i] });
             this.actor.add(label,
                            { row: 1,
                              col: 6 - i,
@@ -138,9 +138,9 @@ Calendar.prototype = {
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
         
         if (_sameYear(this._selectedDate, now))
-            this._monthLabel.text = str.format(PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1]);
+            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1];
         else
-            this._monthLabel.text = str.format(PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1] + ' ' + this._selectedDate[0]);
+            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1] + ' ' + this._selectedDate[0];
         
         // Remove everything but the topBox and the weekday labels
         let children = this.actor.get_children();
