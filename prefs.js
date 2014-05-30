@@ -77,6 +77,10 @@ const App = new Lang.Class({
         this.vbox2.add(item)
         Schema.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
         
+        let item = new Gtk.CheckButton({label: _('World cup 2014')})
+        this.vbox2.add(item)
+        Schema.bind('event-wc2014', item, 'active', Gio.SettingsBindFlags.DEFAULT);	
+        
         // COLOR
         let item = new Gtk.CheckButton({label: _('Use custom color')})
         this.vbox3.add(item)

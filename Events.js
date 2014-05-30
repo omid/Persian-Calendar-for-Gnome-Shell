@@ -10,6 +10,7 @@ const world = extension.imports.events.world;
 const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
+const wc2014 = extension.imports.events.wc2014;
 
 const str = extension.imports.strFunctions;
 
@@ -38,6 +39,9 @@ Events.prototype = {
         if(Schema.get_boolean("event-persian-personage")){
             this._eventsList.push(new persianPersonage.persianPersonage());
         }
+        if(Schema.get_boolean("event-wc2014")){
+            this._eventsList.push(new wc2014.wc2014());
+        }
     },
 
     getEvents: function(today) {
@@ -64,7 +68,7 @@ Events.prototype = {
 
     _checkEvent: function(el) {
         let type = 0;
-        
+
         switch(el.type){
             case 'gregorian':
                 type = 0; break;
@@ -76,9 +80,8 @@ Events.prototype = {
         
         // if event is available, set event
         // and if it is holiday, set today as holiday!
-        if(el.events[this._today[type][1]] && el.events[this._today[type][1]][this._today[type][2]]){
-            //if(this._events != '') this._events += "\n";
-            this._events = this._events + "\n" + str.format(el.events[this._today[type][1]][this._today[type][2]][0]);
+        if(el.events[this._today[type][1]][this._today[type][2]]){
+            this._events += "\n" + el.events[this._today[type][1]][this._today[type][2]][0];
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }
