@@ -121,8 +121,7 @@ const PersianCalendar = new Lang.Class({
             if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
                 _gsmPrefs.activate();
             } else {
-                _gsmPrefs.launch(global.display.get_current_time_roundtrip(),
-                                 [extension.metadata.uuid],-1,null);
+                launch_extension_prefs(extension.metadata.uuid);
             }
         });
         hbox.add(preferencesIcon);
@@ -284,4 +283,15 @@ function disable() {
   Schema.run_dispose();
   Calendar.Schema.run_dispose();
   Events.Schema.run_dispose();
+}
+
+function launch_extension_prefs(uuid) {
+    let appSys = Shell.AppSystem.get_default();
+    let app = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+    let info = app.get_app_info();
+    let timestamp = global.display.get_current_time_roundtrip();
+    info.launch_uris(
+        ['extension:///' + uuid],
+        global.create_app_launch_context(timestamp, -1)
+    );
 }
