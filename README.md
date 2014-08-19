@@ -1,4 +1,4 @@
-[*** Donate this project! ***](http://fundly.ir/node/24)
+[*** Support this project! ***](http://fundly.ir/node/24)
 
 To install:
 * Create a directory in "~/.local/share/gnome-shell/extensions/" and name it "PersianCalendar@oxygenws.com"
