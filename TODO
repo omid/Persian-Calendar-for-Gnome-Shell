@@ -1,5 +1,7 @@
 // FEATURES
-- customize "day" for panel to "day month" or "day month year".
+- customize "day" for panel to "day month" or "day month year" or something else!
+- calendar position (right/center)
+- replace default calendar option
 - optional date formats.
 - optional previous/next year.
 - date convertor.
