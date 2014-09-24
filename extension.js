@@ -146,7 +146,7 @@ const PersianCalendar = new Lang.Class({
 				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
         // nowrooz: emblem-favorite-symbolic
 
-        let nowroozIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
+        let nowroozIcon = new St.Button({ child: icon, style_class: 'pcalendar-preferences-button' });
         nowroozIcon.connect('clicked', function () {
 
             /*
@@ -242,9 +242,9 @@ const PersianCalendar = new Lang.Class({
         
         // is holiday?
         if(events[1]){
-            this.label.add_style_class_name("calendar-holiday");
+            this.label.add_style_class_name("pcalendar-holiday");
         } else {
-            this.label.remove_style_class_name("calendar-holiday");
+            this.label.remove_style_class_name("pcalendar-holiday");
         }
         
         this.label.set_text(_day);

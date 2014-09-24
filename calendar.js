@@ -60,34 +60,50 @@ Calendar.prototype = {
     },
 
     _buildHeader: function() {
+		this._rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
+		if (this._rtl) {
+			this._colPosition = 0;
+		} else {
+			this._colPosition = 6;
+		}
+		
         this.actor.destroy_all_children();
         
         // Top line of the calendar '<| year month |>'
         this._topBox = new St.BoxLayout();
         this.actor.add(this._topBox, { row: 0, col: 0, col_span: 7 });
 
-        let forward = new St.Button({ style_class: 'calendar-change-month-back' });
-        this._topBox.add(forward);
-        forward.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+        let rightButton = new St.Button({ style_class: 'calendar-change-month-back' });
+        this._topBox.add(rightButton);
+        if (this._rtl) {
+			rightButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+		} else {
+			rightButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+		}
 
         this._monthLabel = new St.Label({style_class: 'calendar-month-label'});
         this._topBox.add(this._monthLabel, { expand: true, x_fill: false, x_align: St.Align.MIDDLE });
 
-        let back = new St.Button({ style_class: 'calendar-change-month-forward' });
-        this._topBox.add(back);
-        back.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+        let leftButton = new St.Button({ style_class: 'calendar-change-month-forward' });
+        this._topBox.add(leftButton);
+		
+		if (this._rtl) {
+			leftButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+		} else {
+			leftButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+		}
         
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
-            let label = new St.Label({ style_class: 'calendar-day-base calendar-day-heading',
+            let label = new St.Label({ style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl',
                                        text: this.weekdayAbbr[i] });
             this.actor.add(label,
                            { row: 1,
-                             col: 6 - i,
+                             col: Math.abs(this._colPosition - i),
                              x_fill: false,
                              x_align: St.Align.MIDDLE });
         }
-
+        
         // All the children after this are days, and get removed when we update the calendar
         this._firstDayIndex = this.actor.get_children().length;
     },
@@ -170,7 +186,7 @@ Calendar.prototype = {
             // find events and holidays
             events = ev.getEvents(iter);
 
-            let styleClass = 'calendar-day-base calendar-day';
+            let styleClass = 'calendar-day-base calendar-day pcalendar-day';
             if (events[1])
                 styleClass += ' calendar-nonwork-day'
             else
@@ -179,7 +195,7 @@ Calendar.prototype = {
             if (row == 2)
                 styleClass = 'calendar-day-top ' + styleClass;
             if (iter.getDay() == this._weekStart - 1)
-                styleClass = 'calendar-day-left ' + styleClass;
+                styleClass = 'pcalendar-day-left ' + styleClass;
 
             if (_sameDay(now, p_iter))
                 styleClass += ' calendar-today';
@@ -192,7 +208,7 @@ Calendar.prototype = {
             button.style_class = styleClass;
 
             this.actor.add(button,
-                           { row: row, col: 6 - (7 + iter.getDay() - this._weekStart) % 7 });
+                           { row: row, col: Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7) });
 
 			let oldd = new Date(iter.getTime());
 
@@ -227,7 +243,7 @@ Calendar.prototype = {
             let _datesBox_p = new St.BoxLayout();
             this.actor.add(_datesBox_p, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]), style_class: 'calendar-day calendar-date-label' });
+            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]), style_class: 'calendar-day pcalendar-date-label' });
             _datesBox_p.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
@@ -241,7 +257,7 @@ Calendar.prototype = {
             let _datesBox_g = new St.BoxLayout();
             this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth()+1) + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-day calendar-date-label' });
+            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth()+1) + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-day pcalendar-date-label' });
             _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
@@ -255,7 +271,7 @@ Calendar.prototype = {
             let _datesBox_h = new St.BoxLayout();
             this.actor.add(_datesBox_h, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]), style_class: 'calendar-day calendar-date-label' });
+            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]), style_class: 'calendar-day pcalendar-date-label' });
             _datesBox_h.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
@@ -268,7 +284,7 @@ Calendar.prototype = {
         if(events[0]){
             let _eventBox = new St.BoxLayout();
             this.actor.add(_eventBox, { row: ++row, col: 0, col_span: 7 });
-            let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-day calendar-event-label' });
+            let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-day pcalendar-event-label' });
             
             /* Wrap truncate some texts!
              * And I cannot make height of eventBox flexible!

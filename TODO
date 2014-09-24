@@ -1,3 +1,7 @@
+// DONE
+- color of texts wont change. So in bright themes you cannot see them!
+- fix interface for RTLed Gnome.
+
 // FEATURES
 - customize "day" for panel to "day month" or "day month year" or something else!
 - calendar position (right/center)
@@ -11,6 +15,4 @@
 - evolution integration.
 
 // BUGS
-- color of texts wont change. So in bright themes you cannot see texts!
-- fix interface for RTLed Gnome.
-
+- 
