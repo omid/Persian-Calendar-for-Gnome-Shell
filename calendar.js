@@ -227,7 +227,7 @@ Calendar.prototype = {
             let _datesBox_p = new St.BoxLayout();
             this.actor.add(_datesBox_p, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: str.format(this._selectedDate[2] + ' ' + PersianDate.PersianDate.p_month_names[this._selectedDate[1]-1] + ' ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]), style_class: 'calendar-day calendar-date-label' });
             _datesBox_p.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
@@ -241,7 +241,7 @@ Calendar.prototype = {
             let _datesBox_g = new St.BoxLayout();
             this.actor.add(_datesBox_g, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: gregorian_month_name[g_selectedDate.getMonth()] + ' ' + g_selectedDate.getDate() + ' ' + g_selectedDate.getFullYear(), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth()+1) + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth()+1) + ' - ' + g_selectedDate.getDate(), style_class: 'calendar-day calendar-date-label' });
             _datesBox_g.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
@@ -255,7 +255,7 @@ Calendar.prototype = {
             let _datesBox_h = new St.BoxLayout();
             this.actor.add(_datesBox_h, { row: ++row, col: 0, col_span: 7 });
             //let button = new St.Button({ label: str.format(h_selectedDate[2] + ' ' + hijri_month_name[h_selectedDate[1]-1] + ' ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
-            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]), style_class: 'calendar-date-label' });
+            let button = new St.Button({ label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]), style_class: 'calendar-day calendar-date-label' });
             _datesBox_h.add(button, { expand: true, x_fill: true, x_align: St.Align.MIDDLE });
             button.connect('clicked', Lang.bind(button, function() {
                 St.Clipboard.get_default().set_text(this.label)
@@ -268,7 +268,7 @@ Calendar.prototype = {
         if(events[0]){
             let _eventBox = new St.BoxLayout();
             this.actor.add(_eventBox, { row: ++row, col: 0, col_span: 7 });
-            let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-event-label' });
+            let bottomLabel = new St.Label({ text: str.format(events[0]), style_class: 'calendar-day calendar-event-label' });
             
             /* Wrap truncate some texts!
              * And I cannot make height of eventBox flexible!

@@ -5,15 +5,15 @@
 .calendar-date-label {
     width: 150px;
     padding: .4em 0;
-    color: #cccccc;
     font-size: 0.8em;
+    border: 0 !important;
 }
 
 .calendar-event-label {
     width: 150px;
     padding-bottom: 2em;
-    color: #cccccc;
     font-size: 0.8em;
+    border: 0 !important;
 }
 
 .calendar-date-label:hover {
