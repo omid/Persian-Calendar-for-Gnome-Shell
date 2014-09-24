@@ -40,15 +40,15 @@ const PersianCalendar = new Lang.Class({
             this.label.set_style('color: ' + Schema.get_string('color'));
         }
         
-        Schema.connect('changed::color', Lang.bind(
+        this.schema_color_change_signal = Schema.connect('changed::color', Lang.bind(
             this, function (schema, key) {
                 if(Schema.get_boolean('custom-color')){
                     this.label.set_style('color: ' + Schema.get_string('color'));
                 }
             }
         ));
-        
-        Schema.connect('changed::custom-color', Lang.bind(
+
+        this.schema_custom_color_signal = Schema.connect('changed::custom-color', Lang.bind(
             this, function (schema, key) {
                 if(Schema.get_boolean('custom-color')){
                     this.label.set_style('color: ' + Schema.get_string('color'));
@@ -101,7 +101,7 @@ const PersianCalendar = new Lang.Class({
         this.today = [3];
         
         let vbox = new St.BoxLayout({vertical: true});
-		
+        
         this._calendar = new Calendar.Calendar();
         vbox.add(this._calendar.actor, {x_fill: false,
                                         x_align: St.Align.MIDDLE })
@@ -111,7 +111,7 @@ const PersianCalendar = new Lang.Class({
         
         // Add preferences button
         let icon = new St.Icon({ icon_name: 'emblem-system-symbolic',
-				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
 
         let _appSys = Shell.AppSystem.get_default();
         let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
@@ -128,7 +128,7 @@ const PersianCalendar = new Lang.Class({
         
         // Add date convertion button
         /*let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
-				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
 
         let convertionIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
         convertionIcon.connect('clicked', function () {
@@ -143,7 +143,7 @@ const PersianCalendar = new Lang.Class({
 
         // Add Nowrooz button
         let icon = new St.Icon({ icon_name: 'emblem-favorite-symbolic',
-				      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
         // nowrooz: emblem-favorite-symbolic
 
         let nowroozIcon = new St.Button({ child: icon, style_class: 'pcalendar-preferences-button' });
@@ -203,9 +203,9 @@ const PersianCalendar = new Lang.Class({
         hbox.add(nowroozIcon);
         
         let popopMenuItem = new PopupMenu.PopupBaseMenuItem({hover: false});
-		popopMenuItem.actor.add_child(vbox);
-		this.menu.addMenuItem(popopMenuItem);
-		
+        popopMenuItem.actor.add_child(vbox);
+        this.menu.addMenuItem(popopMenuItem);
+        
         this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
             if (isOpen) {
                 let now = new Date();
@@ -278,6 +278,9 @@ function enable() {
 }
 
 function disable() {
+  Schema.disconnect(_indicator.schema_color_change_signal);
+  Schema.disconnect(_indicator.schema_custom_color_signal);
+  
   _indicator.destroy();
   MainLoop.source_remove(_timer);
   Schema.run_dispose();
