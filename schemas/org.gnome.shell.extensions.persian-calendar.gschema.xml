@@ -40,11 +40,6 @@
       <summary>Display official international events</summary>
       <description>Display official international events.</description>
     </key>
-    <key name="event-wc2014" type="b">
-      <default>true</default>
-      <summary>Display world cup 2014 events</summary>
-      <description>Display world cup 2014 events.</description>
-    </key>
     <key name="custom-color" type="b">
       <default>false</default>
       <summary>Use custom color</summary>

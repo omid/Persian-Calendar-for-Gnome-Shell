@@ -59,32 +59,28 @@ const App = new Lang.Class({
 
         let item = new Gtk.CheckButton({label: _('Official Iranian lunar')})
         this.vbox2.add(item)
-        Schema.bind('event-iran-lunar', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
+        Schema.bind('event-iran-lunar', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         let item = new Gtk.CheckButton({label: _('Official Iranian solar')})
         this.vbox2.add(item)
-        Schema.bind('event-iran-solar', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
+        Schema.bind('event-iran-solar', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         let item = new Gtk.CheckButton({label: _('Old Persian')})
         this.vbox2.add(item)
-        Schema.bind('event-persian', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
+        Schema.bind('event-persian', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         let item = new Gtk.CheckButton({label: _('Persian personages')})
         this.vbox2.add(item)
-        Schema.bind('event-persian-personage', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
+        Schema.bind('event-persian-personage', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         let item = new Gtk.CheckButton({label: _('International')})
         this.vbox2.add(item)
-        Schema.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
-        
-        let item = new Gtk.CheckButton({label: _('World cup 2014')})
-        this.vbox2.add(item)
-        Schema.bind('event-wc2014', item, 'active', Gio.SettingsBindFlags.DEFAULT);	
+        Schema.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);
         
         // COLOR
         let item = new Gtk.CheckButton({label: _('Use custom color')})
         this.vbox3.add(item)
-        Schema.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);		
+        Schema.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         let label = new Gtk.Label({label: "Color: "});
         let color = new Gtk.ColorButton();

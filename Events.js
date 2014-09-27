@@ -10,7 +10,6 @@ const world = extension.imports.events.world;
 const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
-const wc2014 = extension.imports.events.wc2014;
 
 const str = extension.imports.strFunctions;
 
@@ -38,9 +37,6 @@ Events.prototype = {
         }
         if(Schema.get_boolean("event-persian-personage")){
             this._eventsList.push(new persianPersonage.persianPersonage());
-        }
-        if(Schema.get_boolean("event-wc2014")){
-            this._eventsList.push(new wc2014.wc2014());
         }
     },
 
