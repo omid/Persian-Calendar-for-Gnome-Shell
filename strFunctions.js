@@ -1,17 +1,15 @@
 function format(str, convert_numbers) {
-    var enums   = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    var pnums   = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-                  
+    var enums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    var pnums = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+
     return replace(enums, pnums, str);
 }
 
 /* copied from http://phpjs.org/functions/str_replace */
-function replace (search, replace, subject, count) {
-    var i = 0,
-        j = 0,
+function replace(search, replace, subject, count) {
+    var j = 0,
         temp = '',
         repl = '',
-        sl = 0,
         fl = 0,
         f = [].concat(search),
         r = [].concat(replace),

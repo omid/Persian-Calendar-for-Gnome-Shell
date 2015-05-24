@@ -1,14 +1,14 @@
 function iranSolar() {
     this._init();
-};
+}
 
 iranSolar.prototype = {
     name: 'مناسبت‌های رسمی ایران',
     type: 'persian',
     /* [month][day] = [title, isHoliday] */
-    events: [[],[],[],[],[],[],[],[],[],[],[],[],[]],
-    
-    _init: function() {
+    events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
+
+    _init: function () {
         this.events[1][1] = ['عید نوروز', true];
         this.events[1][2] = ['عید نوروز', true];
         this.events[1][3] = ['عید نوروز', true];
@@ -24,4 +24,4 @@ iranSolar.prototype = {
         this.events[11][22] = ['پیروزی انقلاب اسلامی', true];
         this.events[12][29] = ['روز ملی شدن صنعت نفت', true];
     }
-}
+};

@@ -5,7 +5,6 @@ const PopupMenu = imports.ui.popupMenu;
 const MainLoop = imports.mainloop;
 const Lang = imports.lang;
 const MessageTray = imports.ui.messageTray;
-const Pango = imports.gi.Pango;
 const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 
@@ -27,230 +26,224 @@ const PersianCalendar = new Lang.Class({
     Name: 'PersianCalendar.PersianCalendar',
     Extends: PanelMenu.Button,
 
-    _init: function() {
+    _init: function () {
         messageTray = new MessageTray.MessageTray();
         this.parent(0.0);
-        
-        this.label = new St.Label({y_expand: true,
-                                   y_align: Clutter.ActorAlign.CENTER });
+
+        this.label = new St.Label({
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER
+        });
         this.actor.add_actor(this.label);
-        
+
         // some codes for coloring label
-        if(Schema.get_boolean('custom-color')){
+        if (Schema.get_boolean('custom-color')) {
             this.label.set_style('color: ' + Schema.get_string('color'));
         }
-        
+
+        let that = this;
         this.schema_color_change_signal = Schema.connect('changed::color', Lang.bind(
-            this, function (schema, key) {
-                if(Schema.get_boolean('custom-color')){
-                    this.label.set_style('color: ' + Schema.get_string('color'));
+            that, function (schema, key) {
+                if (Schema.get_boolean('custom-color')) {
+                    that.label.set_style('color: ' + Schema.get_string('color'));
                 }
             }
         ));
 
+        let that = this;
         this.schema_custom_color_signal = Schema.connect('changed::custom-color', Lang.bind(
-            this, function (schema, key) {
-                if(Schema.get_boolean('custom-color')){
-                    this.label.set_style('color: ' + Schema.get_string('color'));
+            that, function (schema, key) {
+                if (Schema.get_boolean('custom-color')) {
+                    that.label.set_style('color: ' + Schema.get_string('color'));
                 } else {
-                    this.label.set_style('color:');
+                    that.label.set_style('color:');
                 }
             }
         ));
         ///////////////////////////////
-        
+
         // some codes for fonts
         /*
-        let font = Schema.get_string('font').split(' ');
-        font.pop(); // remove size
-        font = font.join(' ');
-        
-        if(Schema.get_boolean('custom-font')){
-            this.label.set_style('font-family: ' + font);
-        }
-        
-        Schema.connect('changed::font', Lang.bind(
-            this, function (schema, key) {
-                if(Schema.get_boolean('custom-font')){
-                    let font = Schema.get_string('font').split(' ');
-                    font.pop(); // remove size
-                    font = font.join(' ');
-                    
-                    this.label.set_style('font-family: ' + font);
-                }
-            }
-        ));
-        
-        Schema.connect('changed::custom-font', Lang.bind(
-            this, function (schema, key) {
-                if(Schema.get_boolean('custom-font')){
-                    let font = Schema.get_string('font').split(' ');
-                    font.pop(); // remove size
-                    font = font.join(' ');
-                    
-                    this.label.set_style('font-family: ' + font);
-                } else {
-                    this.label.set_style('font-family: ');
-                }
-            }
-        ));
-        */
+         let font = Schema.get_string('font').split(' ');
+         font.pop(); // remove size
+         font = font.join(' ');
+
+         if(Schema.get_boolean('custom-font')){
+         this.label.set_style('font-family: ' + font);
+         }
+
+         Schema.connect('changed::font', Lang.bind(
+         this, function (schema, key) {
+         if(Schema.get_boolean('custom-font')){
+         let font = Schema.get_string('font').split(' ');
+         font.pop(); // remove size
+         font = font.join(' ');
+
+         this.label.set_style('font-family: ' + font);
+         }
+         }
+         ));
+
+         Schema.connect('changed::custom-font', Lang.bind(
+         this, function (schema, key) {
+         if(Schema.get_boolean('custom-font')){
+         let font = Schema.get_string('font').split(' ');
+         font.pop(); // remove size
+         font = font.join(' ');
+
+         this.label.set_style('font-family: ' + font);
+         } else {
+         this.label.set_style('font-family: ');
+         }
+         }
+         ));
+         */
         ///////////////////////////////
-        
-        this._today  = '';
-        this.today = [3];
-        
+
+        this._today = '';
+
         let vbox = new St.BoxLayout({vertical: true});
-        
+
         this._calendar = new Calendar.Calendar();
-        vbox.add(this._calendar.actor, {x_fill: false,
-                                        x_align: St.Align.MIDDLE })
-        
+        vbox.add_actor(this._calendar.actor);
+
         let hbox = new St.BoxLayout({style_class: 'calendar-preferences-hbox'});
-        vbox.add(hbox, {x_fill: true});
-        
+        vbox.add_actor(hbox);
+
         // Add preferences button
-        let icon = new St.Icon({ icon_name: 'emblem-system-symbolic',
-                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        let icon = new St.Icon({
+            icon_name: 'emblem-system-symbolic',
+            style_class: 'popup-menu-icon calendar-popup-menu-icon'
+        });
 
         let _appSys = Shell.AppSystem.get_default();
         let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
 
-        let preferencesIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
+        let preferencesIcon = new St.Button({
+            child: icon,
+            style_class: 'system-menu-action calendar-preferences-button',
+            reactive: true,
+            can_focus: true
+        });
         preferencesIcon.connect('clicked', function () {
-            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
+            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING) {
                 _gsmPrefs.activate();
             } else {
                 launch_extension_prefs(extension.metadata.uuid);
             }
         });
-        hbox.add(preferencesIcon);
-        
-        // Add date convertion button
-        /*let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
-                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        hbox.add_actor(preferencesIcon, {expand: true, x_fill: false});
 
-        let convertionIcon = new St.Button({ child: icon, style_class: 'calendar-preferences-button' });
-        convertionIcon.connect('clicked', function () {
-            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
-                _gsmPrefs.activate();
-            } else {
-                _gsmPrefs.launch(global.display.get_current_time_roundtrip(),
-                                 [extension.metadata.uuid],-1,null);
-            }
-        });
-        hbox.add(convertionIcon);*/
+        // Add date conversion button
+        //let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
+        // style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        //
+        // let convertionIcon = new St.Button({ child: icon, style_class: 'system-menu-action calendar-preferences-button'});
+        // convertionIcon.connect('clicked', function () {
+        // if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING){
+        // _gsmPrefs.activate();
+        // } else {
+        // _gsmPrefs.launch(global.display.get_current_time_roundtrip(),
+        // [extension.metadata.uuid],-1,null);
+        // }
+        // });
+        // hbox.add_actor(convertionIcon, {expand: true, x_fill: false});
 
         // Add Nowrooz button
-        let icon = new St.Icon({ icon_name: 'emblem-favorite-symbolic',
-                      style_class: 'popup-menu-icon calendar-popup-menu-icon' });
+        let icon = new St.Icon({
+            icon_name: 'emblem-favorite-symbolic',
+            style_class: 'popup-menu-icon calendar-popup-menu-icon'
+        });
         // nowrooz: emblem-favorite-symbolic
 
-        let nowroozIcon = new St.Button({ child: icon, style_class: 'pcalendar-preferences-button' });
+        let nowroozIcon = new St.Button({
+            child: icon,
+            reactive: true,
+            can_focus: true,
+            style_class: 'system-menu-action'
+        });
         nowroozIcon.connect('clicked', function () {
 
-            /*
-            let now = new Date();
-            let date = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
-            let nextYear = ++date[0];
-            date = PersianDate.PersianDate.persianToGregorian(date[0], 1 , 1);
-            let nowrooz = new Date(date[0], date[1], date[2]);
-            let delta = Math.ceil((nowrooz.getTime() - now.getTime()) / 86400000); // days
-            notify(str.format(delta + ' روز مانده تا نوروز سال ' + nextYear), delta<7?str.format('نوروزتان فرخنده باد'):'');
-            */
-            
             /* calculate exact hour/minute/second of the next new year.
-            it calculate with some small differences!*/
+             it calculate with some small differences!*/
             let now = new Date();
             let pdate = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
-            
-            // 31556912 is length of each Persian year, according to ghiasabadi.com
-            let start_nowrooz = 1269106333000; // in Iran's Timezone! // based on the year 1388
-            let year_delta = pdate[0] - 1389 + 1;
 
-            start_nowrooz = start_nowrooz + (year_delta * 31556912000);
-            if (start_nowrooz <= 0) {
-                start_nowrooz = 0;
-            }
-            
             let month_delta = 12 - pdate[1];
             let day_delta, nowrooz;
-            if(month_delta >= 6) {
+            if (month_delta >= 6) {
                 day_delta = 31 - pdate[2];
             } else {
                 day_delta = 30 - pdate[2];
             }
-            
-            if(month_delta != 0) {
+
+            if (month_delta != 0) {
                 nowrooz = month_delta + ' ماه و ';
             }
-            else
-            {
+            else {
                 nowrooz = '';
             }
-            
-            if(day_delta != 0)
-            {
-                nowrooz = nowrooz + day_delta + ' روز مانده به ';
-                nowrooz = nowrooz + 'نوروز سال ' + (pdate[0]+1);
-            }
-            
-            let nowrooz_time = new Date(start_nowrooz);
 
-            notify(str.format(nowrooz) + (day_delta<7?str.format(' - نوروزتان فرخنده باد'):''));
+            if (day_delta != 0) {
+                nowrooz = nowrooz + day_delta + ' روز مانده به ';
+                nowrooz = nowrooz + 'نوروز سال ' + (pdate[0] + 1);
+            }
+
+            notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
 
         });
-        hbox.add(nowroozIcon);
-        
+        hbox.add_actor(nowroozIcon, {expand: true, x_fill: false});
+
         let popopMenuItem = new PopupMenu.PopupBaseMenuItem({hover: false});
         popopMenuItem.actor.add_child(vbox);
         this.menu.addMenuItem(popopMenuItem);
-        
-        this.menu.connect('open-state-changed', Lang.bind(this, function(menu, isOpen) {
+
+        let that = this;
+        this.menu.connect('open-state-changed', Lang.bind(that, function (menu, isOpen) {
             if (isOpen) {
                 let now = new Date();
                 now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
-                this._calendar.setDate(now);
+                that._calendar.setDate(now);
             }
         }));
     },
 
-    _updateDate: function() {
+    _updateDate: function () {
         this._isHoliday = false;
         let _date = new Date();
         this._events = '';
-        
+
         // convert to Persian
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
-        
+
         // if today is "today" just return, don't change anything!
-        if(this._today == _date[3]){
+        if (this._today == _date[3]) {
             return true;
         }
-        
+
         // set today as "today"
         this._today = _date[3];
-        
+
         // set indicator label and popupmenu
         var _day = str.format(_date[2] + '');
-        _date = str.format(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1]-1] + ' ' + _date[0]);
-        
+        _date = str.format(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1] - 1] + ' ' + _date[0]);
+
         // get events of today
         let ev = new Events.Events();
         let events = ev.getEvents(new Date());
-        events[0] = events[0] != '' ? "\n" + events[0] : ''
-        
+        events[0] = events[0] != '' ? "\n" + events[0] : '';
+
         // is holiday?
-        if(events[1]){
+        if (events[1]) {
             this.label.add_style_class_name("pcalendar-holiday");
         } else {
             this.label.remove_style_class_name("pcalendar-holiday");
         }
-        
+
         this.label.set_text(_day);
-        
+
         notify(_date, events[0]);
-        
+
         return true;
     }
 });
@@ -271,21 +264,21 @@ function init(metadata) {
 }
 
 function enable() {
-  _indicator = new PersianCalendar;
-  Main.panel.addToStatusArea('persian_calendar', _indicator);
-  _indicator._updateDate();
-  _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
+    _indicator = new PersianCalendar;
+    Main.panel.addToStatusArea('persian_calendar', _indicator);
+    _indicator._updateDate();
+    _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
 function disable() {
-  Schema.disconnect(_indicator.schema_color_change_signal);
-  Schema.disconnect(_indicator.schema_custom_color_signal);
-  
-  _indicator.destroy();
-  MainLoop.source_remove(_timer);
-  Schema.run_dispose();
-  Calendar.Schema.run_dispose();
-  Events.Schema.run_dispose();
+    Schema.disconnect(_indicator.schema_color_change_signal);
+    Schema.disconnect(_indicator.schema_custom_color_signal);
+
+    _indicator.destroy();
+    MainLoop.source_remove(_timer);
+    Schema.run_dispose();
+    Calendar.Schema.run_dispose();
+    Events.Schema.run_dispose();
 }
 
 function launch_extension_prefs(uuid) {
