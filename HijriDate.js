@@ -27,7 +27,7 @@ HijriDate.ToHijri = function (y, m, d) {
     d = l - HijriDate.intPart((709 * m) / 24);
     y = 30 * n + j - 30;
 
-    return [y, m, d];
+    return {year: y, month: m, day: d};
 };
 
 HijriDate.fromHijri = function (y, m, d) {
@@ -57,5 +57,5 @@ HijriDate.fromHijri = function (y, m, d) {
         y = 4 * k + n + i - 4716;
     }
 
-    return [y, m, d];
+    return {year: y, month: m, day: d};
 };

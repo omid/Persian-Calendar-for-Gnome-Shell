@@ -16,6 +16,9 @@ let convenience = extension.imports.convenience;
 
 let Schema = convenience.getSettings(extension, SETTINGS_SCHEMA);
 
+function init() {
+}
+
 const App = new Lang.Class({
     Name: 'PersianCalendar.App',
 

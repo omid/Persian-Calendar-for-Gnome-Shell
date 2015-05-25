@@ -54,9 +54,10 @@ Events.prototype = {
         // convert to Persian
         today = PersianDate.PersianDate.gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
         // store persian date of today
-        this._today[1] = today;
+        this._today[1] = [today.year, today.month, today.day];
         // store hijri date of today
-        this._today[2] = HijriDate.HijriDate.ToHijri(this._today[0][0], this._today[0][1], this._today[0][2]);
+        today = HijriDate.HijriDate.ToHijri(this._today[0][0], this._today[0][1], this._today[0][2]);
+        this._today[2] = [today.year, today.month, today.day];
 
         this._eventsList.forEach(this._checkEvent, this);
         return [this._events, this._isHoliday];

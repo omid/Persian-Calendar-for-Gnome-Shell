@@ -58,7 +58,7 @@ PersianDate.persianToGregorian = function (p_y, p_m, p_d) {
     var gm = i + 1;
     var gd = g_day_no + 1;
 
-    return [gy, gm, gd];
+    return {year: gy, month: gm, day: gd};
 };
 
 PersianDate.checkDate = function (p_y, p_m, p_d) {
@@ -106,5 +106,5 @@ PersianDate.gregorianToPersian = function (g_y, g_m, g_d) {
     var pd = p_day_no + 1;
 
 
-    return [py, pm, pd, day_in_year];
+    return {year: py, month: pm, day: pd, yearDays: day_in_year};
 };

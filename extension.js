@@ -103,12 +103,18 @@ const PersianCalendar = new Lang.Class({
         this._today = '';
 
         let vbox = new St.BoxLayout({vertical: true});
+        let item = new PopupMenu.PopupBaseMenuItem({hover: false});
+        item.actor.add_child(vbox);
+        this.menu.addMenuItem(item);
 
         this._calendar = new Calendar.Calendar();
         vbox.add_actor(this._calendar.actor);
 
-        let hbox = new St.BoxLayout({style_class: 'calendar-preferences-hbox'});
-        vbox.add_actor(hbox);
+        item = new PopupMenu.PopupBaseMenuItem({
+            reactive: false,
+            can_focus: false
+        });
+        this.menu.addMenuItem(item);
 
         // Add preferences button
         let icon = new St.Icon({
@@ -132,7 +138,7 @@ const PersianCalendar = new Lang.Class({
                 launch_extension_prefs(extension.metadata.uuid);
             }
         });
-        hbox.add_actor(preferencesIcon, {expand: true, x_fill: false});
+        item.actor.add(preferencesIcon, {expand: true, x_fill: false});
 
         // Add date conversion button
         //let icon = new St.Icon({ icon_name: 'emblem-synchronizing-symbolic',
@@ -154,7 +160,6 @@ const PersianCalendar = new Lang.Class({
             icon_name: 'emblem-favorite-symbolic',
             style_class: 'popup-menu-icon calendar-popup-menu-icon'
         });
-        // nowrooz: emblem-favorite-symbolic
 
         let nowroozIcon = new St.Button({
             child: icon,
@@ -169,12 +174,12 @@ const PersianCalendar = new Lang.Class({
             let now = new Date();
             let pdate = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
-            let month_delta = 12 - pdate[1];
+            let month_delta = 12 - pdate.month;
             let day_delta, nowrooz;
             if (month_delta >= 6) {
-                day_delta = 31 - pdate[2];
+                day_delta = 31 - pdate.day;
             } else {
-                day_delta = 30 - pdate[2];
+                day_delta = 30 - pdate.day;
             }
 
             if (month_delta != 0) {
@@ -186,17 +191,13 @@ const PersianCalendar = new Lang.Class({
 
             if (day_delta != 0) {
                 nowrooz = nowrooz + day_delta + ' روز مانده به ';
-                nowrooz = nowrooz + 'نوروز سال ' + (pdate[0] + 1);
+                nowrooz = nowrooz + 'نوروز سال ' + (pdate.year + 1);
             }
 
             notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
 
         });
-        hbox.add_actor(nowroozIcon, {expand: true, x_fill: false});
-
-        let popopMenuItem = new PopupMenu.PopupBaseMenuItem({hover: false});
-        popopMenuItem.actor.add_child(vbox);
-        this.menu.addMenuItem(popopMenuItem);
+        item.actor.add(nowroozIcon, {expand: true, x_fill: false});
 
         let that = this;
         this.menu.connect('open-state-changed', Lang.bind(that, function (menu, isOpen) {
@@ -217,16 +218,16 @@ const PersianCalendar = new Lang.Class({
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
 
         // if today is "today" just return, don't change anything!
-        if (this._today == _date[3]) {
+        if (this._today == _date.yearDays) {
             return true;
         }
 
         // set today as "today"
-        this._today = _date[3];
+        this._today = _date.yearDays;
 
         // set indicator label and popupmenu
-        var _day = str.format(_date[2] + '');
-        _date = str.format(_date[2] + ' ' + PersianDate.PersianDate.p_month_names[_date[1] - 1] + ' ' + _date[0]);
+        var _day = str.format(_date.day + '');
+        _date = str.format(_date.day + ' ' + PersianDate.PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
 
         // get events of today
         let ev = new Events.Events();

@@ -15,16 +15,10 @@ const Events = extension.imports.Events;
 
 const Schema = convenience.getSettings(extension, 'persian-calendar');
 
-const MSECS_IN_DAY = 24 * 60 * 60 * 1000;
-
 function _sameDay(dateA, dateB) {
-    return (dateA[0] == dateB[0] &&
-    dateA[1] == dateB[1] &&
-    dateA[2] == dateB[2]);
-}
-
-function _sameYear(dateA, dateB) {
-    return (dateA[0] == dateB[0]);
+    return (dateA.year == dateB.year &&
+    dateA.month == dateB.month &&
+    dateA.day == dateB.day);
 }
 
 function Calendar() {
@@ -54,10 +48,9 @@ Calendar.prototype = {
     setDate: function (date) {
         if (!_sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
-            this._update();
-        } else {
-            this._update();
         }
+
+        this._update();
     },
 
     _buildHeader: function () {
@@ -128,13 +121,13 @@ Calendar.prototype = {
 
     _onPrevMonthButtonClicked: function () {
         let newDate = this._selectedDate;
-        let oldMonth = newDate[1];
+        let oldMonth = newDate.month;
         if (oldMonth == 1) {
-            newDate[1] = 12;
-            newDate[0]--;
+            newDate.month = 12;
+            newDate.year--;
         }
         else {
-            newDate[1]--;
+            newDate.month--;
         }
 
         this.setDate(newDate);
@@ -142,13 +135,13 @@ Calendar.prototype = {
 
     _onNextMonthButtonClicked: function () {
         let newDate = this._selectedDate;
-        let oldMonth = newDate[1];
+        let oldMonth = newDate.month;
         if (oldMonth == 12) {
-            newDate[1] = 1;
-            newDate[0]++;
+            newDate.month = 1;
+            newDate.year++;
         }
         else {
-            newDate[1]++;
+            newDate.month++;
         }
 
         this.setDate(newDate);
@@ -158,10 +151,10 @@ Calendar.prototype = {
         let now = new Date();
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
-        if (_sameYear(this._selectedDate, now)) {
-            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1];
+        if (this._selectedDate.year == now.year) {
+            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1];
         } else {
-            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate[1] - 1] + ' ' + str.format(this._selectedDate[0]);
+            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' + str.format(this._selectedDate.year);
         }
 
         // Remove everything but the topBox and the weekday labels
@@ -171,20 +164,18 @@ Calendar.prototype = {
         }
 
         // Start at the beginning of the week before the start of the month
-        let beginDate = this._selectedDate;
-        beginDate = PersianDate.PersianDate.persianToGregorian(beginDate[0], beginDate[1], 1);
-        beginDate = new Date(beginDate[0], beginDate[1] - 1, beginDate[2]);
-        let daysToWeekStart = (7 + beginDate.getDay() - this._weekStart) % 7;
-        beginDate.setTime(beginDate.getTime() - daysToWeekStart * MSECS_IN_DAY);
+        let iter = this._selectedDate;
+        iter = PersianDate.PersianDate.persianToGregorian(iter.year, iter.month, 1);
+        iter = new Date(iter.year, iter.month - 1, iter.day);
+        let daysToWeekStart = (7 + iter.getDay() - this._weekStart) % 7;
+        iter.setDate(iter.getDate() - daysToWeekStart);
 
-        let iter = new Date(beginDate);
         let row = 2;
-        let p_iter;
         let ev = new Events.Events();
         let events;
         while (true) {
-            p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
-            let button = new St.Button({label: str.format(p_iter[2])});
+            let p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
+            let button = new St.Button({label: str.format(p_iter.day)});
 
             button.connect('clicked', Lang.bind(this, function () {
                 this.setDate(p_iter);
@@ -195,52 +186,44 @@ Calendar.prototype = {
 
             let styleClass = 'calendar-day-base calendar-day pcalendar-day';
             if (events[1])
-                styleClass += ' calendar-nonwork-day'
+                styleClass += ' calendar-nonwork-day';
             else
-                styleClass += ' calendar-work-day'
+                styleClass += ' calendar-work-day';
 
             if (row == 2)
                 styleClass = 'calendar-day-top ' + styleClass;
             if (iter.getDay() == this._weekStart - 1)
                 styleClass = 'pcalendar-day-left ' + styleClass;
 
-            if (_sameDay(now, p_iter))
+            if (_sameDay(now, p_iter)) {
                 styleClass += ' calendar-today';
-            else if (p_iter[1] != this._selectedDate[1])
+            } else if (p_iter.month != this._selectedDate.month) {
                 styleClass += ' calendar-other-month-day';
+            }
 
-            if (_sameDay(this._selectedDate, p_iter))
+            if (_sameDay(this._selectedDate, p_iter)) {
                 button.add_style_pseudo_class('active');
+            }
 
             button.style_class = styleClass;
 
             this.actor.add(button,
                 {row: row, col: Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7)});
 
-            let oldd = new Date(iter.getTime());
-
-            iter.setTime(iter.getTime() + MSECS_IN_DAY);
-
-            let newd = new Date(iter.getTime());
-
-            // I don't know why we need this
-            // maybe because of a bug in JavaScript calculation or something!
-            // By removing this, you will get some rendering error in calendar in Shahrivar of 1392
-            if (oldd.getDate() == newd.getDate()) {
-                iter.setTime(iter.getTime() + MSECS_IN_DAY);
-            }
+            iter.setDate(iter.getDate() + 1);
 
             if (iter.getDay() == this._weekStart) {
                 // We stop on the first "first day of the week" after the month we are displaying
-                if (p_iter[1] > this._selectedDate[1] || p_iter[0] > this._selectedDate[0])
+                if (p_iter.month > this._selectedDate.month || p_iter.year > this._selectedDate.year) {
                     break;
+                }
                 row++;
             }
         }
 
         // find gregorian date
-        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate[0], this._selectedDate[1], this._selectedDate[2]);
-        g_selectedDate = new Date(g_selectedDate[0], g_selectedDate[1] - 1, g_selectedDate[2]);
+        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate.year, this._selectedDate.month, this._selectedDate.day);
+        g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
 
         // find hijri date of today
         let h_selectedDate = HijriDate.HijriDate.ToHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth() + 1, g_selectedDate.getDate());
@@ -250,12 +233,12 @@ Calendar.prototype = {
             let _datesBox_p = new St.BoxLayout();
             this.actor.add(_datesBox_p, {row: ++row, col: 0, col_span: 7});
             let button = new St.Button({
-                label: str.format(this._selectedDate[2] + ' / ' + this._selectedDate[1] + ' / ' + this._selectedDate[0]),
+                label: str.format(this._selectedDate.day + ' / ' + this._selectedDate.month + ' / ' + this._selectedDate.year),
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_p.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
             button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(this.label)
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
         }
 
@@ -278,12 +261,12 @@ Calendar.prototype = {
             let _datesBox_h = new St.BoxLayout();
             this.actor.add(_datesBox_h, {row: ++row, col: 0, col_span: 7});
             let button = new St.Button({
-                label: str.format(h_selectedDate[2] + ' / ' + h_selectedDate[1] + ' / ' + h_selectedDate[0]),
+                label: str.format(h_selectedDate.day + ' / ' + h_selectedDate.month + ' / ' + h_selectedDate.year),
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_h.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
             button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(this.label)
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
         }
 
