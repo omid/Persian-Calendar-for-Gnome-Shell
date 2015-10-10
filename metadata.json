@@ -4,9 +4,9 @@
   "name": "Persian Calendar", 
   "original-authors": "Omid Mottaghi", 
   "shell-version": [
-    "3.16"
+    "3.18"
   ], 
   "url": "http://oxygenws.com/", 
   "uuid": "PersianCalendar@oxygenws.com", 
-  "version": 36
+  "version": 37
 }

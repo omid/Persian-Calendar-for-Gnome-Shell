@@ -34,8 +34,9 @@ Calendar.prototype = {
         this._selectedDate = new Date();
         this._selectedDate = PersianDate.PersianDate.gregorianToPersian(this._selectedDate.getFullYear(), this._selectedDate.getMonth() + 1, this._selectedDate.getDate());
 
-        this.actor = new St.Table({
-            homogeneous: false,
+        this.actor = new St.Widget({
+            //homogeneous: false,
+            layout_manager: new Clutter.TableLayout(),
             reactive: true
         });
 
@@ -65,7 +66,8 @@ Calendar.prototype = {
 
         // Top line of the calendar '<| year month |>'
         this._topBox = new St.BoxLayout();
-        this.actor.add(this._topBox, {row: 0, col: 0, col_span: 7});
+        this.actor.layout_manager.pack(this._topBox, 0, 0);
+        this.actor.layout_manager.set_span(this._topBox, 7, 1);
 
         let rightButton = new St.Button({style_class: 'calendar-change-month-back pager-button', can_focus: true});
         this._topBox.add(rightButton);
@@ -93,13 +95,7 @@ Calendar.prototype = {
                 style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl',
                 text: this.weekdayAbbr[i]
             });
-            this.actor.add(label,
-                {
-                    row: 1,
-                    col: Math.abs(this._colPosition - i),
-                    x_fill: false,
-                    x_align: St.Align.MIDDLE
-                });
+            this.actor.layout_manager.pack(label, Math.abs(this._colPosition - i), 1);
         }
 
         // All the children after this are days, and get removed when we update the calendar
@@ -207,8 +203,11 @@ Calendar.prototype = {
 
             button.style_class = styleClass;
 
-            this.actor.add(button,
-                {row: row, col: Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7)});
+            this.actor.layout_manager.pack(
+                button,
+                Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7),
+                row
+            );
 
             iter.setDate(iter.getDate() + 1);
 
@@ -231,7 +230,8 @@ Calendar.prototype = {
         // add persian date
         if (Schema.get_boolean("persian-display")) {
             let _datesBox_p = new St.BoxLayout();
-            this.actor.add(_datesBox_p, {row: ++row, col: 0, col_span: 7});
+            this.actor.layout_manager.pack(_datesBox_p, 0, ++row);
+            this.actor.layout_manager.set_span(_datesBox_p, 7, 1);
             let button = new St.Button({
                 label: str.format(this._selectedDate.day + ' / ' + this._selectedDate.month + ' / ' + this._selectedDate.year),
                 style_class: 'calendar-day pcalendar-date-label'
@@ -245,7 +245,9 @@ Calendar.prototype = {
         // add gregorian date
         if (Schema.get_boolean("gregorian-display")) {
             let _datesBox_g = new St.BoxLayout();
-            this.actor.add(_datesBox_g, {row: ++row, col: 0, col_span: 7});
+            this.actor.layout_manager.pack(_datesBox_g, 0, ++row);
+            this.actor.layout_manager.set_span(_datesBox_g, 7, 1);
+
             let button = new St.Button({
                 label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth() + 1) + ' - ' + g_selectedDate.getDate(),
                 style_class: 'calendar-day pcalendar-date-label'
@@ -259,7 +261,9 @@ Calendar.prototype = {
         // add hijri date
         if (Schema.get_boolean("hijri-display")) {
             let _datesBox_h = new St.BoxLayout();
-            this.actor.add(_datesBox_h, {row: ++row, col: 0, col_span: 7});
+            this.actor.layout_manager.pack(_datesBox_h, 0, ++row);
+            this.actor.layout_manager.set_span(_datesBox_h, 7, 1);
+
             let button = new St.Button({
                 label: str.format(h_selectedDate.day + ' / ' + h_selectedDate.month + ' / ' + h_selectedDate.year),
                 style_class: 'calendar-day pcalendar-date-label'
@@ -275,7 +279,8 @@ Calendar.prototype = {
 
         if (events[0]) {
             let _eventBox = new St.BoxLayout();
-            this.actor.add(_eventBox, {row: ++row, col: 0, col_span: 7});
+            this.actor.layout_manager.pack(_eventBox, 0, ++row);
+            this.actor.layout_manager.set_span(_eventBox, 7, 1);
             let bottomLabel = new St.Label({
                 text: str.format(events[0]),
                 style_class: 'calendar-day pcalendar-event-label'

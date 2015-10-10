@@ -20,6 +20,8 @@
 
 .pcalendar-event-label {
     width: 150px;
+    direction: rtl !important;
+    text-align: right !important;
     padding-bottom: 2em;
     font-size: 0.8em;
     border: 0 !important;
