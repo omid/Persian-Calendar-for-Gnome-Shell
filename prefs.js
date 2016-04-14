@@ -50,23 +50,65 @@ const App = new Lang.Class({
         this.main_hbox.pack_start(this.vbox2, false, false, 0);
         this.main_hbox.pack_start(this.vbox3, false, false, 0);
 
-        this.vbox1.add(new Gtk.Label({label: _('Dates to display:')}));
-        this.vbox2.add(new Gtk.Label({
-            label: _('Events to display:\n<span size="x-small">("Official" events are needed to find holidays)</span>'),
-            use_markup: true
-        }));
+        // DATES FORMAT
+        this.vbox1.add(new Gtk.Label({label: _('Date Conversions:')}));
 
         let item = new Gtk.CheckButton({label: _('Persian')});
         this.vbox1.add(item);
         Schema.bind('persian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+        
+        let label = new Gtk.Label({label: "     Format: "});
+        let format = new Gtk.Entry();
+        let hbox = new Gtk.HBox();
+        hbox.add(label);
+        hbox.add(format);
+        this.vbox1.add(hbox);
+        format.set_text(Schema.get_string('persian-display-format'));
+        format.connect('changed', function (format) {
+            Schema.set_string('persian-display-format', format.text);
+        });
 
         let item = new Gtk.CheckButton({label: _('Gregorian')});
         this.vbox1.add(item);
         Schema.bind('gregorian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
+        let label = new Gtk.Label({label: "     Format: "});
+        let format = new Gtk.Entry();
+        let hbox = new Gtk.HBox();
+        hbox.add(label);
+        hbox.add(format);
+        this.vbox1.add(hbox);
+        format.set_text(Schema.get_string('gregorian-display-format'));
+        format.connect('changed', function (format) {
+            Schema.set_string('gregorian-display-format', format.text);
+        });
+
         let item = new Gtk.CheckButton({label: _('Hijri')});
         this.vbox1.add(item);
         Schema.bind('hijri-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+
+        let label = new Gtk.Label({label: "     Format: "});
+        let format = new Gtk.Entry();
+        let hbox = new Gtk.HBox();
+        hbox.add(label);
+        hbox.add(format);
+        this.vbox1.add(hbox);
+        format.set_text(Schema.get_string('hijri-display-format'));
+        format.connect('changed', function (format) {
+            Schema.set_string('hijri-display-format', format.text);
+        });
+
+        let comment = new Gtk.Label({
+            label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day</span>'),
+            use_markup: true
+        });
+        this.vbox1.add(comment);
+
+        // EVENTS
+        this.vbox2.add(new Gtk.Label({
+            label: _('Events:\n<span size="x-small">("Official" events are needed to find holidays)</span>'),
+            use_markup: true
+        }));
 
         let item = new Gtk.CheckButton({label: _('Official Iranian lunar')});
         this.vbox2.add(item);
@@ -89,6 +131,8 @@ const App = new Lang.Class({
         Schema.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         // COLOR
+        this.vbox3.add(new Gtk.Label({label: _('Widget Properties:')}));
+
         let item = new Gtk.CheckButton({label: _('Use custom color')});
         this.vbox3.add(item);
         Schema.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);
@@ -106,6 +150,23 @@ const App = new Lang.Class({
         color.connect('color-set', function (color) {
             Schema.set_string('color', getHexadecimalByColor(color.get_color()));
         });
+
+        let label = new Gtk.Label({label: "Format: "});
+        let format = new Gtk.Entry();
+        let hbox = new Gtk.HBox();
+        hbox.add(label);
+        hbox.add(format);
+        this.vbox3.add(hbox);
+        format.set_text(Schema.get_string('widget-format'));
+        format.connect('changed', function (format) {
+            Schema.set_string('widget-format', format.text);
+        });
+
+        let comment = new Gtk.Label({
+            label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day</span>'),
+            use_markup: true
+        });
+        this.vbox3.add(comment);
 
         // FONT
         /*let item = new Gtk.CheckButton({label: _('Use custom font')})

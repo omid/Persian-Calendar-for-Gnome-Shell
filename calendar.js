@@ -54,6 +54,41 @@ Calendar.prototype = {
         this._update();
     },
 
+    // Sets the calendar to show a specific date
+    format: function (format, day, month, year, calendar) {
+        let months =
+        {
+            gregorian:
+            {
+                small: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                large: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+            },
+            persian:
+            {
+                small: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
+                large: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
+            },
+            hijri:
+            {
+                small: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
+                large: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه']
+            }
+        };
+
+        let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d'];
+        let replace = [
+            year,
+            (year + "").slice(-2),
+            months[calendar]['large'][month - 1],
+            months[calendar]['small'][month - 1],
+            ("0" + (month - 1)).slice(-2),
+            month - 1,
+            ("0" + day).slice(-2),
+            day
+        ];
+        return str.replace(find, replace, format);
+    },
+
     _buildHeader: function () {
         this._rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
         if (this._rtl) {
@@ -233,7 +268,15 @@ Calendar.prototype = {
             this.actor.layout_manager.pack(_datesBox_p, 0, ++row);
             this.actor.layout_manager.set_span(_datesBox_p, 7, 1);
             let button = new St.Button({
-                label: str.format(this._selectedDate.day + ' / ' + this._selectedDate.month + ' / ' + this._selectedDate.year),
+                label: str.format(
+                    this.format(
+                        Schema.get_string('persian-display-format'),
+                        this._selectedDate.day,
+                        this._selectedDate.month,
+                        this._selectedDate.year,
+                        'persian'
+                    )
+                ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_p.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
@@ -249,7 +292,13 @@ Calendar.prototype = {
             this.actor.layout_manager.set_span(_datesBox_g, 7, 1);
 
             let button = new St.Button({
-                label: g_selectedDate.getFullYear() + ' - ' + (g_selectedDate.getMonth() + 1) + ' - ' + g_selectedDate.getDate(),
+                label: this.format(
+                    Schema.get_string('gregorian-display-format'),
+                    g_selectedDate.getDate(),
+                    g_selectedDate.getMonth() + 1,
+                    g_selectedDate.getFullYear(),
+                    'gregorian'
+                ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_g.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
@@ -265,7 +314,15 @@ Calendar.prototype = {
             this.actor.layout_manager.set_span(_datesBox_h, 7, 1);
 
             let button = new St.Button({
-                label: str.format(h_selectedDate.day + ' / ' + h_selectedDate.month + ' / ' + h_selectedDate.year),
+                label: str.format(
+                    this.format(
+                        Schema.get_string('hijri-display-format'),
+                        h_selectedDate.day,
+                        h_selectedDate.month,
+                        h_selectedDate.year,
+                        'hijri'
+                    )
+                ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_h.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});

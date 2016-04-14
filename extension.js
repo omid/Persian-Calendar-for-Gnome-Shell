@@ -49,7 +49,7 @@ const PersianCalendar = new Lang.Class({
                 }
             }
         ));
-
+        
         let that = this;
         this.schema_custom_color_signal = Schema.connect('changed::custom-color', Lang.bind(
             that, function (schema, key) {
@@ -58,6 +58,13 @@ const PersianCalendar = new Lang.Class({
                 } else {
                     that.label.set_style('color:');
                 }
+            }
+        ));
+
+        let that = this;
+        this.schema_widget_format_signal = Schema.connect('changed::widget-format', Lang.bind(
+            that, function (schema, key) {
+                this._updateDate(true, true)
             }
         ));
         ///////////////////////////////
@@ -209,7 +216,7 @@ const PersianCalendar = new Lang.Class({
         }));
     },
 
-    _updateDate: function () {
+    _updateDate: function (skip_notification, force) {
         this._isHoliday = false;
         let _date = new Date();
         this._events = '';
@@ -218,7 +225,7 @@ const PersianCalendar = new Lang.Class({
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
 
         // if today is "today" just return, don't change anything!
-        if (this._today == _date.yearDays) {
+        if (!force && this._today == _date.yearDays) {
             return true;
         }
 
@@ -226,9 +233,6 @@ const PersianCalendar = new Lang.Class({
         this._today = _date.yearDays;
 
         // set indicator label and popupmenu
-        var _day = str.format(_date.day + '');
-        _date = str.format(_date.day + ' ' + PersianDate.PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
-
         // get events of today
         let ev = new Events.Events();
         let events = ev.getEvents(new Date());
@@ -241,9 +245,22 @@ const PersianCalendar = new Lang.Class({
             this.label.remove_style_class_name("pcalendar-holiday");
         }
 
-        this.label.set_text(_day);
+        this.label.set_text(
+            str.format(
+                this._calendar.format(
+                    Schema.get_string('widget-format'),
+                    _date.day,
+                    _date.month,
+                    _date.year,
+                    'persian'
+                )
+            )
+        );
 
-        notify(_date, events[0]);
+        _date = str.format(_date.day + ' ' + PersianDate.PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
+        if (!skip_notification){
+            notify(_date, events[0]);
+        }
 
         return true;
     }
@@ -274,6 +291,7 @@ function enable() {
 function disable() {
     Schema.disconnect(_indicator.schema_color_change_signal);
     Schema.disconnect(_indicator.schema_custom_color_signal);
+    Schema.disconnect(_indicator.schema_widget_format_signal);
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);

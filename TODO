@@ -1,18 +1,12 @@
-// DONE
-- color of texts wont change. So in bright themes you cannot see them!
-- fix interface for RTLed Gnome.
-
 // FEATURES
-- customize "day" for panel to "day month" or "day month year" or something else!
 - calendar position (right/center)
-- replace default calendar option
-- optional date formats.
-- optional previous/next year.
-- date convertor.
-- add unofficial lunar events.
-- add an option to change fonts of extension.
-- add multilingual options.
-- evolution integration.
+- possibility to change calendar system to gregorian, lunar-hijri or ...
+- previous/next year buttons
+- date converter tools
+- add unofficial lunar events
+- add an option to change font
+- add multilingual options
+- evolution integration
 
 // BUGS
 - 

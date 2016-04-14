@@ -15,6 +15,21 @@
       <summary>Display Persian date below the calendar</summary>
       <description>Set to true to display Persian date.</description>
     </key>
+    <key name="hijri-display-format" type="s">
+      <default>'%D / %M / %Y'</default>
+      <summary>Hijri date format</summary>
+      <description>Hijri date format</description>
+    </key>
+    <key name="gregorian-display-format" type="s">
+      <default>'%D / %M / %Y'</default>
+      <summary>Gregorian date format</summary>
+      <description>Gregorian date format</description>
+    </key>
+    <key name="persian-display-format" type="s">
+      <default>'%D / %M / %Y'</default>
+      <summary>Persian date format</summary>
+      <description>Persian date format</description>
+    </key>
     <key name="event-iran-lunar" type="b">
       <default>true</default>
       <summary>Display official Iranian lunar events</summary>
@@ -39,6 +54,11 @@
       <default>true</default>
       <summary>Display official international events</summary>
       <description>Display official international events.</description>
+    </key>
+    <key name="widget-format" type="s">
+      <default>'%d'</default>
+      <summary>Widget date format</summary>
+      <description>Widget date format</description>
     </key>
     <key name="custom-color" type="b">
       <default>false</default>
