@@ -81,8 +81,8 @@ Calendar.prototype = {
             (year + "").slice(-2),
             months[calendar]['large'][month - 1],
             months[calendar]['small'][month - 1],
-            ("0" + (month - 1)).slice(-2),
-            month - 1,
+            ("0" + (month)).slice(-2),
+            month,
             ("0" + day).slice(-2),
             day
         ];
