@@ -110,7 +110,10 @@ const PersianCalendar = new Lang.Class({
         this._today = '';
 
         let vbox = new St.BoxLayout({vertical: true});
-        let item = new PopupMenu.PopupBaseMenuItem({hover: false});
+        let item = new PopupMenu.PopupBaseMenuItem({
+            reactive: false,
+            can_focus: false
+        });
         item.actor.add_child(vbox);
         this.menu.addMenuItem(item);
 

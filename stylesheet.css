@@ -6,6 +6,10 @@
     border-left-width: 1px !important;
 }
 
+.pcalendar-top-button {
+    color: #5f5f5f;
+}
+
 .pcalendar-day {
     border-left-width: 0;
     border-right-width: 1px;

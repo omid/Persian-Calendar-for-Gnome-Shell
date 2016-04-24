@@ -104,25 +104,60 @@ Calendar.prototype = {
         this.actor.layout_manager.pack(this._topBox, 0, 0);
         this.actor.layout_manager.set_span(this._topBox, 7, 1);
 
-        let rightButton = new St.Button({style_class: 'calendar-change-month-back pager-button', can_focus: true});
-        this._topBox.add(rightButton);
+        let rightButton = null;
+        let icon = null;
+        let style = 'pager-button pcalendar-top-button';
         if (this._rtl) {
+            icon = new St.Icon({icon_name: 'go-last-symbolic'});
+            rightButton = new St.Button({style_class: style, child: icon});
+            rightButton.connect('clicked', Lang.bind(this, this._onPrevYearButtonClicked));
+        } else {
+            icon = new St.Icon({icon_name: 'go-first-symbolic'});
+            rightButton = new St.Button({style_class: style, child: icon});
+            rightButton.connect('clicked', Lang.bind(this, this._onNextYearButtonClicked));
+        }
+        icon.set_icon_size(16);
+        this._topBox.add(rightButton);
+
+        if (this._rtl) {
+            icon = new St.Icon({icon_name: 'go-next-symbolic'});
+            rightButton = new St.Button({style_class: style, child: icon});
             rightButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
         } else {
+            icon = new St.Icon({icon_name: 'go-previous-symbolic'});
+            rightButton = new St.Button({style_class: style, child: icon});
             rightButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
         }
+        icon.set_icon_size(16);
+        this._topBox.add(rightButton);
 
         this._monthLabel = new St.Label({style_class: 'calendar-month-label'});
         this._topBox.add(this._monthLabel, {expand: true, x_fill: false, x_align: St.Align.MIDDLE});
 
-        let leftButton = new St.Button({style_class: 'calendar-change-month-forward pager-button', can_focus: true});
+        let leftButton = null;
+        if (this._rtl) {
+            icon = new St.Icon({icon_name: 'go-previous-symbolic'});
+            leftButton = new St.Button({style_class: style, child: icon});
+            leftButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+        } else {
+            icon = new St.Icon({icon_name: 'go-next-symbolic'});
+            leftButton = new St.Button({style_class: style, child: icon});
+            leftButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+        }
+        icon.set_icon_size(16);
         this._topBox.add(leftButton);
 
         if (this._rtl) {
-            leftButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+            icon = new St.Icon({icon_name: 'go-first-symbolic'});
+            leftButton = new St.Button({style_class: style, child: icon});
+            leftButton.connect('clicked', Lang.bind(this, this._onNextYearButtonClicked));
         } else {
-            leftButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+            icon = new St.Icon({icon_name: 'go-last-symbolic'});
+            leftButton = new St.Button({style_class: style, child: icon});
+            leftButton.connect('clicked', Lang.bind(this, this._onPrevYearButtonClicked));
         }
+        icon.set_icon_size(16);
+        this._topBox.add(leftButton);
 
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
@@ -174,6 +209,20 @@ Calendar.prototype = {
         else {
             newDate.month++;
         }
+
+        this.setDate(newDate);
+    },
+
+    _onPrevYearButtonClicked: function () {
+        let newDate = this._selectedDate;
+        newDate.year--;
+
+        this.setDate(newDate);
+    },
+
+    _onNextYearButtonClicked: function () {
+        let newDate = this._selectedDate;
+        newDate.year++;
 
         this.setDate(newDate);
     },
