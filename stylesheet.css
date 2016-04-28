@@ -44,5 +44,36 @@
 }
 
 .pcalendar-rtl {
-direction: rtl !important;
+    direction: rtl !important;
+}
+
+.button {
+    border-radius: 0 0 0 0;
+    border: 1px solid black;
+    padding: 5px;
+    width: 90px;
+}
+
+.button.activeButton {
+    border-right: 0;
+}
+
+.button.active {
+    background-color: #077391;
+}
+
+.button.fromPersian {
+    border-radius: 0 5px 5px 0;
+}
+
+.button.fromHijri {
+    border-radius: 5px 0 0 5px;
+}
+
+.pcalendar-converter-box {
+    padding: 5px 0;
+}
+
+.pcalendar-converter-entry {
+    margin: 5px;
 }

@@ -56,7 +56,7 @@ Events.prototype = {
         // store persian date of today
         this._today[1] = [today.year, today.month, today.day];
         // store hijri date of today
-        today = HijriDate.HijriDate.ToHijri(this._today[0][0], this._today[0][1], this._today[0][2]);
+        today = HijriDate.HijriDate.toHijri(this._today[0][0], this._today[0][1], this._today[0][2]);
         this._today[2] = [today.year, today.month, today.day];
 
         this._eventsList.forEach(this._checkEvent, this);

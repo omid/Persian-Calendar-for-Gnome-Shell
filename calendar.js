@@ -309,7 +309,7 @@ Calendar.prototype = {
         g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
 
         // find hijri date of today
-        let h_selectedDate = HijriDate.HijriDate.ToHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth() + 1, g_selectedDate.getDate());
+        let h_selectedDate = HijriDate.HijriDate.toHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth() + 1, g_selectedDate.getDate());
 
         // add persian date
         if (Schema.get_boolean("persian-display")) {
