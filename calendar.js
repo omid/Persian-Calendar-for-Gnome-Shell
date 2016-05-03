@@ -264,27 +264,30 @@ Calendar.prototype = {
             // find events and holidays
             events = ev.getEvents(iter);
 
-            let styleClass = 'calendar-day-base calendar-day pcalendar-day';
+            let styleClass = ' calendar-day-base calendar-day pcalendar-day ';
             if (events[1])
-                styleClass += ' calendar-nonwork-day';
+                styleClass += ' pcalendar-nonwork-day ';
             else
-                styleClass += ' calendar-work-day';
+                styleClass += ' pcalendar-work-day ';
 
             if (row == 2)
-                styleClass = 'calendar-day-top ' + styleClass;
+                styleClass = ' calendar-day-top ' + styleClass;
             if (iter.getDay() == this._weekStart - 1)
-                styleClass = 'pcalendar-day-left ' + styleClass;
+                styleClass = ' calendar-day-left ' + styleClass;
 
             if (_sameDay(now, p_iter)) {
-                styleClass += ' calendar-today';
+                styleClass += ' calendar-today ';
             } else if (p_iter.month != this._selectedDate.month) {
-                styleClass += ' calendar-other-month-day';
+                styleClass += ' pcalendar-other-month-day ';
             }
 
             if (_sameDay(this._selectedDate, p_iter)) {
                 button.add_style_pseudo_class('active');
             }
 
+            if (events[0])
+                styleClass += ' calendar-day-with-events pcalendar-day-with-events ';
+                
             button.style_class = styleClass;
 
             this.actor.layout_manager.pack(
