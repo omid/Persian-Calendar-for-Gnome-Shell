@@ -282,7 +282,7 @@ const PersianCalendar = new Lang.Class({
             track_hover    : true,
             label          : _('از فارسی'),
             accessible_name: 'fromPersian',
-            style_class    : 'popup-menu-item button fromPersian active'
+            style_class    : 'popup-menu-item button pcalendar-button fromPersian active'
         });
         fromPersian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromPersian.TypeID = ConverterTypes.fromPersian;
@@ -293,7 +293,7 @@ const PersianCalendar = new Lang.Class({
             track_hover    : true,
             label          : _('از میلادی'),
             accessible_name: 'fromGregorian',
-            style_class    : 'popup-menu-item button fromGregorian'
+            style_class    : 'popup-menu-item button pcalendar-button fromGregorian'
         });
         fromGregorian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromGregorian.TypeID = ConverterTypes.fromGregorian;
@@ -304,7 +304,7 @@ const PersianCalendar = new Lang.Class({
             track_hover    : true,
             label          : _('از قمری'),
             accessible_name: 'fromHijri',
-            style_class    : 'popup-menu-item button fromHijri'
+            style_class    : 'popup-menu-item button pcalendar-button fromHijri'
         });
         fromHijri.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromHijri.TypeID = ConverterTypes.fromHijri;

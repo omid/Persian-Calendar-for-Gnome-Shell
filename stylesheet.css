@@ -64,27 +64,27 @@
     direction: rtl !important;
 }
 
-.button {
+.pcalendar-button {
     border-radius: 0 0 0 0;
     border: 1px solid black;
     padding: 5px;
-    width: 83px;
+    width: 83px !important;
     font-size: 0.9em;
 }
 
-.button.activeButton {
+.pcalendar-button.activeButton {
     border-right: 0;
 }
 
-.button.active {
+.pcalendar-button.active {
     background-color: #077391;
 }
 
-.button.fromPersian {
+.pcalendar-button.fromPersian {
     border-radius: 0 5px 5px 0;
 }
 
-.button.fromHijri {
+.pcalendar-button.fromHijri {
     border-radius: 5px 0 0 5px;
 }
 
