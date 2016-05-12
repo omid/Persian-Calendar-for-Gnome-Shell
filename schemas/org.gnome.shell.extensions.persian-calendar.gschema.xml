@@ -60,6 +60,11 @@
       <summary>Widget date format</summary>
       <description>Widget date format</description>
     </key>
+    <key name="startup-notification" type="b">
+      <default>true</default>
+      <summary>Startup Notification</summary>
+      <description>Show notification on start up</description>
+    </key>
     <key name="custom-color" type="b">
       <default>false</default>
       <summary>Use custom color</summary>
