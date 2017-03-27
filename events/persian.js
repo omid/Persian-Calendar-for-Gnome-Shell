@@ -69,13 +69,13 @@ persian.prototype = {
         this.events[12][26] = ['فروردگان', false];
 
         let date = new Date();
-        let date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
+        date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
         let year = date[0];
 
-        var first_wednesday_of_year;
-        var first_saturday_of_year;
-        var last_wednesday_of_year;
-        var last_day_of_year;
+        let first_wednesday_of_year;
+        let first_saturday_of_year;
+        let last_wednesday_of_year;
+        let last_day_of_year;
 
         // find first saturday of the year
         // and
