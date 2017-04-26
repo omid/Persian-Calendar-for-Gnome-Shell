@@ -1,51 +1,31 @@
-.pcalendar-holiday {
+.pcalendar-holiday, .pcalendar-day-with-events {
     text-decoration: underline;
 }
 
-.pcalendar-day-left {
-    border-left-width: 1px !important;
-}
-
 .pcalendar-top-button {
-    color: #5f5f5f;
+    opacity: .5; /* for future compatibility! */
 }
 
-.pcalendar-nonwork-day {
-    color: #949796 !important;
+.calendar-nonwork-day {
+    font-weight: bold;
 }
 
-.pcalendar-work-day {
-    color: #eeeeec;
-}
-
-.pcalendar-day-with-events {
-    font-weight: normal;
-}
-
-.pcalendar-other-month-day {
-  color: rgba(238, 238, 236, 0.15) !important;
-  opacity: 0.5;
-}
- 
 .pcalendar-day {
-    border-left-width: 0;
-    border-right-width: 1px;
+    font-size: 1em;
+    width: 2em;
+    height: 1.85em;
 }
 
 .pcalendar-date-label {
-    width: 150px;
     padding: .4em 0;
-    font-size: 0.8em;
-    border: 0 !important;
+    font-size: .8em;
 }
 
 .pcalendar-event-label {
-    width: 150px;
-    direction: rtl !important;
-    text-align: right !important;
-    padding-bottom: 2em;
-    font-size: 0.8em;
-    border: 0 !important;
+    text-align: right;
+    border: 1px solid red;
+    padding: 0;
+    width: 150px; /* this should be useless, but when we have events, it fixes HEIGHT! */
 }
 
 .pcalendar-date-label:hover {
@@ -68,30 +48,24 @@
     border-radius: 0 0 0 0;
     border: 1px solid black;
     padding: 5px;
-    width: 83px !important;
-    font-size: 0.9em;
-}
-
-.pcalendar-button.activeButton {
-    border-right: 0;
+    font-size: .9em;
 }
 
 .pcalendar-button.active {
-    background-color: #077391;
+    background-color: #bbb;
+    color: #333;
 }
 
 .pcalendar-button.fromPersian {
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 3px 3px 0;
+    border-left: none;
 }
 
 .pcalendar-button.fromHijri {
-    border-radius: 5px 0 0 5px;
+    border-radius: 3px 0 0 3px;
+    border-right: none;
 }
 
 .pcalendar-converter-box {
     padding: 5px 0;
-}
-
-.pcalendar-converter-entry {
-    margin: 5px;
 }

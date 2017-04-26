@@ -32,7 +32,8 @@ const PersianCalendar = new Lang.Class({
     Name: 'PersianCalendar.PersianCalendar',
     Extends: PanelMenu.Button,
 
-    _init: function () {
+    _init: function ()
+    {
         messageTray = new MessageTray.MessageTray();
         this.parent(0.0);
 
@@ -49,7 +50,7 @@ const PersianCalendar = new Lang.Class({
 
         let that = this;
         this.schema_color_change_signal = Schema.connect('changed::color', Lang.bind(
-            that, function (schema, key) {
+            that, function () {
                 if (Schema.get_boolean('custom-color')) {
                     that.label.set_style('color: ' + Schema.get_string('color'));
                 }
@@ -57,7 +58,7 @@ const PersianCalendar = new Lang.Class({
         ));
         
         this.schema_custom_color_signal = Schema.connect('changed::custom-color', Lang.bind(
-            that, function (schema, key) {
+            that, function () {
                 if (Schema.get_boolean('custom-color')) {
                     that.label.set_style('color: ' + Schema.get_string('color'));
                 } else {
@@ -67,7 +68,7 @@ const PersianCalendar = new Lang.Class({
         ));
 
         this.schema_widget_format_signal = Schema.connect('changed::widget-format', Lang.bind(
-            that, function (schema, key) {
+            that, function () {
                 this._updateDate(true, true)
             }
         ));
@@ -149,7 +150,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true
         });
         preferencesIcon.connect('clicked', function () {
-            if (_gsmPrefs.get_state() == _gsmPrefs.SHELL_APP_STATE_RUNNING) {
+            if (_gsmPrefs.get_state() === _gsmPrefs.SHELL_APP_STATE_RUNNING) {
                 _gsmPrefs.activate();
             } else {
                 launch_extension_prefs(extension.metadata.uuid);
@@ -183,14 +184,14 @@ const PersianCalendar = new Lang.Class({
                 day_delta = 30 - pdate.day;
             }
 
-            if (month_delta != 0) {
+            if (month_delta !== 0) {
                 nowrooz = month_delta + ' ماه و ';
             }
             else {
                 nowrooz = '';
             }
 
-            if (day_delta != 0) {
+            if (day_delta !== 0) {
                 nowrooz = nowrooz + day_delta + ' روز مانده به ';
                 nowrooz = nowrooz + 'نوروز سال ' + (pdate.year + 1);
             }
@@ -219,7 +220,7 @@ const PersianCalendar = new Lang.Class({
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
 
         // if today is "today" just return, don't change anything!
-        if (!force && this._today == _date.yearDays) {
+        if (!force && this._today === _date.yearDays) {
             return true;
         }
 
@@ -230,7 +231,7 @@ const PersianCalendar = new Lang.Class({
         // get events of today
         let ev = new Events.Events();
         let events = ev.getEvents(new Date());
-        events[0] = events[0] != '' ? "\n" + events[0] : '';
+        events[0] = events[0] !== '' ? "\n" + events[0] : '';
 
         // is holiday?
         if (events[1]) {
@@ -252,7 +253,7 @@ const PersianCalendar = new Lang.Class({
         );
 
         _date = str.format(_date.day + ' ' + PersianDate.PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
-        if (!skip_notification){
+        if (!skip_notification) {
             notify(_date, events[0]);
         }
 
@@ -263,8 +264,10 @@ const PersianCalendar = new Lang.Class({
     {
         // Add date conversion button
         let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
+        converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
+
         this.menu.addMenuItem(converterMenu);
-        this.converterVbox = new St.BoxLayout({vertical: true});
+        this.converterVbox = new St.BoxLayout({vertical: true, x_expand: true});
         let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
             can_focus: false
@@ -272,7 +275,7 @@ const PersianCalendar = new Lang.Class({
         converterSubMenu.actor.add_child(this.converterVbox);
         converterMenu.menu.addMenuItem(converterSubMenu);
 
-        let middleBox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
+        let middleBox = new St.BoxLayout({style_class: 'pcalendar-converter-box', x_expand: true});
 
         this._activeConverter = ConverterTypes.fromPersian;
 
@@ -280,6 +283,7 @@ const PersianCalendar = new Lang.Class({
             reactive       : true,
             can_focus      : true,
             track_hover    : true,
+            x_expand       : true,
             label          : _('از فارسی'),
             accessible_name: 'fromPersian',
             style_class    : 'popup-menu-item button pcalendar-button fromPersian active'
@@ -291,6 +295,7 @@ const PersianCalendar = new Lang.Class({
             reactive       : true,
             can_focus      : true,
             track_hover    : true,
+            x_expand       : true,
             label          : _('از میلادی'),
             accessible_name: 'fromGregorian',
             style_class    : 'popup-menu-item button pcalendar-button fromGregorian'
@@ -302,6 +307,7 @@ const PersianCalendar = new Lang.Class({
             reactive       : true,
             can_focus      : true,
             track_hover    : true,
+            x_expand       : true,
             label          : _('از قمری'),
             accessible_name: 'fromHijri',
             style_class    : 'popup-menu-item button pcalendar-button fromHijri'
@@ -319,8 +325,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterYear = new St.Entry({
             name: 'year',
-            hint_text: _('سال'),
-            can_focus: true,
+            hint_text  : _('سال'),
+            can_focus  : true,
+            x_expand   : true,
             style_class: 'pcalendar-converter-entry'
         });
         this.converterYear.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
@@ -328,8 +335,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterMonth = new St.Entry({
             name: 'month',
-            hint_text: _('ماه'),
-            can_focus: true,
+            hint_text  : _('ماه'),
+            can_focus  : true,
+            x_expand   : true,
             style_class: 'pcalendar-converter-entry'
         });
         converterHbox.add(this.converterMonth, {expand: true});
@@ -337,8 +345,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterDay = new St.Entry({
             name: 'day',
-            hint_text: _('روز'),
-            can_focus: true,
+            hint_text  : _('روز'),
+            can_focus  : true,
+            x_expand   : true,
             style_class: 'pcalendar-converter-entry'
         });
         converterHbox.add(this.converterDay, {expand: true});
@@ -354,8 +363,7 @@ const PersianCalendar = new Lang.Class({
     {
         // erase old date
         let convertedDatesChildren = this.convertedDatesVbox.get_children();
-        for(let i = 0; i < convertedDatesChildren.length; i++)
-        {
+        for (let i = 0; i < convertedDatesChildren.length; i++) {
             convertedDatesChildren[i].destroy();
         }
 
@@ -364,7 +372,7 @@ const PersianCalendar = new Lang.Class({
         let day = this.converterDay.get_text();
 
         // check if data is numerical and not empty
-        if (isNaN(day) || isNaN(month) || isNaN(year) || !day || !month || !year || year.length != 4) {
+        if (isNaN(day) || isNaN(month) || isNaN(year) || !day || !month || !year || year.length !== 4) {
             return;
         }
 
@@ -451,8 +459,7 @@ const PersianCalendar = new Lang.Class({
     _toggleConverter: function(button)
     {
         // skip because it is already active
-        if(this._activeConverter == button.TypeID)
-        {
+        if (this._activeConverter === button.TypeID) {
             return;
         }
 
@@ -460,8 +467,7 @@ const PersianCalendar = new Lang.Class({
         let tabBox = button.get_parent();
         let tabBoxChildren = tabBox.get_children();
 
-        for(let i = 0; i < tabBoxChildren.length; i++)
-        {
+        for (let i = 0; i < tabBoxChildren.length; i++) {
             let tabButton = tabBoxChildren[i];
             tabButton.remove_style_class_name("active");
         }

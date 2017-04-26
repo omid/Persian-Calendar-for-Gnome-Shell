@@ -1,10 +1,23 @@
-[*** Support this project! ***](http://fundly.ir/node/24)
+## Persian Calendar *for Gnome-Shell*
 
-To install:
+An extension for Gnome-Shell to show Persian date/calendar
+
+![Screenshot](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/blob/master/Screenshot.png?raw=true)
+
+
+##### To install:
 * Create a directory in `~/.local/share/gnome-shell/extensions/` and name it `PersianCalendar@oxygenws.com`
 * Copy all files in the repository to the above directory (`~/.local/share/gnome-shell/extensions/PersianCalendar@oxygenws.com/`)
 * Restart Gnome-shell. (ALT+F2, r, Enter)
 
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/omid/persian-calendar-for-gnome-shell/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+##### Links:
+* :octocat: https://github.com/omid/Persian-Calendar-for-Gnome-Shell
+* :link: https://extensions.gnome.org/extension/240/
+* :yum: https://www.paypal.me/omidmr/
 
+
+##### Contributors:
+* Omid Mottaghi Rad
+* Mostafa Mirmousavi
+* 

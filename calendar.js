@@ -16,9 +16,9 @@ const Events = extension.imports.Events;
 const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 function _sameDay(dateA, dateB) {
-    return (dateA.year == dateB.year &&
-    dateA.month == dateB.month &&
-    dateA.day == dateB.day);
+    return (dateA.year === dateB.year &&
+    dateA.month === dateB.month &&
+    dateA.day === dateB.day);
 }
 
 function Calendar() {
@@ -29,7 +29,8 @@ Calendar.prototype = {
     weekdayAbbr: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
     _weekStart: 6,
 
-    _init: function () {
+    _init: function ()
+    {
         // Start off with the current date
         this._selectedDate = new Date();
         this._selectedDate = PersianDate.PersianDate.gregorianToPersian(this._selectedDate.getFullYear(), this._selectedDate.getMonth() + 1, this._selectedDate.getDate());
@@ -46,7 +47,8 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    setDate: function (date) {
+    setDate: function (date)
+    {
         if (!_sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
         }
@@ -55,7 +57,8 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    format: function (format, day, month, year, calendar) {
+    format: function (format, day, month, year, calendar)
+    {
         let months =
         {
             gregorian:
@@ -89,8 +92,9 @@ Calendar.prototype = {
         return str.replace(find, replace, format);
     },
 
-    _buildHeader: function () {
-        this._rtl = (Clutter.get_default_text_direction() == Clutter.TextDirection.RTL);
+    _buildHeader: function ()
+    {
+        this._rtl = (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL);
         if (this._rtl) {
             this._colPosition = 0;
         } else {
@@ -172,7 +176,8 @@ Calendar.prototype = {
         this._firstDayIndex = this.actor.get_children().length;
     },
 
-    _onScroll: function (actor, event) {
+    _onScroll: function (actor, event)
+    {
         switch (event.get_scroll_direction()) {
             case Clutter.ScrollDirection.UP:
             case Clutter.ScrollDirection.LEFT:
@@ -185,10 +190,11 @@ Calendar.prototype = {
         }
     },
 
-    _onPrevMonthButtonClicked: function () {
+    _onPrevMonthButtonClicked: function ()
+    {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
-        if (oldMonth == 1) {
+        if (oldMonth === 1) {
             newDate.month = 12;
             newDate.year--;
         }
@@ -199,10 +205,11 @@ Calendar.prototype = {
         this.setDate(newDate);
     },
 
-    _onNextMonthButtonClicked: function () {
+    _onNextMonthButtonClicked: function ()
+    {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
-        if (oldMonth == 12) {
+        if (oldMonth === 12) {
             newDate.month = 1;
             newDate.year++;
         }
@@ -213,25 +220,28 @@ Calendar.prototype = {
         this.setDate(newDate);
     },
 
-    _onPrevYearButtonClicked: function () {
+    _onPrevYearButtonClicked: function ()
+    {
         let newDate = this._selectedDate;
         newDate.year--;
 
         this.setDate(newDate);
     },
 
-    _onNextYearButtonClicked: function () {
+    _onNextYearButtonClicked: function ()
+    {
         let newDate = this._selectedDate;
         newDate.year++;
 
         this.setDate(newDate);
     },
 
-    _update: function () {
+    _update: function ()
+    {
         let now = new Date();
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
-        if (this._selectedDate.year == now.year) {
+        if (this._selectedDate.year === now.year) {
             this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1];
         } else {
             this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' + str.format(this._selectedDate.year);
@@ -253,6 +263,7 @@ Calendar.prototype = {
         let row = 2;
         let ev = new Events.Events();
         let events;
+
         while (true) {
             let p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
             let button = new St.Button({label: str.format(p_iter.day)});
@@ -264,30 +275,34 @@ Calendar.prototype = {
             // find events and holidays
             events = ev.getEvents(iter);
 
-            let styleClass = ' calendar-day-base calendar-day pcalendar-day ';
-            if (events[1])
-                styleClass += ' pcalendar-nonwork-day ';
-            else
-                styleClass += ' pcalendar-work-day ';
+            let styleClass = 'calendar-day-base calendar-day pcalendar-day';
+            if (events[1]) {
+                styleClass += ' calendar-nonwork-day pcalendar-nonwork-day ';
+            } else {
+                styleClass += ' calendar-work-day pcalendar-work-day ';
+            }
 
-            if (row == 2)
+            if (row === 2) {
                 styleClass = ' calendar-day-top ' + styleClass;
-            if (iter.getDay() == this._weekStart - 1)
+            }
+            if (iter.getDay() === this._weekStart - 1) {
                 styleClass = ' calendar-day-left ' + styleClass;
+            }
 
             if (_sameDay(now, p_iter)) {
                 styleClass += ' calendar-today ';
-            } else if (p_iter.month != this._selectedDate.month) {
-                styleClass += ' pcalendar-other-month-day ';
+            } else if (p_iter.month !== this._selectedDate.month) {
+                styleClass += ' calendar-other-month-day pcalendar-other-month-day ';
             }
 
             if (_sameDay(this._selectedDate, p_iter)) {
                 button.add_style_pseudo_class('active');
             }
 
-            if (events[0])
-                styleClass += ' calendar-day-with-events pcalendar-day-with-events ';
-                
+            if (events[0]) {
+                styleClass += ' pcalendar-day-with-events ';
+            }
+
             button.style_class = styleClass;
 
             this.actor.layout_manager.pack(
@@ -298,7 +313,7 @@ Calendar.prototype = {
 
             iter.setDate(iter.getDate() + 1);
 
-            if (iter.getDay() == this._weekStart) {
+            if (iter.getDay() === this._weekStart) {
                 // We stop on the first "first day of the week" after the month we are displaying
                 if (p_iter.month > this._selectedDate.month || p_iter.year > this._selectedDate.year) {
                     break;
@@ -392,13 +407,9 @@ Calendar.prototype = {
             this.actor.layout_manager.set_span(_eventBox, 7, 1);
             let bottomLabel = new St.Label({
                 text: str.format(events[0]),
-                style_class: 'calendar-day pcalendar-event-label'
+                style_class: 'pcalendar-event-label'
             });
 
-            /* Wrap truncate some texts!
-             * And I cannot make height of eventBox flexible!
-             * I think it's a bug in St library!
-             **/
             bottomLabel.clutter_text.line_wrap = true;
             bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
             bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
