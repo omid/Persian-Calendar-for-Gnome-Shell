@@ -4,7 +4,6 @@
   "name": "Persian Calendar",
   "original-authors": "Omid Mottaghi Rad",
   "shell-version": [
-    "3.20",
     "3.22",
     "3.24"
   ],
