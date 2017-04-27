@@ -496,12 +496,10 @@ function notify(msg, details)
 let _indicator;
 let _timer;
 
-/*jshint unused:false*/
 function init(metadata)
 {
 }
 
-/*jshint unused:false*/
 function enable()
 {
     _indicator = new PersianCalendar;
@@ -510,7 +508,6 @@ function enable()
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
-/*jshint unused:false*/
 function disable()
 {
     Schema.disconnect(_indicator.schema_color_change_signal);

@@ -13,7 +13,6 @@ let convenience = extension.imports.convenience;
 
 let Schema = convenience.getSettings(extension, SETTINGS_SCHEMA);
 
-/*jshint unused:false*/
 function init()
 {
 }
@@ -235,7 +234,6 @@ const App = new Lang.Class({
     }
 });
 
-/*jshint unused:false*/
 function buildPrefsWidget()
 {
     let widget = new App();

@@ -4,7 +4,6 @@ const Gio = imports.gi.Gio;
 const Config = imports.misc.config;
 const ExtensionUtils = imports.misc.extensionUtils;
 
-/*jshint unused:false*/
 function initTranslations(domain)
 {
     let extension = ExtensionUtils.getCurrentExtension();
@@ -19,7 +18,6 @@ function initTranslations(domain)
     }
 }
 
-/*jshint unused:false*/
 function getSettings(metadata, extension_id)
 {
     let schemaDir = metadata.dir.get_child('schemas').get_path();
