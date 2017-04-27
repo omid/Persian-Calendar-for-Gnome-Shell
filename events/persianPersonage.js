@@ -1,6 +1,7 @@
 // copyright http://www.farhangiran.com
 
-function persianPersonage() {
+function persianPersonage()
+{
     this._init();
 }
 
@@ -10,7 +11,8 @@ persianPersonage.prototype = {
     /* [month][day] = [title, isHoliday] */
     events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function () {
+    _init: function ()
+    {
         this.events[1][6] = ['زایش زرتشت', false];
         this.events[1][25] = ['بزرگ‌داشت عطار نیشابوری', false];
         this.events[2][1] = ['بزرگ‌داشت سعدی', false];

@@ -21,32 +21,36 @@ function Events() {
 
 Events.prototype = {
 
-    _init: function () {
+    _init: function ()
+    {
         this._eventsList = [];
-        if (Schema.get_boolean("event-persian")) {
+        if (Schema.get_boolean('event-persian')) {
             this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         }
-        if (Schema.get_boolean("event-world")) {
+        if (Schema.get_boolean('event-world')) {
             this._eventsList.push(new world.world);
         }
-        if (Schema.get_boolean("event-iran-solar")) {
+        if (Schema.get_boolean('event-iran-solar')) {
             this._eventsList.push(new iranSolar.iranSolar);
         }
-        if (Schema.get_boolean("event-iran-lunar")) {
+        if (Schema.get_boolean('event-iran-lunar')) {
             this._eventsList.push(new iranLunar.iranLunar());
         }
-        if (Schema.get_boolean("event-persian-personage")) {
+        if (Schema.get_boolean('event-persian-personage')) {
             this._eventsList.push(new persianPersonage.persianPersonage());
         }
     },
 
-    getEvents: function (today) {
+    getEvents: function (today)
+    {
         this._events = '';
         this._isHoliday = false;
         this._today = [];
 
         // if it is friday
-        if (today.getDay() == 5) this._isHoliday = true;
+        if (today.getDay() === 5) {
+          this._isHoliday = true;
+        }
 
         // store gregorian date of today
         this._today[0] = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
@@ -63,7 +67,8 @@ Events.prototype = {
         return [this._events, this._isHoliday];
     },
 
-    _checkEvent: function (el) {
+    _checkEvent: function (el)
+    {
         let type = 0;
 
         switch (el.type) {

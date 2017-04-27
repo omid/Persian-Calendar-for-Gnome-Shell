@@ -81,12 +81,12 @@ Calendar.prototype = {
         let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d'];
         let replace = [
             year,
-            (year + "").slice(-2),
-            months[calendar]['large'][month - 1],
-            months[calendar]['small'][month - 1],
-            ("0" + (month)).slice(-2),
+            (year + '').slice(-2),
+            months[calendar].large[month - 1],
+            months[calendar].small[month - 1],
+            ('0' + (month)).slice(-2),
             month,
-            ("0" + day).slice(-2),
+            ('0' + day).slice(-2),
             day
         ];
         return str.replace(find, replace, format);
@@ -330,7 +330,7 @@ Calendar.prototype = {
         let h_selectedDate = HijriDate.HijriDate.toHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth() + 1, g_selectedDate.getDate());
 
         // add persian date
-        if (Schema.get_boolean("persian-display")) {
+        if (Schema.get_boolean('persian-display')) {
             let _datesBox_p = new St.BoxLayout();
             this.actor.layout_manager.pack(_datesBox_p, 0, ++row);
             this.actor.layout_manager.set_span(_datesBox_p, 7, 1);
@@ -353,7 +353,7 @@ Calendar.prototype = {
         }
 
         // add gregorian date
-        if (Schema.get_boolean("gregorian-display")) {
+        if (Schema.get_boolean('gregorian-display')) {
             let _datesBox_g = new St.BoxLayout();
             this.actor.layout_manager.pack(_datesBox_g, 0, ++row);
             this.actor.layout_manager.set_span(_datesBox_g, 7, 1);
@@ -375,7 +375,7 @@ Calendar.prototype = {
         }
 
         // add hijri date
-        if (Schema.get_boolean("hijri-display")) {
+        if (Schema.get_boolean('hijri-display')) {
             let _datesBox_h = new St.BoxLayout();
             this.actor.layout_manager.pack(_datesBox_h, 0, ++row);
             this.actor.layout_manager.set_span(_datesBox_h, 7, 1);

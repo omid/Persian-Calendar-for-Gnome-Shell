@@ -56,7 +56,7 @@ const PersianCalendar = new Lang.Class({
                 }
             }
         ));
-        
+
         this.schema_custom_color_signal = Schema.connect('changed::custom-color', Lang.bind(
             that, function () {
                 if (Schema.get_boolean('custom-color')) {
@@ -235,9 +235,9 @@ const PersianCalendar = new Lang.Class({
 
         // is holiday?
         if (events[1]) {
-            this.label.add_style_class_name("pcalendar-holiday");
+            this.label.add_style_class_name('pcalendar-holiday');
         } else {
-            this.label.remove_style_class_name("pcalendar-holiday");
+            this.label.remove_style_class_name('pcalendar-holiday');
         }
 
         this.label.set_text(
@@ -398,7 +398,7 @@ const PersianCalendar = new Lang.Class({
         }
 
         // add persian date
-        if (Schema.get_boolean("persian-display") && jDate) {
+        if (Schema.get_boolean('persian-display') && jDate) {
             let button = new St.Button({
                 label: str.format(
                     this._calendar.format(
@@ -418,7 +418,7 @@ const PersianCalendar = new Lang.Class({
         }
 
         // add gregorian date
-        if (Schema.get_boolean("gregorian-display") && gDate) {
+        if (Schema.get_boolean('gregorian-display') && gDate) {
             let button = new St.Button({
                 label: this._calendar.format(
                     Schema.get_string('gregorian-display-format'),
@@ -436,7 +436,7 @@ const PersianCalendar = new Lang.Class({
         }
 
         // add hijri date
-        if (Schema.get_boolean("hijri-display") && hDate) {
+        if (Schema.get_boolean('hijri-display') && hDate) {
             let button = new St.Button({
                 label: str.format(
                     this._calendar.format(
@@ -455,7 +455,7 @@ const PersianCalendar = new Lang.Class({
             }));
         }
     },
-    
+
     _toggleConverter: function(button)
     {
         // skip because it is already active
@@ -469,10 +469,10 @@ const PersianCalendar = new Lang.Class({
 
         for (let i = 0; i < tabBoxChildren.length; i++) {
             let tabButton = tabBoxChildren[i];
-            tabButton.remove_style_class_name("active");
+            tabButton.remove_style_class_name('active');
         }
 
-        button.add_style_class_name("active");
+        button.add_style_class_name('active');
         this._activeConverter = button.TypeID;
 
         this._onModifyConverter()

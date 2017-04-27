@@ -1,4 +1,4 @@
-/* 
+/*
  * Based on a code from http://www.tabibmuda.com/page.php?8
  */
 
@@ -15,9 +15,9 @@ HijriDate.toHijri = function (y, m, d) {
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);
-    
+
     let jd, l, n, j;
-    if ((y > 1582) || ((y == 1582) && (m > 10)) || ((y == 1582) && (m == 10) && (d > 14))) {
+    if ((y > 1582) || ((y === 1582) && (m > 10)) || ((y === 1582) && (m === 10) && (d > 14))) {
         jd = HijriDate.intPart((1461 * (y + 4800 + HijriDate.intPart((m - 14) / 12))) / 4) + HijriDate.intPart((367 * (m - 2 - 12 * (HijriDate.intPart((m - 14) / 12)))) / 12) - HijriDate.intPart((3 * (HijriDate.intPart((y + 4900 + HijriDate.intPart((m - 14) / 12)     ) / 100)    )   ) / 4) + d - 32075;
     } else {
         jd = 367 * y - HijriDate.intPart((7 * (y + 5001 + HijriDate.intPart((m - 9) / 7))) / 4) + HijriDate.intPart((275 * m) / 9) + d + 1729777;
@@ -38,7 +38,7 @@ HijriDate.fromHijri = function (y, m, d) {
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);
-    
+
     let jd, l, n, j, i, k;
     jd = HijriDate.intPart((11 * y + 3) / 30) + 354 * y + 30 * m - HijriDate.intPart((m - 1) / 2) + d + 1948440 - 385;
     if (jd > 2299160) {

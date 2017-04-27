@@ -56,8 +56,8 @@ const App = new Lang.Class({
         let item = new Gtk.CheckButton({label: _('Persian')});
         this.vbox1.add(item);
         Schema.bind('persian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
-        
-        let label = new Gtk.Label({label: "     Format: "});
+
+        let label = new Gtk.Label({label: '     Format: '});
         let format = new Gtk.Entry();
         let hbox = new Gtk.HBox();
         hbox.add(label);
@@ -72,7 +72,7 @@ const App = new Lang.Class({
         this.vbox1.add(item);
         Schema.bind('gregorian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: "     Format: "});
+        label = new Gtk.Label({label: '     Format: '});
         format = new Gtk.Entry();
         hbox = new Gtk.HBox();
         hbox.add(label);
@@ -87,7 +87,7 @@ const App = new Lang.Class({
         this.vbox1.add(item);
         Schema.bind('hijri-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: "     Format: "});
+        label = new Gtk.Label({label: '     Format: '});
         format = new Gtk.Entry();
         hbox = new Gtk.HBox();
         hbox.add(label);
@@ -151,7 +151,7 @@ const App = new Lang.Class({
         this.vbox3.add(item);
         Schema.bind('startup-notification', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: "Format: "});
+        label = new Gtk.Label({label: 'Format: '});
         format = new Gtk.Entry();
         hbox = new Gtk.HBox();
         hbox.add(label);
@@ -192,12 +192,14 @@ const App = new Lang.Class({
     }
 });
 
-function buildPrefsWidget() {
+function buildPrefsWidget()
+{
     let widget = new App();
     return widget.main_hbox;
 }
 
-function _scaleRound(value) {
+function _scaleRound(value)
+{
     // Based on gtk/gtkcoloreditor.c
     value = Math.floor((value / 255) + 0.5);
     value = Math.max(value, 0);
@@ -205,7 +207,8 @@ function _scaleRound(value) {
     return value;
 }
 
-function _dec2Hex(value) {
+function _dec2Hex(value)
+{
     value = value.toString(16);
 
     while (value.length < 2) {
@@ -215,7 +218,8 @@ function _dec2Hex(value) {
     return value;
 }
 
-function getColorByHexadecimal(hex) {
+function getColorByHexadecimal(hex)
+{
     let colorArray = Gdk.Color.parse(hex);
     let color = null;
 
@@ -229,9 +233,10 @@ function getColorByHexadecimal(hex) {
     return color;
 }
 
-function getHexadecimalByColor(color) {
+function getHexadecimalByColor(color)
+{
     let red = _scaleRound(color.red);
     let green = _scaleRound(color.green);
     let blue = _scaleRound(color.blue);
-    return "#" + _dec2Hex(red) + _dec2Hex(green) + _dec2Hex(blue);
+    return '#' + _dec2Hex(red) + _dec2Hex(green) + _dec2Hex(blue);
 }

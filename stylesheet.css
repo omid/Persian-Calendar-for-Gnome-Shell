@@ -23,7 +23,6 @@
 
 .pcalendar-event-label {
     text-align: right;
-    border: 1px solid red;
     padding: 0;
     width: 150px; /* this should be useless, but when we have events, it fixes HEIGHT! */
 }
@@ -68,4 +67,9 @@
 
 .pcalendar-converter-box {
     padding: 5px 0;
+}
+
+.pcalendar-converter-entry {
+    margin-left: 5px;
+    margin-right: 5px;
 }

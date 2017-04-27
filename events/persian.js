@@ -1,6 +1,7 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-function persian(pdate) {
+function persian(pdate)
+{
     this._init(pdate);
 }
 
@@ -10,7 +11,8 @@ persian.prototype = {
     /* [month][day] = [title, isHoliday] */
     events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function (pdate) {
+    _init: function (pdate)
+    {
         this.events[1][1] = ['جشن نوروز', false];
         this.events[1][6] = ['روز امید / روز شادباش‌نویسی', false];
         this.events[1][10] = ['جشن آبان‌گاه', false];
@@ -68,6 +70,11 @@ persian.prototype = {
         this.events[12][25] = ['پایان سرایش شاهنامه فردوسی', false];
         this.events[12][26] = ['فروردگان', false];
 
+        this.addSpecificEvents(pdate);
+    },
+
+    addSpecificEvents: function (pdate)
+    {
         let date = new Date();
         date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
         let year = date[0];
@@ -84,11 +91,11 @@ persian.prototype = {
             let p_ts = pdate.persianToGregorian(year, 1, i);
             p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2], 5);
             /* do not remove this 5 :D */
-            if (p_ts.getDay() == 3) {
+            if (p_ts.getDay() === 3) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
                 first_wednesday_of_year = dummy_date[2];
             }
-            if (p_ts.getDay() == 6) {
+            if (p_ts.getDay() === 6) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
                 first_saturday_of_year = dummy_date[2];
             }
@@ -107,7 +114,7 @@ persian.prototype = {
             let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
 
             p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2]);
-            if (p_ts.getDay() == 3) {
+            if (p_ts.getDay() === 3) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
                 last_wednesday_of_year = dummy_date[2];
                 break;
