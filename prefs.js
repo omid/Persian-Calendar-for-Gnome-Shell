@@ -7,22 +7,22 @@ const SETTINGS_SCHEMA = 'persian-calendar';
 
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
-const N_ = function (e) {
-    return e;
-};
 
 let extension = imports.misc.extensionUtils.getCurrentExtension();
 let convenience = extension.imports.convenience;
 
 let Schema = convenience.getSettings(extension, SETTINGS_SCHEMA);
 
-function init() {
+/*jshint unused:false*/
+function init()
+{
 }
 
 const App = new Lang.Class({
     Name: 'PersianCalendar.App',
 
-    _init: function () {
+    _init: function ()
+    {
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
@@ -140,11 +140,11 @@ const App = new Lang.Class({
         let color = new Gtk.ColorButton();
         this.vbox3.add(color);
 
-        let _color = getColorByHexadecimal(Schema.get_string('color'));
+        let _color = this.getColorByHexadecimal(Schema.get_string('color'));
         color.set_color(_color);
 
         color.connect('color-set', function (color) {
-            Schema.set_string('color', getHexadecimalByColor(color.get_color()));
+            Schema.set_string('color', this.getHexadecimalByColor(color.get_color()));
         });
 
         item = new Gtk.CheckButton({label: _('Startup Notification')});
@@ -189,54 +189,55 @@ const App = new Lang.Class({
          });*/
 
         this.main_hbox.show_all();
+    },
+
+    _scaleRound: function(value)
+    {
+        // Based on gtk/gtkcoloreditor.c
+        value = Math.floor((value / 255) + 0.5);
+        value = Math.max(value, 0);
+        value = Math.min(value, 255);
+        return value;
+    },
+
+    _dec2Hex: function(value)
+    {
+        value = value.toString(16);
+
+        while (value.length < 2) {
+            value = '0' + value;
+        }
+
+        return value;
+    },
+
+    getColorByHexadecimal: function(hex)
+    {
+        let colorArray = Gdk.Color.parse(hex);
+        let color = null;
+
+        if (colorArray[0]) {
+            color = colorArray[1];
+        } else {
+            // On any error, default to red
+            color = new Gdk.Color({red: 65535});
+        }
+
+        return color;
+    },
+
+    getHexadecimalByColor: function(color)
+    {
+        let red = this._scaleRound(color.red);
+        let green = this._scaleRound(color.green);
+        let blue = this._scaleRound(color.blue);
+        return '#' + this._dec2Hex(red) + this._dec2Hex(green) + this._dec2Hex(blue);
     }
 });
 
+/*jshint unused:false*/
 function buildPrefsWidget()
 {
     let widget = new App();
     return widget.main_hbox;
-}
-
-function _scaleRound(value)
-{
-    // Based on gtk/gtkcoloreditor.c
-    value = Math.floor((value / 255) + 0.5);
-    value = Math.max(value, 0);
-    value = Math.min(value, 255);
-    return value;
-}
-
-function _dec2Hex(value)
-{
-    value = value.toString(16);
-
-    while (value.length < 2) {
-        value = '0' + value;
-    }
-
-    return value;
-}
-
-function getColorByHexadecimal(hex)
-{
-    let colorArray = Gdk.Color.parse(hex);
-    let color = null;
-
-    if (colorArray[0]) {
-        color = colorArray[1];
-    } else {
-        // On any error, default to red
-        color = new Gdk.Color({red: 65535});
-    }
-
-    return color;
-}
-
-function getHexadecimalByColor(color)
-{
-    let red = _scaleRound(color.red);
-    let green = _scaleRound(color.green);
-    let blue = _scaleRound(color.blue);
-    return '#' + _dec2Hex(red) + _dec2Hex(green) + _dec2Hex(blue);
 }

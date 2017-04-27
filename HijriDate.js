@@ -4,14 +4,16 @@
 
 let HijriDate = {};
 
-HijriDate.intPart = function (floatNum) {
+HijriDate.intPart = function (floatNum)
+{
     if (floatNum < -0.0000001) {
         return Math.ceil(floatNum - 0.0000001);
     }
     return Math.floor(floatNum + 0.0000001);
 };
 
-HijriDate.toHijri = function (y, m, d) {
+HijriDate.toHijri = function (y, m, d)
+{
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);
@@ -34,7 +36,8 @@ HijriDate.toHijri = function (y, m, d) {
     return {year: y, month: m, day: d};
 };
 
-HijriDate.fromHijri = function (y, m, d) {
+HijriDate.fromHijri = function (y, m, d)
+{
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);

@@ -11,8 +11,6 @@ const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
 
-const str = extension.imports.strFunctions;
-
 const Schema = convenience.getSettings(extension, 'persian-calendar');
 
 function Events() {

@@ -174,7 +174,11 @@ const PersianCalendar = new Lang.Class({
             /* calculate exact hour/minute/second of the next new year.
              it calculate with some small differences!*/
             let now = new Date();
-            let pdate = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+            let pdate = PersianDate.PersianDate.gregorianToPersian(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                now.getDate()
+            );
 
             let month_delta = 12 - pdate.month;
             let day_delta, nowrooz;
@@ -492,10 +496,12 @@ function notify(msg, details)
 let _indicator;
 let _timer;
 
+/*jshint unused:false*/
 function init(metadata)
 {
 }
 
+/*jshint unused:false*/
 function enable()
 {
     _indicator = new PersianCalendar;
@@ -504,6 +510,7 @@ function enable()
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 }
 
+/*jshint unused:false*/
 function disable()
 {
     Schema.disconnect(_indicator.schema_color_change_signal);

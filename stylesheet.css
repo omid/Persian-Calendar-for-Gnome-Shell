@@ -40,7 +40,7 @@
 }
 
 .pcalendar-rtl {
-    direction: rtl !important;
+    direction: rtl;
 }
 
 .pcalendar-button {

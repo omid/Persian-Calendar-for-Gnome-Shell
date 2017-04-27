@@ -33,7 +33,11 @@ Calendar.prototype = {
     {
         // Start off with the current date
         this._selectedDate = new Date();
-        this._selectedDate = PersianDate.PersianDate.gregorianToPersian(this._selectedDate.getFullYear(), this._selectedDate.getMonth() + 1, this._selectedDate.getDate());
+        this._selectedDate = PersianDate.PersianDate.gregorianToPersian(
+            this._selectedDate.getFullYear(),
+            this._selectedDate.getMonth() + 1,
+            this._selectedDate.getDate()
+        );
 
         this.actor = new St.Widget({
             //homogeneous: false,
@@ -244,7 +248,8 @@ Calendar.prototype = {
         if (this._selectedDate.year === now.year) {
             this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1];
         } else {
-            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' + str.format(this._selectedDate.year);
+            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' +
+                str.format(this._selectedDate.year);
         }
 
         // Remove everything but the topBox and the weekday labels
@@ -265,7 +270,11 @@ Calendar.prototype = {
         let events;
 
         while (true) {
-            let p_iter = PersianDate.PersianDate.gregorianToPersian(iter.getFullYear(), iter.getMonth() + 1, iter.getDate());
+            let p_iter = PersianDate.PersianDate.gregorianToPersian(
+                iter.getFullYear(),
+                iter.getMonth() + 1,
+                iter.getDate()
+            );
             let button = new St.Button({label: str.format(p_iter.day)});
 
             button.connect('clicked', Lang.bind(this, function () {
@@ -323,11 +332,19 @@ Calendar.prototype = {
         }
 
         // find gregorian date
-        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(this._selectedDate.year, this._selectedDate.month, this._selectedDate.day);
+        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(
+            this._selectedDate.year,
+            this._selectedDate.month,
+            this._selectedDate.day
+        );
         g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
 
         // find hijri date of today
-        let h_selectedDate = HijriDate.HijriDate.toHijri(g_selectedDate.getFullYear(), g_selectedDate.getMonth() + 1, g_selectedDate.getDate());
+        let h_selectedDate = HijriDate.HijriDate.toHijri(
+            g_selectedDate.getFullYear(),
+            g_selectedDate.getMonth() + 1,
+            g_selectedDate.getDate()
+        );
 
         // add persian date
         if (Schema.get_boolean('persian-display')) {
