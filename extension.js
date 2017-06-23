@@ -116,7 +116,8 @@ const PersianCalendar = new Lang.Class({
 
         let vbox = new St.BoxLayout({vertical: true});
         let calendar = new PopupMenu.PopupBaseMenuItem({
-            reactive: false,
+            activate: false,
+            hover: false,
             can_focus: false
         });
         calendar.actor.add_child(vbox);
