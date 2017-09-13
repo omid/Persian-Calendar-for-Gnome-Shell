@@ -2,7 +2,7 @@
  * Based on a code from http://www.tabibmuda.com/page.php?8
  */
 
-let HijriDate = {};
+var HijriDate = {};
 
 HijriDate.intPart = function (floatNum)
 {

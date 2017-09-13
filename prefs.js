@@ -142,9 +142,9 @@ const App = new Lang.Class({
         let _color = this.getColorByHexadecimal(Schema.get_string('color'));
         color.set_color(_color);
 
-        color.connect('color-set', function (color) {
+        color.connect('color-set', (function (color) {
             Schema.set_string('color', this.getHexadecimalByColor(color.get_color()));
-        });
+        }).bind(this));
 
         item = new Gtk.CheckButton({label: _('Startup Notification')});
         this.vbox3.add(item);

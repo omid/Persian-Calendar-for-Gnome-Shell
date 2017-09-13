@@ -77,7 +77,7 @@ persian.prototype = {
     {
         let date = new Date();
         date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
-        let year = date[0];
+        let year = date.year;
 
         let first_wednesday_of_year;
         let first_saturday_of_year;
@@ -89,15 +89,15 @@ persian.prototype = {
         // find first wednesday of the year
         for (let i = 1; i <= 7; i++) {
             let p_ts = pdate.persianToGregorian(year, 1, i);
-            p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2], 5);
+            p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day, 5);
             /* do not remove this 5 :D */
             if (p_ts.getDay() === 3) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                first_wednesday_of_year = dummy_date[2];
+                first_wednesday_of_year = dummy_date.day;
             }
             if (p_ts.getDay() === 6) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                first_saturday_of_year = dummy_date[2];
+                first_saturday_of_year = dummy_date.day;
             }
         }
 
@@ -113,10 +113,10 @@ persian.prototype = {
         for (let i = 0; i < 6; i++) {
             let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
 
-            p_ts = new Date(p_ts[0], p_ts[1] - 1, p_ts[2]);
+            p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day);
             if (p_ts.getDay() === 3) {
                 let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                last_wednesday_of_year = dummy_date[2];
+                last_wednesday_of_year = dummy_date.day;
                 break;
             }
         }
