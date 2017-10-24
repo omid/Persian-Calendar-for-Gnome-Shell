@@ -1,3 +1,4 @@
+const GLib = imports.gi.GLib;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
@@ -38,6 +39,7 @@ const PersianCalendar = new Lang.Class({
         this.parent(0.0);
 
         this.label = new St.Label({
+			style_class: 'pcalendar-font',
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
@@ -125,6 +127,7 @@ const PersianCalendar = new Lang.Class({
 
         this._calendar = new Calendar.Calendar();
         vbox.add_actor(this._calendar.actor);
+		this._calendar.actor.add_style_class_name('pcalendar-font');
 
         this._generateConverterPart();
 
@@ -270,9 +273,10 @@ const PersianCalendar = new Lang.Class({
         // Add date conversion button
         let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
         converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
+		converterMenu.actor.add_style_class_name('pcalendar-font');
 
         this.menu.addMenuItem(converterMenu);
-        this.converterVbox = new St.BoxLayout({vertical: true, x_expand: true});
+        this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
         let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
             can_focus: false
@@ -507,6 +511,16 @@ function enable()
     Main.panel.addToStatusArea('persian_calendar', _indicator);
     _indicator._updateDate(!Schema.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
+
+    // install fonts
+    let path = extension.dir.get_path();
+    GLib.spawn_sync(
+        null,
+        ['/bin/bash', path + '/bin/install_fonts.sh', path],
+        null,
+        GLib.SpawnFlags.DEFAULT,
+        null
+    );
 }
 
 function disable()
@@ -520,6 +534,16 @@ function disable()
     Schema.run_dispose();
     Calendar.Schema.run_dispose();
     Events.Schema.run_dispose();
+
+    // uninstall fonts
+    let path = extension.dir.get_path();
+    GLib.spawn_async(
+        null,
+        ['/bin/bash', path + '/bin/uninstall_fonts.sh', path],
+        null,
+        GLib.SpawnFlags.DEFAULT,
+        null
+    );
 }
 
 function launch_extension_prefs(uuid)

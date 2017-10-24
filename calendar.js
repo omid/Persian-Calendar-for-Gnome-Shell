@@ -139,7 +139,7 @@ Calendar.prototype = {
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
 
-        this._monthLabel = new St.Label({style_class: 'calendar-month-label'});
+        this._monthLabel = new St.Label({style_class: 'calendar-month-label pcalendar-month-label'});
         this._topBox.add(this._monthLabel, {expand: true, x_fill: false, x_align: St.Align.MIDDLE});
 
         let leftButton = null;
