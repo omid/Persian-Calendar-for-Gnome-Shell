@@ -40,7 +40,6 @@ Calendar.prototype = {
         );
 
         this.actor = new St.Widget({
-            //homogeneous: false,
             layout_manager: new Clutter.TableLayout(),
             reactive: true
         });
@@ -61,37 +60,51 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    format: function (format, day, month, year, calendar)
+    format: function (format, day, month, year, dow, calendar)
     {
-        let months =
+        let phrases =
         {
             gregorian:
             {
-                small: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                large: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                monthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                monthLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                weekdayShort: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                weekdayLong: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
             },
             persian:
             {
-                small: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
-                large: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
+                monthShort: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
+                monthLong: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+                weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
+                weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پتج‌شنبه', 'آدینه'],
             },
             hijri:
             {
-                small: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
-                large: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه']
+                monthShort: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
+                monthLong: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه'],
+                weekdayShort: ['س', 'ا', 'ا', 'ث', 'ا', 'خ', 'ج'],
+                weekdayLong: ['‫السبت', '‫الأحد', '‫الاثنين', '‫الثلاثاء', '‫الأربعاء', '‫الخميس', '‫الجمعة'],
             }
         };
 
-        let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d'];
+        // change dow to Persian style!
+        dow += 1;
+        if (dow > 6) {
+            dow = 0;
+        }
+
+        let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d', '%WW', '%ww'];
         let replace = [
             year,
             (year + '').slice(-2),
-            months[calendar].large[month - 1],
-            months[calendar].small[month - 1],
+            phrases[calendar].monthLong[month - 1],
+            phrases[calendar].monthShort[month - 1],
             ('0' + (month)).slice(-2),
             month,
             ('0' + day).slice(-2),
-            day
+            day,
+            phrases[calendar].weekdayLong[dow],
+            phrases[calendar].weekdayShort[dow],
         ];
         return str.replace(find, replace, format);
     },
@@ -358,6 +371,7 @@ Calendar.prototype = {
                         this._selectedDate.day,
                         this._selectedDate.month,
                         this._selectedDate.year,
+                        g_selectedDate.getDay(),
                         'persian'
                     )
                 ),
@@ -381,6 +395,7 @@ Calendar.prototype = {
                     g_selectedDate.getDate(),
                     g_selectedDate.getMonth() + 1,
                     g_selectedDate.getFullYear(),
+                    g_selectedDate.getDay(),
                     'gregorian'
                 ),
                 style_class: 'calendar-day pcalendar-date-label'
@@ -404,6 +419,7 @@ Calendar.prototype = {
                         h_selectedDate.day,
                         h_selectedDate.month,
                         h_selectedDate.year,
+                        g_selectedDate.getDay(),
                         'hijri'
                     )
                 ),

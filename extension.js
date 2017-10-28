@@ -39,7 +39,7 @@ const PersianCalendar = new Lang.Class({
         this.parent(0.0);
 
         this.label = new St.Label({
-			style_class: 'pcalendar-font',
+            style_class: 'pcalendar-font',
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
@@ -127,7 +127,7 @@ const PersianCalendar = new Lang.Class({
 
         this._calendar = new Calendar.Calendar();
         vbox.add_actor(this._calendar.actor);
-		this._calendar.actor.add_style_class_name('pcalendar-font');
+        this._calendar.actor.add_style_class_name('pcalendar-font');
 
         this._generateConverterPart();
 
@@ -222,6 +222,7 @@ const PersianCalendar = new Lang.Class({
     {
         this._isHoliday = false;
         let _date = new Date();
+        let _dayOfWeek = _date.getDay();
         this._events = '';
 
         // convert to Persian
@@ -255,6 +256,7 @@ const PersianCalendar = new Lang.Class({
                     _date.day,
                     _date.month,
                     _date.year,
+                    _dayOfWeek,
                     'persian'
                 )
             )
@@ -273,7 +275,7 @@ const PersianCalendar = new Lang.Class({
         // Add date conversion button
         let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
         converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
-		converterMenu.actor.add_style_class_name('pcalendar-font');
+        converterMenu.actor.add_style_class_name('pcalendar-font');
 
         this.menu.addMenuItem(converterMenu);
         this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
@@ -386,12 +388,12 @@ const PersianCalendar = new Lang.Class({
         }
 
         let gDate;
-        let jDate;
+        let pDate;
         let hDate;
 
         switch (this._activeConverter) {
             case ConverterTypes.fromGregorian:
-                jDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
+                pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
                 hDate = HijriDate.HijriDate.toHijri(year, month, day);
                 break;
 
@@ -402,19 +404,27 @@ const PersianCalendar = new Lang.Class({
 
             case ConverterTypes.fromHijri:
                 gDate = HijriDate.HijriDate.fromHijri(year, month, day);
-                jDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+                pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
                 break;
         }
 
+        // calc day of week
+        let $dayOfWeek = new Date(year, month, day);
+        if (gDate) {
+            $dayOfWeek = new Date(gDate.year, gDate.month, gDate.day);
+        }
+        $dayOfWeek = $dayOfWeek.getDay();
+
         // add persian date
-        if (Schema.get_boolean('persian-display') && jDate) {
+        if (pDate) {
             let button = new St.Button({
                 label: str.format(
                     this._calendar.format(
                         Schema.get_string('persian-display-format'),
-                        jDate.day,
-                        jDate.month,
-                        jDate.year,
+                        pDate.day,
+                        pDate.month,
+                        pDate.year,
+                        $dayOfWeek,
                         'persian'
                     )
                 ),
@@ -427,13 +437,14 @@ const PersianCalendar = new Lang.Class({
         }
 
         // add gregorian date
-        if (Schema.get_boolean('gregorian-display') && gDate) {
+        if (gDate) {
             let button = new St.Button({
                 label: this._calendar.format(
                     Schema.get_string('gregorian-display-format'),
                     gDate.day,
                     gDate.month,
                     gDate.year,
+                    $dayOfWeek,
                     'gregorian'
                 ),
                 style_class: 'calendar-day pcalendar-date-label'
@@ -445,7 +456,7 @@ const PersianCalendar = new Lang.Class({
         }
 
         // add hijri date
-        if (Schema.get_boolean('hijri-display') && hDate) {
+        if (hDate) {
             let button = new St.Button({
                 label: str.format(
                     this._calendar.format(
@@ -453,6 +464,7 @@ const PersianCalendar = new Lang.Class({
                         hDate.day,
                         hDate.month,
                         hDate.year,
+                        $dayOfWeek,
                         'hijri'
                     )
                 ),
