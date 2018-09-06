@@ -20,6 +20,3 @@ An extension for Gnome-Shell to show Persian date/calendar
 #### Contributors:
 * Omid Mottaghi Rad
 * Mostafa Mirmousavi
-
-#### Support me by clicking on the following link:
-
