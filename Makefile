@@ -32,6 +32,7 @@ install-local: _build
 	echo done
 
 release: _build
+	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/' $(UUID)/metadata.json;
 	cd _build ; \
 	zip -qr "$(UUID)$(NEW_VERSION).zip" .
 	mv _build/$(UUID)$(NEW_VERSION).zip ./
@@ -49,7 +50,7 @@ _build: all #update-translation
 	mkdir -p _build/schemas
 	cp $(UUID)/schemas/*.xml _build/schemas/
 	cp $(UUID)/schemas/gschemas.compiled _build/schemas/
-	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/'  _build/metadata.json;
+	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/' _build/metadata.json;
 
 #update-translation: all
 #	cd po; \
