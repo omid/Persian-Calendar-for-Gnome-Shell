@@ -20,7 +20,7 @@ const Calendar = extension.imports.calendar;
 const Events = extension.imports.Events;
 const str = extension.imports.strFunctions;
 
-const Schema = convenience.getSettings(extension, 'persian-calendar');
+let Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 const ConverterTypes = {
     fromPersian: 0,
     fromGregorian : 1,
@@ -519,6 +519,8 @@ function init(metadata)
 
 function enable()
 {
+    // Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
+
     _indicator = new PersianCalendar;
     Main.panel.addToStatusArea('persian_calendar', _indicator);
     _indicator._updateDate(!Schema.get_boolean('startup-notification'));
@@ -543,9 +545,6 @@ function disable()
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);
-    Schema.run_dispose();
-    Calendar.Schema.run_dispose();
-    Events.Schema.run_dispose();
 
     // uninstall fonts
     let path = extension.dir.get_path();

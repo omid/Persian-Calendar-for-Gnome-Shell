@@ -3,15 +3,13 @@ const Gio = imports.gi.Gio;
 const Gdk = imports.gi.Gdk;
 const Lang = imports.lang;
 
-const SETTINGS_SCHEMA = 'persian-calendar';
-
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
 
 let extension = imports.misc.extensionUtils.getCurrentExtension();
 let convenience = extension.imports.convenience;
 
-let Schema = convenience.getSettings(extension, SETTINGS_SCHEMA);
+let Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 
 function init()
 {

@@ -13,7 +13,7 @@ const HijriDate = extension.imports.HijriDate;
 const str = extension.imports.strFunctions;
 const Events = extension.imports.Events;
 
-const Schema = convenience.getSettings(extension, 'persian-calendar');
+var Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 
 function _sameDay(dateA, dateB) {
     return (dateA.year === dateB.year &&
