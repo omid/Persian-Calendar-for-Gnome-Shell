@@ -11,7 +11,7 @@ const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
 
-var Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
+const Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 
 function Events() {
     this._init();
