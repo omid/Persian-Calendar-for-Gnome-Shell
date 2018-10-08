@@ -2,8 +2,7 @@
 
 An extension for Gnome-Shell to show Persian date/calendar
 
-![Screenshot](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/blob/master/Screenshot.png?raw=true)
-
+![Screenshot](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/blob/master/PersianCalendar%40oxygenws.com/Screenshot.png?raw=true)
 
 #### To install:
 * Copy `PersianCalendar@oxygenws.com` directory of the repository to `~/.local/share/gnome-shell/extensions/` directory.
