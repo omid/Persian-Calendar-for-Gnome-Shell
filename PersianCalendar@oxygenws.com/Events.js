@@ -19,17 +19,16 @@ function Events() {
 
 Events.prototype = {
 
-    _init: function ()
-    {
+    _init: function () {
         this._eventsList = [];
         if (Schema.get_boolean('event-persian')) {
             this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         }
         if (Schema.get_boolean('event-world')) {
-            this._eventsList.push(new world.world);
+            this._eventsList.push(new world.world());
         }
         if (Schema.get_boolean('event-iran-solar')) {
-            this._eventsList.push(new iranSolar.iranSolar);
+            this._eventsList.push(new iranSolar.iranSolar());
         }
         if (Schema.get_boolean('event-iran-lunar')) {
             this._eventsList.push(new iranLunar.iranLunar());
@@ -39,15 +38,14 @@ Events.prototype = {
         }
     },
 
-    getEvents: function (today)
-    {
+    getEvents: function (today) {
         this._events = '';
         this._isHoliday = false;
         this._today = [];
 
         // if it is friday
         if (today.getDay() === 5) {
-          this._isHoliday = true;
+            this._isHoliday = true;
         }
 
         // store gregorian date of today
@@ -65,26 +63,27 @@ Events.prototype = {
         return [this._events, this._isHoliday];
     },
 
-    _checkEvent: function (el)
-    {
+    _checkEvent: function (el) {
         let type = 0;
 
         switch (el.type) {
-            case 'gregorian':
-                type = 0;
-                break;
-            case 'persian':
-                type = 1;
-                break;
-            case 'hijri':
-                type = 2;
-                break;
+        case 'gregorian':
+            type = 0;
+            break;
+        case 'persian':
+            type = 1;
+            break;
+        case 'hijri':
+            type = 2;
+            break;
+        default:
+            // do nothing
         }
 
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += "\n" + el.events[this._today[type][1]][this._today[type][2]][0];
+            this._events += '\n' + el.events[this._today[type][1]][this._today[type][2]][0];
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

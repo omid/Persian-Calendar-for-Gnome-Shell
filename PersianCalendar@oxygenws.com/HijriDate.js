@@ -4,23 +4,23 @@
 
 var HijriDate = {};
 
-HijriDate.intPart = function (floatNum)
-{
+HijriDate.intPart = function (floatNum) {
     if (floatNum < -0.0000001) {
         return Math.ceil(floatNum - 0.0000001);
     }
     return Math.floor(floatNum + 0.0000001);
 };
 
-HijriDate.toHijri = function (y, m, d)
-{
+HijriDate.toHijri = function (y, m, d) {
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);
 
-    let jd, l, n, j;
+    let j, jd, l, n;
     if ((y > 1582) || ((y === 1582) && (m > 10)) || ((y === 1582) && (m === 10) && (d > 14))) {
-        jd = HijriDate.intPart((1461 * (y + 4800 + HijriDate.intPart((m - 14) / 12))) / 4) + HijriDate.intPart((367 * (m - 2 - 12 * (HijriDate.intPart((m - 14) / 12)))) / 12) - HijriDate.intPart((3 * (HijriDate.intPart((y + 4900 + HijriDate.intPart((m - 14) / 12)     ) / 100)    )   ) / 4) + d - 32075;
+        jd = HijriDate.intPart((1461 * (y + 4800 + HijriDate.intPart((m - 14) / 12))) / 4) +
+            HijriDate.intPart((367 * (m - 2 - 12 * (HijriDate.intPart((m - 14) / 12)))) / 12) -
+            HijriDate.intPart((3 * (HijriDate.intPart((y + 4900 + HijriDate.intPart((m - 14) / 12)) / 100))) / 4) + d - 32075;
     } else {
         jd = 367 * y - HijriDate.intPart((7 * (y + 5001 + HijriDate.intPart((m - 9) / 7))) / 4) + HijriDate.intPart((275 * m) / 9) + d + 1729777;
     }
@@ -36,18 +36,17 @@ HijriDate.toHijri = function (y, m, d)
     return {year: y, month: m, day: d};
 };
 
-HijriDate.fromHijri = function (y, m, d)
-{
+HijriDate.fromHijri = function (y, m, d) {
     y = parseInt(y);
     m = parseInt(m);
     d = parseInt(d);
 
-    let jd, l, n, j, i, k;
+    let i, j, jd, k, l, n;
     jd = HijriDate.intPart((11 * y + 3) / 30) + 354 * y + 30 * m - HijriDate.intPart((m - 1) / 2) + d + 1948440 - 385;
     if (jd > 2299160) {
         l = jd + 68569;
         n = HijriDate.intPart((4 * l) / 146097);
-        l = l - HijriDate.intPart((146097 * n + 3) / 4);
+        l -= HijriDate.intPart((146097 * n + 3) / 4);
         i = HijriDate.intPart((4000 * (l + 1)) / 1461001);
         l = l - HijriDate.intPart((1461 * i) / 4) + 31;
         j = HijriDate.intPart((80 * l) / 2447);

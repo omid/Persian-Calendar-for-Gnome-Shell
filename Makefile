@@ -31,7 +31,7 @@ install-local: _build
 	-rm -fR _build
 	echo done
 
-release: _build
+release: eslint _build
 	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/' $(UUID)/metadata.json;
 	cd _build ; \
 	zip -qr "$(UUID)$(NEW_VERSION).zip" .
@@ -40,6 +40,9 @@ release: _build
 	git commit -v
 	git push
 	-rm -fR _build
+
+eslint:
+	eslint PersianCalendar@oxygenws.com
 
 _build: all #update-translation
 	-rm -fR ./_build
@@ -55,3 +58,6 @@ _build: all #update-translation
 #update-translation: all
 #	cd po; \
 #	./compile.sh ../PersianCalendar@oxygenws.com/locale;
+
+tailLog:
+	sudo journalctl -f -g $(UUID)

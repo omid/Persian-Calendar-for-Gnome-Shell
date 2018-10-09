@@ -1,7 +1,6 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-function persian(pdate)
-{
+function persian(pdate) {
     this._init(pdate);
 }
 
@@ -11,8 +10,7 @@ persian.prototype = {
     /* [month][day] = [title, isHoliday] */
     events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function (pdate)
-    {
+    _init: function (pdate) {
         this.events[1][1] = ['جشن نوروز', false];
         this.events[1][6] = ['روز امید / روز شادباش‌نویسی', false];
         this.events[1][10] = ['جشن آبان‌گاه', false];
@@ -73,16 +71,15 @@ persian.prototype = {
         this.addSpecificEvents(pdate);
     },
 
-    addSpecificEvents: function (pdate)
-    {
+    addSpecificEvents: function (pdate) {
         let date = new Date();
         date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
         let year = date.year;
 
-        let first_wednesday_of_year;
-        let first_saturday_of_year;
-        let last_wednesday_of_year;
-        let last_day_of_year;
+        let first_saturday_of_year,
+            first_wednesday_of_year,
+            last_day_of_year,
+            last_wednesday_of_year;
 
         // find first saturday of the year
         // and
@@ -123,7 +120,8 @@ persian.prototype = {
 
         this.events[1][first_saturday_of_year] = ['جشن نخستین شنبه سال', false];
         this.events[1][first_wednesday_of_year] = ['جشن نخستین چهارشنبه سال', false];
-        this.events[12][last_day_of_year] = ['گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان / زادروز زرتشت / جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه / آتش افروزی بر بام‌ها در استقبال از نوروز', false];
+        this.events[12][last_day_of_year] =
+            ['گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان / زادروز زرتشت / جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه / آتش افروزی بر بام‌ها در استقبال از نوروز', false];
         this.events[12][last_wednesday_of_year - 1] = ['چارشنبه سوری، جشن شب چهارشنبه آخر', false];
         this.events[12][last_wednesday_of_year] = ['چارشنبه آخر', false];
     }

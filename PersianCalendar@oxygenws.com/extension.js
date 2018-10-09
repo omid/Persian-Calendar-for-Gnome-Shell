@@ -9,6 +9,9 @@ const MessageTray = imports.ui.messageTray;
 const Clutter = imports.gi.Clutter;
 const Shell = imports.gi.Shell;
 
+const Gettext = imports.gettext.domain('persian-calendar');
+const _ = Gettext.gettext;
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
 const convenience = extension.imports.convenience;
@@ -23,18 +26,19 @@ const str = extension.imports.strFunctions;
 const Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 const ConverterTypes = {
     fromPersian: 0,
-    fromGregorian : 1,
-    fromHijri  : 2
+    fromGregorian: 1,
+    fromHijri: 2
 };
 
-let messageTray;
+let _indicator,
+    _timer,
+    messageTray;
 
 const PersianCalendar = new Lang.Class({
     Name: 'PersianCalendar.PersianCalendar',
     Extends: PanelMenu.Button,
 
-    _init: function ()
-    {
+    _init: function () {
         messageTray = new MessageTray.MessageTray();
         this.parent(0.0);
 
@@ -74,7 +78,7 @@ const PersianCalendar = new Lang.Class({
                 this._updateDate(true, true)
             }
         ));
-        ///////////////////////////////
+        // /////////////////////////////
 
         // some codes for fonts
         /*
@@ -112,7 +116,7 @@ const PersianCalendar = new Lang.Class({
          }
          ));
          */
-        ///////////////////////////////
+        // /////////////////////////////
 
         this._today = '';
 
@@ -194,8 +198,7 @@ const PersianCalendar = new Lang.Class({
 
             if (month_delta !== 0) {
                 nowrooz = month_delta + ' ماه و ';
-            }
-            else {
+            } else {
                 nowrooz = '';
             }
 
@@ -205,7 +208,6 @@ const PersianCalendar = new Lang.Class({
             }
 
             notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
-
         });
         actionButtons.actor.add(nowroozIcon, {expand: true, x_fill: false});
 
@@ -218,8 +220,7 @@ const PersianCalendar = new Lang.Class({
         }));
     },
 
-    _updateDate: function (skip_notification, force)
-    {
+    _updateDate: function (skip_notification, force) {
         this._isHoliday = false;
         let _date = new Date();
         let _dayOfWeek = _date.getDay();
@@ -240,7 +241,7 @@ const PersianCalendar = new Lang.Class({
         // get events of today
         let ev = new Events.Events();
         let events = ev.getEvents(new Date());
-        events[0] = events[0] !== '' ? "\n" + events[0] : '';
+        events[0] = events[0] !== '' ? '\n' + events[0] : '';
 
         // is holiday?
         if (events[1]) {
@@ -270,8 +271,7 @@ const PersianCalendar = new Lang.Class({
         return true;
     },
 
-    _generateConverterPart: function ()
-    {
+    _generateConverterPart: function () {
         // Add date conversion button
         let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
         converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
@@ -291,37 +291,37 @@ const PersianCalendar = new Lang.Class({
         this._activeConverter = ConverterTypes.fromPersian;
 
         let fromPersian = new St.Button({
-            reactive       : true,
-            can_focus      : true,
-            track_hover    : true,
-            x_expand       : true,
-            label          : _('از فارسی'),
+            reactive: true,
+            can_focus: true,
+            track_hover: true,
+            x_expand: true,
+            label: _('از فارسی'),
             accessible_name: 'fromPersian',
-            style_class    : 'popup-menu-item button pcalendar-button fromPersian active'
+            style_class: 'popup-menu-item button pcalendar-button fromPersian active'
         });
         fromPersian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromPersian.TypeID = ConverterTypes.fromPersian;
 
         let fromGregorian = new St.Button({
-            reactive       : true,
-            can_focus      : true,
-            track_hover    : true,
-            x_expand       : true,
-            label          : _('از میلادی'),
+            reactive: true,
+            can_focus: true,
+            track_hover: true,
+            x_expand: true,
+            label: _('از میلادی'),
             accessible_name: 'fromGregorian',
-            style_class    : 'popup-menu-item button pcalendar-button fromGregorian'
+            style_class: 'popup-menu-item button pcalendar-button fromGregorian'
         });
         fromGregorian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromGregorian.TypeID = ConverterTypes.fromGregorian;
 
         let fromHijri = new St.Button({
-            reactive       : true,
-            can_focus      : true,
-            track_hover    : true,
-            x_expand       : true,
-            label          : _('از قمری'),
+            reactive: true,
+            can_focus: true,
+            track_hover: true,
+            x_expand: true,
+            label: _('از قمری'),
             accessible_name: 'fromHijri',
-            style_class    : 'popup-menu-item button pcalendar-button fromHijri'
+            style_class: 'popup-menu-item button pcalendar-button fromHijri'
         });
         fromHijri.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromHijri.TypeID = ConverterTypes.fromHijri;
@@ -336,9 +336,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterYear = new St.Entry({
             name: 'year',
-            hint_text  : _('سال'),
-            can_focus  : true,
-            x_expand   : true,
+            hint_text: _('سال'),
+            can_focus: true,
+            x_expand: true,
             style_class: 'pcalendar-converter-entry'
         });
         this.converterYear.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
@@ -346,9 +346,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterMonth = new St.Entry({
             name: 'month',
-            hint_text  : _('ماه'),
-            can_focus  : true,
-            x_expand   : true,
+            hint_text: _('ماه'),
+            can_focus: true,
+            x_expand: true,
             style_class: 'pcalendar-converter-entry'
         });
         converterHbox.add(this.converterMonth, {expand: true});
@@ -356,9 +356,9 @@ const PersianCalendar = new Lang.Class({
 
         this.converterDay = new St.Entry({
             name: 'day',
-            hint_text  : _('روز'),
-            can_focus  : true,
-            x_expand   : true,
+            hint_text: _('روز'),
+            can_focus: true,
+            x_expand: true,
             style_class: 'pcalendar-converter-entry'
         });
         converterHbox.add(this.converterDay, {expand: true});
@@ -370,8 +370,7 @@ const PersianCalendar = new Lang.Class({
         this.converterVbox.add(this.convertedDatesVbox);
     },
 
-    _onModifyConverter: function()
-    {
+    _onModifyConverter: function () {
         // erase old date
         let convertedDatesChildren = this.convertedDatesVbox.get_children();
         for (let i = 0; i < convertedDatesChildren.length; i++) {
@@ -387,25 +386,28 @@ const PersianCalendar = new Lang.Class({
             return;
         }
 
-        let gDate;
-        let pDate;
-        let hDate;
+        let gDate,
+            hDate,
+            pDate;
 
         switch (this._activeConverter) {
-            case ConverterTypes.fromGregorian:
-                pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(year, month, day);
-                break;
+        case ConverterTypes.fromGregorian:
+            pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
+            hDate = HijriDate.HijriDate.toHijri(year, month, day);
+            break;
 
-            case ConverterTypes.fromPersian:
-                gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
-                break;
+        case ConverterTypes.fromPersian:
+            gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
+            hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
+            break;
 
-            case ConverterTypes.fromHijri:
-                gDate = HijriDate.HijriDate.fromHijri(year, month, day);
-                pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
-                break;
+        case ConverterTypes.fromHijri:
+            gDate = HijriDate.HijriDate.fromHijri(year, month, day);
+            pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+            break;
+
+        default:
+            // do nothing
         }
 
         // calc day of week
@@ -477,8 +479,7 @@ const PersianCalendar = new Lang.Class({
         }
     },
 
-    _toggleConverter: function(button)
-    {
+    _toggleConverter: function (button) {
         // skip because it is already active
         if (this._activeConverter === button.TypeID) {
             return;
@@ -500,8 +501,7 @@ const PersianCalendar = new Lang.Class({
     }
 });
 
-function notify(msg, details)
-{
+function notify(msg, details) {
     let source = new MessageTray.SystemNotificationSource();
     messageTray.add(source);
     let notification = new MessageTray.Notification(source, msg, details);
@@ -509,17 +509,11 @@ function notify(msg, details)
     source.notify(notification);
 }
 
-
-let _indicator;
-let _timer;
-
-function init(metadata)
-{
+function init(metadata) {
 }
 
-function enable()
-{
-    _indicator = new PersianCalendar;
+function enable() {
+    _indicator = new PersianCalendar();
     Main.panel.addToStatusArea('persian_calendar', _indicator);
     _indicator._updateDate(!Schema.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
@@ -535,8 +529,7 @@ function enable()
     );
 }
 
-function disable()
-{
+function disable() {
     Schema.disconnect(_indicator.schema_color_change_signal);
     Schema.disconnect(_indicator.schema_custom_color_signal);
     Schema.disconnect(_indicator.schema_widget_format_signal);
@@ -555,8 +548,7 @@ function disable()
     );
 }
 
-function launch_extension_prefs(uuid)
-{
+function launch_extension_prefs(uuid) {
     let appSys = Shell.AppSystem.get_default();
     let app = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
     let info = app.get_app_info();

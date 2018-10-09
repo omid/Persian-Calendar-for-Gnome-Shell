@@ -1,5 +1,4 @@
-function iranSolar()
-{
+function iranSolar() {
     this._init();
 }
 
@@ -9,8 +8,7 @@ iranSolar.prototype = {
     /* [month][day] = [title, isHoliday] */
     events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function ()
-    {
+    _init: function () {
         this.events[1][1] = ['عید نوروز', true];
         this.events[1][2] = ['عید نوروز', true];
         this.events[1][3] = ['عید نوروز', true];

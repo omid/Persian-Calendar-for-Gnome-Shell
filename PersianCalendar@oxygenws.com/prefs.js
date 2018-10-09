@@ -11,15 +11,13 @@ let convenience = extension.imports.convenience;
 
 let Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 
-function init()
-{
+function init() {
 }
 
 const App = new Lang.Class({
     Name: 'PersianCalendar.App',
 
-    _init: function ()
-    {
+    _init: function () {
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
@@ -61,8 +59,8 @@ const App = new Lang.Class({
         hbox.add(format);
         this.vbox1.add(hbox);
         format.set_text(Schema.get_string('persian-display-format'));
-        format.connect('changed', function (format) {
-            Schema.set_string('persian-display-format', format.text);
+        format.connect('changed', function (innerFormat) {
+            Schema.set_string('persian-display-format', innerFormat.text);
         });
 
         item = new Gtk.CheckButton({label: _('Gregorian')});
@@ -76,8 +74,8 @@ const App = new Lang.Class({
         hbox.add(format);
         this.vbox1.add(hbox);
         format.set_text(Schema.get_string('gregorian-display-format'));
-        format.connect('changed', function (format) {
-            Schema.set_string('gregorian-display-format', format.text);
+        format.connect('changed', function (innerFormat) {
+            Schema.set_string('gregorian-display-format', innerFormat.text);
         });
 
         item = new Gtk.CheckButton({label: _('Hijri')});
@@ -91,8 +89,8 @@ const App = new Lang.Class({
         hbox.add(format);
         this.vbox1.add(hbox);
         format.set_text(Schema.get_string('hijri-display-format'));
-        format.connect('changed', function (format) {
-            Schema.set_string('hijri-display-format', format.text);
+        format.connect('changed', function (innerFormat) {
+            Schema.set_string('hijri-display-format', innerFormat.text);
         });
 
         let comment = new Gtk.Label({
@@ -140,8 +138,8 @@ const App = new Lang.Class({
         let _color = this.getColorByHexadecimal(Schema.get_string('color'));
         color.set_color(_color);
 
-        color.connect('color-set', (function (color) {
-            Schema.set_string('color', this.getHexadecimalByColor(color.get_color()));
+        color.connect('color-set', (function (innerColor) {
+            Schema.set_string('color', this.getHexadecimalByColor(innerColor.get_color()));
         }).bind(this));
 
         item = new Gtk.CheckButton({label: _('Startup Notification')});
@@ -155,8 +153,8 @@ const App = new Lang.Class({
         hbox.add(format);
         this.vbox3.add(hbox);
         format.set_text(Schema.get_string('widget-format'));
-        format.connect('changed', function (format) {
-            Schema.set_string('widget-format', format.text);
+        format.connect('changed', function (innerFormat) {
+            Schema.set_string('widget-format', innerFormat.text);
         });
 
         comment = new Gtk.Label({
@@ -166,7 +164,7 @@ const App = new Lang.Class({
         this.vbox3.add(comment);
 
         // FONT
-        /*item = new Gtk.CheckButton({label: _('Use custom font')})
+        /* item = new Gtk.CheckButton({label: _('Use custom font')})
          this.vbox3.add(item)
          Schema.bind('custom-font', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -188,8 +186,7 @@ const App = new Lang.Class({
         this.main_hbox.show_all();
     },
 
-    _scaleRound: function(value)
-    {
+    _scaleRound: function (value) {
         // Based on gtk/gtkcoloreditor.c
         value = Math.floor((value / 255) + 0.5);
         value = Math.max(value, 0);
@@ -197,8 +194,7 @@ const App = new Lang.Class({
         return value;
     },
 
-    _dec2Hex: function(value)
-    {
+    _dec2Hex: function (value) {
         value = value.toString(16);
 
         while (value.length < 2) {
@@ -208,8 +204,7 @@ const App = new Lang.Class({
         return value;
     },
 
-    getColorByHexadecimal: function(hex)
-    {
+    getColorByHexadecimal: function (hex) {
         let colorArray = Gdk.Color.parse(hex);
         let color = null;
 
@@ -223,8 +218,7 @@ const App = new Lang.Class({
         return color;
     },
 
-    getHexadecimalByColor: function(color)
-    {
+    getHexadecimalByColor: function (color) {
         let red = this._scaleRound(color.red);
         let green = this._scaleRound(color.green);
         let blue = this._scaleRound(color.blue);
@@ -232,8 +226,7 @@ const App = new Lang.Class({
     }
 });
 
-function buildPrefsWidget()
-{
+function buildPrefsWidget() {
     let widget = new App();
     return widget.main_hbox;
 }

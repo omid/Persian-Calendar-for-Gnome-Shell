@@ -1,5 +1,4 @@
-function iranLunar()
-{
+function iranLunar() {
     this._init();
 }
 
@@ -7,10 +6,9 @@ iranLunar.prototype = {
     name: 'مناسبت‌های مذهبی ایران',
     type: 'hijri',
     /* [month][day] = [title, isHoliday] */
-    events: [[],[],[],[],[],[],[],[],[],[],[],[],[]],
+    events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function()
-    {
+    _init: function () {
         this.events[1][9] = ['تاسوعای حسینی', true];
         this.events[1][10] = ['عاشورای حسینی', true];
         this.events[2][20] = ['اربعین حسینی', true];

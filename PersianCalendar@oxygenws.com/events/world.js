@@ -1,6 +1,5 @@
 // copyright http://www.farhangiran.com
-function world()
-{
+function world() {
     this._init();
 }
 
@@ -10,8 +9,7 @@ world.prototype = {
     /* [month][day] = [title, isHoliday] */
     events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function ()
-    {
+    _init: function () {
         this.events[2][2] = ['روز جهانی عدالت اجتماعی', false];
         this.events[2][3] = ['روز جهانی زبان مادری', false];
         this.events[3][8] = ['روز جهانی زن', false];

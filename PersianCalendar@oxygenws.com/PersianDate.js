@@ -8,15 +8,14 @@ var PersianDate = {
     p_month_names: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند']
 };
 
-PersianDate.persianToGregorian = function (py, pm, pd)
-{
+PersianDate.persianToGregorian = function (py, pm, pd) {
     py = parseInt(py) - 979;
     pm = parseInt(pm) - 1;
     pd = parseInt(pd) - 1;
 
     let p_day_no = 365 * py + parseInt(py / 33) * 8 + parseInt((py % 33 + 3) / 4);
     for (let i = 0; i < pm; i++) {
-      p_day_no += PersianDate.p_days_in_month[i];
+        p_day_no += PersianDate.p_days_in_month[i];
     }
 
     p_day_no += pd;
@@ -25,7 +24,7 @@ PersianDate.persianToGregorian = function (py, pm, pd)
 
     let gy = 1600 + 400 * parseInt(g_day_no / 146097);
     /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
-    g_day_no = g_day_no % 146097;
+    g_day_no %= 146097;
 
     let leap = true;
     /* 36525 = 365*100 + 100/4 */
@@ -33,7 +32,7 @@ PersianDate.persianToGregorian = function (py, pm, pd)
         g_day_no--;
         gy += 100 * parseInt(g_day_no / 36524);
         /* 36524 = 365*100 + 100/4 - 100/100 */
-        g_day_no = g_day_no % 36524;
+        g_day_no %= 36524;
 
         if (g_day_no >= 365) {
             g_day_no++;
@@ -51,7 +50,7 @@ PersianDate.persianToGregorian = function (py, pm, pd)
 
         g_day_no--;
         gy += parseInt(g_day_no / 365);
-        g_day_no = g_day_no % 365;
+        g_day_no %= 365;
     }
 
     let i = 0;
@@ -62,14 +61,12 @@ PersianDate.persianToGregorian = function (py, pm, pd)
     return {year: gy, month: i + 1, day: g_day_no + 1};
 };
 
-PersianDate.checkDate = function (py, pm, pd)
-{
+PersianDate.checkDate = function (py, pm, pd) {
     return !(py < 0 || py > 32767 || pm < 1 || pm > 12 || pd < 1 || pd >
     (PersianDate.p_days_in_month[pm - 1] + (pm === 12 && !((py - 979) % 33 % 4))));
 };
 
-PersianDate.gregorianToPersian = function (gy, gm, gd)
-{
+PersianDate.gregorianToPersian = function (gy, gm, gd) {
     gy = parseInt(gy) - 1600;
     gm = parseInt(gm) - 1;
     gd = parseInt(gd) - 1;

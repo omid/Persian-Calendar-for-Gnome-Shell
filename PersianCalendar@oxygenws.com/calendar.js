@@ -29,8 +29,7 @@ Calendar.prototype = {
     weekdayAbbr: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
     _weekStart: 6,
 
-    _init: function ()
-    {
+    _init: function () {
         // Start off with the current date
         this._selectedDate = new Date();
         this._selectedDate = PersianDate.PersianDate.gregorianToPersian(
@@ -50,8 +49,7 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    setDate: function (date)
-    {
+    setDate: function (date) {
         if (!_sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
         }
@@ -60,8 +58,7 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    format: function (format, day, month, year, dow, calendar)
-    {
+    format: function (format, day, month, year, dow, calendar) {
         let phrases =
         {
             gregorian:
@@ -109,8 +106,7 @@ Calendar.prototype = {
         return str.replace(find, replace, format);
     },
 
-    _buildHeader: function ()
-    {
+    _buildHeader: function () {
         this._rtl = (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL);
         if (this._rtl) {
             this._colPosition = 0;
@@ -193,68 +189,62 @@ Calendar.prototype = {
         this._firstDayIndex = this.actor.get_children().length;
     },
 
-    _onScroll: function (actor, event)
-    {
+    _onScroll: function (actor, event) {
         switch (event.get_scroll_direction()) {
-            case Clutter.ScrollDirection.UP:
-            case Clutter.ScrollDirection.LEFT:
-                this._onNextMonthButtonClicked();
-                break;
-            case Clutter.ScrollDirection.DOWN:
-            case Clutter.ScrollDirection.RIGHT:
-                this._onPrevMonthButtonClicked();
-                break;
+        case Clutter.ScrollDirection.UP:
+        case Clutter.ScrollDirection.LEFT:
+            this._onNextMonthButtonClicked();
+            break;
+        case Clutter.ScrollDirection.DOWN:
+        case Clutter.ScrollDirection.RIGHT:
+            this._onPrevMonthButtonClicked();
+            break;
+        default:
+            // do nothing
         }
     },
 
-    _onPrevMonthButtonClicked: function ()
-    {
+    _onPrevMonthButtonClicked: function () {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
         if (oldMonth === 1) {
             newDate.month = 12;
             newDate.year--;
-        }
-        else {
+        } else {
             newDate.month--;
         }
 
         this.setDate(newDate);
     },
 
-    _onNextMonthButtonClicked: function ()
-    {
+    _onNextMonthButtonClicked: function () {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
         if (oldMonth === 12) {
             newDate.month = 1;
             newDate.year++;
-        }
-        else {
+        } else {
             newDate.month++;
         }
 
         this.setDate(newDate);
     },
 
-    _onPrevYearButtonClicked: function ()
-    {
+    _onPrevYearButtonClicked: function () {
         let newDate = this._selectedDate;
         newDate.year--;
 
         this.setDate(newDate);
     },
 
-    _onNextYearButtonClicked: function ()
-    {
+    _onNextYearButtonClicked: function () {
         let newDate = this._selectedDate;
         newDate.year++;
 
         this.setDate(newDate);
     },
 
-    _update: function ()
-    {
+    _update: function () {
         let now = new Date();
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
@@ -282,6 +272,7 @@ Calendar.prototype = {
         let ev = new Events.Events();
         let events;
 
+        /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
         while (true) {
             let p_iter = PersianDate.PersianDate.gregorianToPersian(
                 iter.getFullYear(),
