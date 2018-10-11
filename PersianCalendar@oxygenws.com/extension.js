@@ -524,7 +524,6 @@ function enable() {
     let positions = ['left', 'center', 'right'];
     let indexes = ['99999', '99999', '0'];
 
-    global.log(Main.panel);
     Main.panel.addToStatusArea(
         'persian_calendar',
         _indicator,
