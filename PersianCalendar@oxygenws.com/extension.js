@@ -78,6 +78,14 @@ const PersianCalendar = new Lang.Class({
                 this._updateDate(true, true)
             }
         ));
+
+
+        this.schema_position_signal = Schema.connect('changed::position', Lang.bind(
+            that, function () {
+                disable();
+                enable();
+            }
+        ));
         // /////////////////////////////
 
         // some codes for fonts
@@ -221,10 +229,8 @@ const PersianCalendar = new Lang.Class({
     },
 
     _updateDate: function (skip_notification, force) {
-        this._isHoliday = false;
         let _date = new Date();
         let _dayOfWeek = _date.getDay();
-        this._events = '';
 
         // convert to Persian
         _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
@@ -514,7 +520,17 @@ function init(metadata) {
 
 function enable() {
     _indicator = new PersianCalendar();
-    Main.panel.addToStatusArea('persian_calendar', _indicator);
+
+    let positions = ['left', 'center', 'right'];
+    let indexes = ['99999', '99999', '0'];
+
+    global.log(Main.panel);
+    Main.panel.addToStatusArea(
+        'persian_calendar',
+        _indicator,
+        indexes[Schema.get_enum('position')],
+        positions[Schema.get_enum('position')]
+    );
     _indicator._updateDate(!Schema.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
 
@@ -533,19 +549,10 @@ function disable() {
     Schema.disconnect(_indicator.schema_color_change_signal);
     Schema.disconnect(_indicator.schema_custom_color_signal);
     Schema.disconnect(_indicator.schema_widget_format_signal);
+    Schema.disconnect(_indicator.schema_position_signal);
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);
-
-    // uninstall fonts
-    let path = extension.dir.get_path();
-    GLib.spawn_async(
-        null,
-        ['/bin/bash', path + '/bin/uninstall_fonts.sh', path],
-        null,
-        GLib.SpawnFlags.DEFAULT,
-        null
-    );
 }
 
 function launch_extension_prefs(uuid) {

@@ -128,6 +128,15 @@ const App = new Lang.Class({
         // COLOR
         this.vbox3.add(new Gtk.Label({label: _('Widget Properties:')}));
 
+        this.vbox3.add(new Gtk.Label({label: _('Position')}));
+        item = new Gtk.ComboBoxText();
+        item.append('left', 'Left');
+        item.append('center', 'Center');
+        item.append('right', 'Right');
+        item.set_active(Schema.get_enum('position'));
+        this.vbox3.add(item);
+        Schema.bind('position', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
+
         item = new Gtk.CheckButton({label: _('Use custom color')});
         this.vbox3.add(item);
         Schema.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);

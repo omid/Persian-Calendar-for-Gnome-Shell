@@ -1,4 +1,9 @@
 <schemalist gettext-domain="gnome-shell-extensions-persian-calendar">
+  <enum id="org.gnome.shell.extensions.persian-calendar.positions">
+    <value nick="left" value="0"/>
+    <value nick="center" value="1"/>
+    <value nick="right" value="2"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
     <key name="hijri-display" type="b">
       <default>true</default>
@@ -74,6 +79,10 @@
       <default>'#000000'</default>
       <summary>Custom color</summary>
       <description>Custom color.</description>
+    </key>
+    <key name="position" enum="org.gnome.shell.extensions.persian-calendar.positions">
+      <default>'right'</default>
+      <summary>Where to display calendar (left, center, right)</summary>
     </key>
     <!--
     <key name="custom-font" type="b">
