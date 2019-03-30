@@ -7,9 +7,10 @@
     "3.24",
     "3.26",
     "3.28",
-    "3.30"
+    "3.30",
+    "3.32"
   ],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",
-  "version": 62
+  "version": 63
 }
