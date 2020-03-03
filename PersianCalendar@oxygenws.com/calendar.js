@@ -39,7 +39,8 @@ Calendar.prototype = {
         );
 
         this.actor = new St.Widget({
-            layout_manager: new Clutter.TableLayout(),
+            style_class: 'calendar',
+            layout_manager: new Clutter.GridLayout(),
             reactive: true
         });
 
@@ -118,8 +119,7 @@ Calendar.prototype = {
 
         // Top line of the calendar '<| year month |>'
         this._topBox = new St.BoxLayout();
-        this.actor.layout_manager.pack(this._topBox, 0, 0);
-        this.actor.layout_manager.set_span(this._topBox, 7, 1);
+        this.actor.layout_manager.attach(this._topBox, 0, 0, 7, 1);
 
         let rightButton = null;
         let icon = null;
@@ -182,7 +182,7 @@ Calendar.prototype = {
                 style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl',
                 text: this.weekdayAbbr[i]
             });
-            this.actor.layout_manager.pack(label, Math.abs(this._colPosition - i), 1);
+            this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
         }
 
         // All the children after this are days, and get removed when we update the calendar
@@ -318,10 +318,12 @@ Calendar.prototype = {
 
             button.style_class = styleClass;
 
-            this.actor.layout_manager.pack(
+            this.actor.layout_manager.attach(
                 button,
                 Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7),
-                row
+                row,
+                1,
+                1
             );
 
             iter.setDate(iter.getDate() + 1);
@@ -353,8 +355,7 @@ Calendar.prototype = {
         // add persian date
         if (Schema.get_boolean('persian-display')) {
             let _datesBox_p = new St.BoxLayout();
-            this.actor.layout_manager.pack(_datesBox_p, 0, ++row);
-            this.actor.layout_manager.set_span(_datesBox_p, 7, 1);
+            this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
             let button = new St.Button({
                 label: str.format(
                     this.format(
@@ -377,8 +378,7 @@ Calendar.prototype = {
         // add gregorian date
         if (Schema.get_boolean('gregorian-display')) {
             let _datesBox_g = new St.BoxLayout();
-            this.actor.layout_manager.pack(_datesBox_g, 0, ++row);
-            this.actor.layout_manager.set_span(_datesBox_g, 7, 1);
+            this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
 
             let button = new St.Button({
                 label: this.format(
@@ -400,8 +400,7 @@ Calendar.prototype = {
         // add hijri date
         if (Schema.get_boolean('hijri-display')) {
             let _datesBox_h = new St.BoxLayout();
-            this.actor.layout_manager.pack(_datesBox_h, 0, ++row);
-            this.actor.layout_manager.set_span(_datesBox_h, 7, 1);
+            this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
 
             let button = new St.Button({
                 label: str.format(
@@ -427,8 +426,7 @@ Calendar.prototype = {
 
         if (events[0]) {
             let _eventBox = new St.BoxLayout();
-            this.actor.layout_manager.pack(_eventBox, 0, ++row);
-            this.actor.layout_manager.set_span(_eventBox, 7, 1);
+            this.actor.layout_manager.attach(_eventBox, 0, ++row, 7, 1);
             let bottomLabel = new St.Label({
                 text: str.format(events[0]),
                 style_class: 'pcalendar-event-label'
