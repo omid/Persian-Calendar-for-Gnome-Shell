@@ -163,8 +163,8 @@ const PersianCalendar = new Lang.Class({
             can_focus: true
         });
         preferencesIcon.connect('clicked', function () {
-	        let appSys = Shell.AppSystem.get_default();
-			let gsmPrefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+            let appSys = Shell.AppSystem.get_default();
+            let gsmPrefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
 
             if (gsmPrefs.get_state() === gsmPrefs.SHELL_APP_STATE_RUNNING) {
                 gsmPrefs.activate();
