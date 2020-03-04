@@ -47,7 +47,7 @@ const PersianCalendar = new Lang.Class({
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
-        this.actor.add_actor(this.label);
+        this.add_actor(this.label);
 
         // some codes for coloring label
         if (Schema.get_boolean('custom-color')) {
@@ -156,9 +156,6 @@ const PersianCalendar = new Lang.Class({
             style_class: 'popup-menu-icon calendar-popup-menu-icon'
         });
 
-        let _appSys = Shell.AppSystem.get_default();
-        let _gsmPrefs = _appSys.lookup_app('gnome-shell-extension-prefs.desktop');
-
         let preferencesIcon = new St.Button({
             child: icon,
             style_class: 'system-menu-action calendar-preferences-button',
@@ -166,8 +163,11 @@ const PersianCalendar = new Lang.Class({
             can_focus: true
         });
         preferencesIcon.connect('clicked', function () {
-            if (_gsmPrefs.get_state() === _gsmPrefs.SHELL_APP_STATE_RUNNING) {
-                _gsmPrefs.activate();
+	        let appSys = Shell.AppSystem.get_default();
+			let gsmPrefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
+
+            if (gsmPrefs.get_state() === gsmPrefs.SHELL_APP_STATE_RUNNING) {
+                gsmPrefs.activate();
             } else {
                 launch_extension_prefs(extension.metadata.uuid);
             }
@@ -512,7 +512,7 @@ function notify(msg, details) {
     messageTray.add(source);
     let notification = new MessageTray.Notification(source, msg, details);
     notification.setTransient(true);
-    source.notify(notification);
+    source.showNotification(notification);
 }
 
 function init(metadata) {

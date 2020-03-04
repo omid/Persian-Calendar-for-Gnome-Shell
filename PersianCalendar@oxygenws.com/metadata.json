@@ -4,13 +4,10 @@
   "name": "Persian Calendar",
   "original-authors": "Omid Mottaghi Rad",
   "shell-version": [
-    "3.24",
-    "3.26",
-    "3.28",
-    "3.30",
-    "3.32"
+    "3.34",
+    "3.36"
   ],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",
-  "version": 65
+  "version": 66
 }
