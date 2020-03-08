@@ -7,11 +7,11 @@ const MainLoop = imports.mainloop;
 const Lang = imports.lang;
 const MessageTray = imports.ui.messageTray;
 const Clutter = imports.gi.Clutter;
-const Shell = imports.gi.Shell;
 
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
 
+const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
 const convenience = extension.imports.convenience;
@@ -45,7 +45,7 @@ const PersianCalendar = new Lang.Class({
         this.label = new St.Label({
             style_class: 'pcalendar-font',
             y_expand: true,
-            y_align: Clutter.ActorAlign.CENTER
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.add_actor(this.label);
 
@@ -132,7 +132,7 @@ const PersianCalendar = new Lang.Class({
         let calendar = new PopupMenu.PopupBaseMenuItem({
             activate: false,
             hover: false,
-            can_focus: false
+            can_focus: false,
         });
         calendar.actor.add_child(vbox);
         this.menu.addMenuItem(calendar);
@@ -146,45 +146,38 @@ const PersianCalendar = new Lang.Class({
         // action buttons
         let actionButtons = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
-            can_focus: false
+            can_focus: false,
         });
         this.menu.addMenuItem(actionButtons);
 
         // Add preferences button
         let icon = new St.Icon({
             icon_name: 'emblem-system-symbolic',
-            style_class: 'popup-menu-icon calendar-popup-menu-icon'
+            style_class: 'popup-menu-icon calendar-popup-menu-icon',
         });
 
         let preferencesIcon = new St.Button({
             child: icon,
-            style_class: 'system-menu-action calendar-preferences-button',
+            style_class: 'button system-menu-action calendar-preferences-button',
             reactive: true,
-            can_focus: true
+            can_focus: true,
         });
         preferencesIcon.connect('clicked', function () {
-            let appSys = Shell.AppSystem.get_default();
-            let gsmPrefs = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
-
-            if (gsmPrefs.get_state() === gsmPrefs.SHELL_APP_STATE_RUNNING) {
-                gsmPrefs.activate();
-            } else {
-                launch_extension_prefs(extension.metadata.uuid);
-            }
+            Util.spawn(["gnome-shell-extension-prefs", extension.metadata.uuid]);
         });
         actionButtons.actor.add(preferencesIcon, {expand: true, x_fill: false});
 
         // Add Nowrooz button
         icon = new St.Icon({
             icon_name: 'emblem-favorite-symbolic',
-            style_class: 'popup-menu-icon calendar-popup-menu-icon'
+            style_class: 'popup-menu-icon calendar-popup-menu-icon',
         });
 
         let nowroozIcon = new St.Button({
             child: icon,
+            style_class: 'button system-menu-action calendar-preferences-button',
             reactive: true,
             can_focus: true,
-            style_class: 'system-menu-action'
         });
         nowroozIcon.connect('clicked', function () {
             /* calculate exact hour/minute/second of the next new year.
@@ -287,7 +280,7 @@ const PersianCalendar = new Lang.Class({
         this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
         let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
             reactive: false,
-            can_focus: false
+            can_focus: false,
         });
         converterSubMenu.actor.add_child(this.converterVbox);
         converterMenu.menu.addMenuItem(converterSubMenu);
@@ -303,7 +296,7 @@ const PersianCalendar = new Lang.Class({
             x_expand: true,
             label: _('از فارسی'),
             accessible_name: 'fromPersian',
-            style_class: 'popup-menu-item button pcalendar-button fromPersian active'
+            style_class: 'popup-menu-item button pcalendar-button fromPersian active',
         });
         fromPersian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromPersian.TypeID = ConverterTypes.fromPersian;
@@ -315,7 +308,7 @@ const PersianCalendar = new Lang.Class({
             x_expand: true,
             label: _('از میلادی'),
             accessible_name: 'fromGregorian',
-            style_class: 'popup-menu-item button pcalendar-button fromGregorian'
+            style_class: 'popup-menu-item button pcalendar-button fromGregorian',
         });
         fromGregorian.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromGregorian.TypeID = ConverterTypes.fromGregorian;
@@ -327,7 +320,7 @@ const PersianCalendar = new Lang.Class({
             x_expand: true,
             label: _('از قمری'),
             accessible_name: 'fromHijri',
-            style_class: 'popup-menu-item button pcalendar-button fromHijri'
+            style_class: 'popup-menu-item button pcalendar-button fromHijri',
         });
         fromHijri.connect('clicked', Lang.bind(this, this._toggleConverter));
         fromHijri.TypeID = ConverterTypes.fromHijri;
@@ -345,7 +338,7 @@ const PersianCalendar = new Lang.Class({
             hint_text: _('سال'),
             can_focus: true,
             x_expand: true,
-            style_class: 'pcalendar-converter-entry'
+            style_class: 'pcalendar-converter-entry',
         });
         this.converterYear.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
         converterHbox.add(this.converterYear, {expand: true});
@@ -355,7 +348,7 @@ const PersianCalendar = new Lang.Class({
             hint_text: _('ماه'),
             can_focus: true,
             x_expand: true,
-            style_class: 'pcalendar-converter-entry'
+            style_class: 'pcalendar-converter-entry',
         });
         converterHbox.add(this.converterMonth, {expand: true});
         this.converterMonth.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
@@ -365,7 +358,7 @@ const PersianCalendar = new Lang.Class({
             hint_text: _('روز'),
             can_focus: true,
             x_expand: true,
-            style_class: 'pcalendar-converter-entry'
+            style_class: 'pcalendar-converter-entry',
         });
         converterHbox.add(this.converterDay, {expand: true});
         this.converterDay.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
@@ -397,22 +390,22 @@ const PersianCalendar = new Lang.Class({
             pDate;
 
         switch (this._activeConverter) {
-        case ConverterTypes.fromGregorian:
-            pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
-            hDate = HijriDate.HijriDate.toHijri(year, month, day);
-            break;
+            case ConverterTypes.fromGregorian:
+                pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
+                hDate = HijriDate.HijriDate.toHijri(year, month, day);
+                break;
 
-        case ConverterTypes.fromPersian:
-            gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
-            hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
-            break;
+            case ConverterTypes.fromPersian:
+                gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
+                hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
+                break;
 
-        case ConverterTypes.fromHijri:
-            gDate = HijriDate.HijriDate.fromHijri(year, month, day);
-            pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
-            break;
+            case ConverterTypes.fromHijri:
+                gDate = HijriDate.HijriDate.fromHijri(year, month, day);
+                pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+                break;
 
-        default:
+            default:
             // do nothing
         }
 
@@ -552,15 +545,4 @@ function disable() {
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);
-}
-
-function launch_extension_prefs(uuid) {
-    let appSys = Shell.AppSystem.get_default();
-    let app = appSys.lookup_app('gnome-shell-extension-prefs.desktop');
-    let info = app.get_app_info();
-    let timestamp = global.display.get_current_time_roundtrip();
-    info.launch_uris(
-        ['extension:///' + uuid],
-        global.create_app_launch_context(timestamp, -1)
-    );
 }
