@@ -125,6 +125,33 @@ const App = new Lang.Class({
         this.vbox2.add(item);
         Schema.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
+        //PrayTimes
+        this.vbox2.add(new Gtk.Label({
+            label: _('PrayTime:\n<span size="x-small">("PrayTime" based on geographical location)</span>'),
+            use_markup: true
+        }));
+        item = new Gtk.CheckButton({label: _('Show Pray Time')});
+        this.vbox2.add(item);
+        Schema.bind('praytime-visible', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+
+        item = new Gtk.CheckButton({label: _('Play Azaan')});
+        this.vbox2.add(item);
+        Schema.bind('praytime-play', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+
+
+        let _item  = this.createTextEntry('praytime-lat', 'Latitude: ');
+        this.vbox2.add(_item.hbox);
+        if(_item.comment) this.vbox2.add(_item.comment);
+
+        _item  = this.createTextEntry('praytime-lng', 'Longitude: ');
+        this.vbox2.add(_item.hbox);
+        if(_item.comment) this.vbox2.add(_item.comment);
+
+        _item  = this.createTextEntry('praytime-timezone', 'Timezone: ');
+        this.vbox2.add(_item.hbox);
+        if(_item.comment) this.vbox2.add(_item.comment);
+
+
         // COLOR
         this.vbox3.add(new Gtk.Label({label: _('Widget Properties:')}));
 
@@ -193,6 +220,25 @@ const App = new Lang.Class({
          });*/
 
         this.main_hbox.show_all();
+    },
+    createTextEntry: function(value, labelText, commentText){
+        let label = new Gtk.Label({label: labelText});
+        let format = new Gtk.Entry();
+        let hbox = new Gtk.HBox();
+        hbox.add(label);
+        hbox.add(format);
+        let comment = null;
+        if(commentText)
+        comment = new Gtk.Label({
+            label: _(commentText),
+            use_markup: true
+        });
+        format.set_text(Schema.get_double(value).toString());
+        format.connect('changed', function (innerFormat) {
+            Schema.set_string(value, innerFormat.text);
+        });
+
+        return {hbox:hbox,comment:comment};
     },
 
     _scaleRound: function (value) {

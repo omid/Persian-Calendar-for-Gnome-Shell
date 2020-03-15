@@ -60,6 +60,31 @@
       <summary>Display official international events</summary>
       <description>Display official international events.</description>
     </key>
+    <key name="praytime-visible" type="b">
+      <default>true</default>
+      <summary>Display PrayTime</summary>
+      <description>Display Pray time based on location</description>
+    </key>
+    <key name="praytime-play" type="b">
+      <default>true</default>
+      <summary>Play Call to prayer song (Azaan)</summary>
+      <description>Play Azan</description>
+    </key>
+    <key name="praytime-lat" type="d">
+      <default>35.689202</default>
+      <summary>Latitude</summary>
+      <description>your location latitude</description>
+    </key>
+    <key name="praytime-lng" type="d">
+      <default>51.388973</default>
+      <summary>Latitude</summary>
+      <description>your location latitude</description>
+    </key>
+    <key name="praytime-timezone" type="d">
+      <default>3.5</default>
+      <summary>Timezone</summary>
+      <description>Your timezone based on GMT</description>
+    </key>
     <key name="widget-format" type="s">
       <default>'%d'</default>
       <summary>Widget date format</summary>
