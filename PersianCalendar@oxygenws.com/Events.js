@@ -9,7 +9,7 @@ const persian = extension.imports.events.persian;
 const world = extension.imports.events.world;
 const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
-const persianPersonage = extension.imports.events.persianPersonage;
+// const persianPersonage = extension.imports.events.persianPersonage;// Merged to iranSolar
 
 const Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
 
@@ -21,21 +21,22 @@ Events.prototype = {
 
     _init: function () {
         this._eventsList = [];
-        if (Schema.get_boolean('event-persian')) {
-            this._eventsList.push(new persian.persian(PersianDate.PersianDate));
-        }
-        if (Schema.get_boolean('event-world')) {
-            this._eventsList.push(new world.world());
+        if (Schema.get_boolean('event-iran-lunar')) {
+            this._eventsList.push(new iranLunar.iranLunar());
         }
         if (Schema.get_boolean('event-iran-solar')) {
             this._eventsList.push(new iranSolar.iranSolar());
         }
-        if (Schema.get_boolean('event-iran-lunar')) {
-            this._eventsList.push(new iranLunar.iranLunar());
+        if (Schema.get_boolean('event-world')) {
+            this._eventsList.push(new world.world());
         }
-        if (Schema.get_boolean('event-persian-personage')) {
-            this._eventsList.push(new persianPersonage.persianPersonage());
+        if (Schema.get_boolean('event-persian')) {
+            this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         }
+        // Merged to iranSolar:
+        // if (Schema.get_boolean('event-persian-personage')) {
+        //     this._eventsList.push(new persianPersonage.persianPersonage());
+        // }
     },
 
     getEvents: function (today) {
@@ -82,9 +83,12 @@ Events.prototype = {
 
         // if event is available, set event
         // and if it is holiday, set today as holiday!
-        if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += '\n' + el.events[this._today[type][1]][this._today[type][2]][0];
-            this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
+        let evArr = el.events[this._today[type][1]][this._today[type][2]];
+        let sym = ['▫', '▪', '◆'];
+        if (evArr) {/** changed for new events structure */
+            let events = evArr[0];
+            for (let i in events) this._events += '\n' + sym[type] + ' ' + events[i][0] + ((events[i][1] !== undefined) ? ' (تعطیل)' : '');
+            this._isHoliday = this._isHoliday || evArr[1];
         }
     }
 };
