@@ -294,7 +294,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
             track_hover: true,
             x_expand: true,
-            label: _('از فارسی'),
+            label: _('از هـ.شمسی'),
             accessible_name: 'fromPersian',
             style_class: 'popup-menu-item button pcalendar-button fromPersian active',
         });
@@ -318,7 +318,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
             track_hover: true,
             x_expand: true,
-            label: _('از قمری'),
+            label: _('از هـ.قمری'),
             accessible_name: 'fromHijri',
             style_class: 'popup-menu-item button pcalendar-button fromHijri',
         });
@@ -389,6 +389,10 @@ const PersianCalendar = new Lang.Class({
             hDate,
             pDate;
 
+        year = parseInt(year);//for fix bun in some systems
+        month = parseInt(month);//for fix bun in some systems
+        day = parseInt(day);//for fix bun in some systems
+    
         switch (this._activeConverter) {
             case ConverterTypes.fromGregorian:
                 pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
@@ -428,26 +432,7 @@ const PersianCalendar = new Lang.Class({
                         $dayOfWeek,
                         'persian'
                     )
-                ),
-                style_class: 'calendar-day pcalendar-date-label'
-            });
-            this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
-            button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
-            }));
-        }
-
-        // add gregorian date
-        if (gDate) {
-            let button = new St.Button({
-                label: this._calendar.format(
-                    Schema.get_string('gregorian-display-format'),
-                    gDate.day,
-                    gDate.month,
-                    gDate.year,
-                    $dayOfWeek,
-                    'gregorian'
-                ),
+                )+' هجری شمسی',
                 style_class: 'calendar-day pcalendar-date-label'
             });
             this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
@@ -468,7 +453,26 @@ const PersianCalendar = new Lang.Class({
                         $dayOfWeek,
                         'hijri'
                     )
-                ),
+                )+' هجری قمری',
+                style_class: 'calendar-day pcalendar-date-label'
+            });
+            this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            button.connect('clicked', Lang.bind(button, function () {
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
+            }));
+        }
+
+        // add gregorian date
+        if (gDate) {
+            let button = new St.Button({
+                label: this._calendar.format(
+                    Schema.get_string('gregorian-display-format'),
+                    gDate.day,
+                    gDate.month,
+                    gDate.year,
+                    $dayOfWeek,
+                    'gregorian'
+                )+' میلادی',
                 style_class: 'calendar-day pcalendar-date-label'
             });
             this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
