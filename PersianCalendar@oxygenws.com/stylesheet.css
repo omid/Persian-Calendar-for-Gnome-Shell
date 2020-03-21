@@ -9,12 +9,16 @@
     opacity: .5; /* for future compatibility! */
 }
 
-.calendar-nonwork-day {
-    font-weight: bold;
+.pcalendar-nonwork-day {
+    color: #e77;
 }
 
 .pcalendar-month-label {
     font-size: .9em;
+}
+.pcalendar-day-heading {
+    font-size: 1em;
+    font-weight: bold;
 }
 
 .pcalendar-day {
