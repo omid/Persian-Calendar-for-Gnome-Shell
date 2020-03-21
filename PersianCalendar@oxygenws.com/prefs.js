@@ -117,9 +117,10 @@ const App = new Lang.Class({
         this.vbox2.add(item);
         Schema.bind('event-persian', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        item = new Gtk.CheckButton({label: _('Persian personages')});
-        this.vbox2.add(item);
-        Schema.bind('event-persian-personage', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+        /* Merged to iranSolar(event-iran-solar): */
+        // item = new Gtk.CheckButton({label: _('Persian personages')});
+        // this.vbox2.add(item);
+        // Schema.bind('event-persian-personage', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         item = new Gtk.CheckButton({label: _('International')});
         this.vbox2.add(item);
