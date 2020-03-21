@@ -25,15 +25,15 @@
       <summary>Hijri date format</summary>
       <description>Hijri date format</description>
     </key>
-    <key name="gregorian-display-format" type="s">
-      <default>'%D / %M / %Y'</default>
-      <summary>Gregorian date format</summary>
-      <description>Gregorian date format</description>
-    </key>
     <key name="persian-display-format" type="s">
       <default>'%D / %M / %Y'</default>
       <summary>Persian date format</summary>
       <description>Persian date format</description>
+    </key>
+    <key name="gregorian-display-format" type="s">
+      <default>'%D - %M - %Y'</default>
+      <summary>Gregorian date format</summary>
+      <description>Gregorian date format</description>
     </key>
     <key name="event-iran-lunar" type="b">
       <default>true</default>
@@ -46,15 +46,17 @@
       <description>Display official Iranian solar events.</description>
     </key>
     <key name="event-persian" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Display old Persian events</summary>
       <description>Display old Persian events.</description>
     </key>
+    <!-- Merged to iranSolar(event-iran-solar):
     <key name="event-persian-personage" type="b">
       <default>true</default>
       <summary>Display Persian personage events</summary>
       <description>Display Persian personage events.</description>
     </key>
+    -->
     <key name="event-world" type="b">
       <default>true</default>
       <summary>Display official international events</summary>
