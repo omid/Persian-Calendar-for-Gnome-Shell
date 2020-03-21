@@ -26,7 +26,7 @@ function Calendar() {
 }
 
 Calendar.prototype = {
-    weekdayAbbr: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
+    weekdayAbbr: ['شـ', 'یـ', 'د', 'سـ', 'چـ', 'پـ', 'جـ'],
     _weekStart: 6,
 
     _init: function () {
@@ -179,7 +179,7 @@ Calendar.prototype = {
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
-                style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl',
+                style_class: 'calendar-day-base calendar-day-heading pcalendar-day-heading pcalendar-rtl',
                 text: this.weekdayAbbr[i]
             });
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
@@ -366,32 +366,10 @@ Calendar.prototype = {
                         g_selectedDate.getDay(),
                         'persian'
                     )
-                ),
+                )+' هجری شمسی',
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_p.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
-            button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
-            }));
-        }
-
-        // add gregorian date
-        if (Schema.get_boolean('gregorian-display')) {
-            let _datesBox_g = new St.BoxLayout();
-            this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
-
-            let button = new St.Button({
-                label: this.format(
-                    Schema.get_string('gregorian-display-format'),
-                    g_selectedDate.getDate(),
-                    g_selectedDate.getMonth() + 1,
-                    g_selectedDate.getFullYear(),
-                    g_selectedDate.getDay(),
-                    'gregorian'
-                ),
-                style_class: 'calendar-day pcalendar-date-label'
-            });
-            _datesBox_g.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -412,10 +390,32 @@ Calendar.prototype = {
                         g_selectedDate.getDay(),
                         'hijri'
                     )
-                ),
+                )+' هجری قمری',
                 style_class: 'calendar-day pcalendar-date-label'
             });
             _datesBox_h.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            button.connect('clicked', Lang.bind(button, function () {
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
+            }));
+        }
+
+        // add gregorian date
+        if (Schema.get_boolean('gregorian-display')) {
+            let _datesBox_g = new St.BoxLayout();
+            this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
+
+            let button = new St.Button({
+                label: this.format(
+                    Schema.get_string('gregorian-display-format'),
+                    g_selectedDate.getDate(),
+                    g_selectedDate.getMonth() + 1,
+                    g_selectedDate.getFullYear(),
+                    g_selectedDate.getDay(),
+                    'gregorian'
+                )+' میلادی',
+                style_class: 'calendar-day pcalendar-date-label'
+            });
+            _datesBox_g.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
