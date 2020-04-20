@@ -42,7 +42,7 @@ release: eslint _build
 	-rm -fR _build
 
 eslint:
-	eslint PersianCalendar@oxygenws.com
+	eslint --fix PersianCalendar@oxygenws.com
 
 _build: all #update-translation
 	-rm -fR ./_build

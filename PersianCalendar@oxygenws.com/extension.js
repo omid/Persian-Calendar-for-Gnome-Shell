@@ -163,7 +163,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
         });
         preferencesIcon.connect('clicked', function () {
-            Util.spawn(["gnome-extensions prefs", extension.metadata.uuid]);
+            Util.spawn(['gnome-extensions prefs', extension.metadata.uuid]);
         });
         actionButtons.actor.add(preferencesIcon, {expand: true, x_fill: false});
 
@@ -390,22 +390,22 @@ const PersianCalendar = new Lang.Class({
             pDate;
 
         switch (this._activeConverter) {
-            case ConverterTypes.fromGregorian:
-                pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(year, month, day);
-                break;
+        case ConverterTypes.fromGregorian:
+            pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
+            hDate = HijriDate.HijriDate.toHijri(year, month, day);
+            break;
 
-            case ConverterTypes.fromPersian:
-                gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
-                break;
+        case ConverterTypes.fromPersian:
+            gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
+            hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
+            break;
 
-            case ConverterTypes.fromHijri:
-                gDate = HijriDate.HijriDate.fromHijri(year, month, day);
-                pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
-                break;
+        case ConverterTypes.fromHijri:
+            gDate = HijriDate.HijriDate.fromHijri(year, month, day);
+            pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+            break;
 
-            default:
+        default:
             // do nothing
         }
 
