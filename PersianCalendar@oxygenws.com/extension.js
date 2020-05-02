@@ -163,7 +163,15 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
         });
         preferencesIcon.connect('clicked', function () {
-            Util.spawn(['gnome-extensions prefs', extension.metadata.uuid]);
+            if (typeof ExtensionUtils.openPrefs === 'function') {
+                ExtensionUtils.openPrefs();
+            } else {
+                // support previous gnome shell versions.
+                Util.spawn([
+                    "gnome-shell-extension-prefs",
+                    extension.metadata.uuid
+                ]);
+            }
         });
         actionButtons.actor.add(preferencesIcon, {expand: true, x_fill: false});
 
