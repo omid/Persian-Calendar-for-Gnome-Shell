@@ -168,7 +168,7 @@ const PersianCalendar = new Lang.Class({
             } else {
                 // support previous gnome shell versions.
                 Util.spawn([
-                    "gnome-shell-extension-prefs",
+                    'gnome-shell-extension-prefs',
                     extension.metadata.uuid
                 ]);
             }
