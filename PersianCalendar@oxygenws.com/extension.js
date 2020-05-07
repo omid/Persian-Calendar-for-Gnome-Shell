@@ -163,7 +163,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
         });
         preferencesIcon.connect('clicked', function () {
-            if (typeof ExtensionUtils.openPrefs === 'function') {
+            if (typeof ExtensionUtils.openPrefs == 'function') {
                 ExtensionUtils.openPrefs();
             } else {
                 // support previous gnome shell versions.
