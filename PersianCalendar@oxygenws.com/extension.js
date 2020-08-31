@@ -47,7 +47,7 @@ const PersianCalendar = new Lang.Class({
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
-        this.add_actor(this.label);
+        this.actor.add_actor(this.label);
 
         // some codes for coloring label
         if (Schema.get_boolean('custom-color')) {
