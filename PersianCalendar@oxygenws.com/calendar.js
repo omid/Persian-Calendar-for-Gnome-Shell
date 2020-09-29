@@ -148,8 +148,12 @@ Calendar.prototype = {
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
 
-        this._monthLabel = new St.Label({style_class: 'calendar-month-label pcalendar-month-label'});
-        this._topBox.add(this._monthLabel, {expand: true, x_fill: false, x_align: St.Align.MIDDLE});
+        this._monthLabel = new St.Label({
+            style_class: 'calendar-month-label pcalendar-month-label',
+            x_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
+        });
+        this._topBox.add(this._monthLabel);
 
         let leftButton = null;
         if (this._rtl) {
@@ -367,9 +371,11 @@ Calendar.prototype = {
                         'persian'
                     )
                 ),
-                style_class: 'calendar-day pcalendar-date-label'
+                style_class: 'calendar-day pcalendar-date-label',
+                x_align: Clutter.ActorAlign.CENTER,
+                x_expand: true
             });
-            _datesBox_p.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            _datesBox_p.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -389,9 +395,11 @@ Calendar.prototype = {
                     g_selectedDate.getDay(),
                     'gregorian'
                 ),
-                style_class: 'calendar-day pcalendar-date-label'
+                style_class: 'calendar-day pcalendar-date-label',
+                x_align: Clutter.ActorAlign.CENTER,
+                x_expand: true
             });
-            _datesBox_g.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            _datesBox_g.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -413,9 +421,11 @@ Calendar.prototype = {
                         'hijri'
                     )
                 ),
-                style_class: 'calendar-day pcalendar-date-label'
+                style_class: 'calendar-day pcalendar-date-label',
+                x_align: Clutter.ActorAlign.CENTER,
+                x_expand: true,
             });
-            _datesBox_h.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            _datesBox_h.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -429,13 +439,15 @@ Calendar.prototype = {
             this.actor.layout_manager.attach(_eventBox, 0, ++row, 7, 1);
             let bottomLabel = new St.Label({
                 text: str.format(events[0]),
-                style_class: 'pcalendar-event-label'
+                style_class: 'pcalendar-event-label',
+                x_align: Clutter.ActorAlign.FILL,
+                x_expand: true,
             });
 
             bottomLabel.clutter_text.line_wrap = true;
             bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
             bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
-            _eventBox.add(bottomLabel, {expand: true, x_fill: true, y_fill: true, x_align: St.Align.MIDDLE});
+            _eventBox.add(bottomLabel);
         }
     }
 };

@@ -7,7 +7,7 @@ An extension for Gnome-Shell to show Persian date and calendar
 #### To install:
 * Clone the repository
 * Go to the cloned directory
-* run ```make install-local```
+* run ```make```
 * Restart Gnome-shell. (ALT+F2, r, Enter)
 * You may need to enable the extension via Gnome Tweaks
 

@@ -161,6 +161,8 @@ const PersianCalendar = new Lang.Class({
             style_class: 'button system-menu-action calendar-preferences-button',
             reactive: true,
             can_focus: true,
+            x_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
         });
         preferencesIcon.connect('clicked', function () {
             if (typeof ExtensionUtils.openPrefs === 'function') {
@@ -173,7 +175,7 @@ const PersianCalendar = new Lang.Class({
                 ]);
             }
         });
-        actionButtons.actor.add(preferencesIcon, {expand: true, x_fill: false});
+        actionButtons.actor.add(preferencesIcon);
 
         // Add Nowrooz button
         icon = new St.Icon({
@@ -186,6 +188,8 @@ const PersianCalendar = new Lang.Class({
             style_class: 'button system-menu-action calendar-preferences-button',
             reactive: true,
             can_focus: true,
+            x_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
         });
         nowroozIcon.connect('clicked', function () {
             /* calculate exact hour/minute/second of the next new year.
@@ -218,7 +222,7 @@ const PersianCalendar = new Lang.Class({
 
             notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
         });
-        actionButtons.actor.add(nowroozIcon, {expand: true, x_fill: false});
+        actionButtons.actor.add(nowroozIcon);
 
         this.menu.connect('open-state-changed', Lang.bind(that, function (menu, isOpen) {
             if (isOpen) {
@@ -349,7 +353,7 @@ const PersianCalendar = new Lang.Class({
             style_class: 'pcalendar-converter-entry',
         });
         this.converterYear.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
-        converterHbox.add(this.converterYear, {expand: true});
+        converterHbox.add(this.converterYear);
 
         this.converterMonth = new St.Entry({
             name: 'month',
@@ -358,7 +362,7 @@ const PersianCalendar = new Lang.Class({
             x_expand: true,
             style_class: 'pcalendar-converter-entry',
         });
-        converterHbox.add(this.converterMonth, {expand: true});
+        converterHbox.add(this.converterMonth);
         this.converterMonth.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
 
         this.converterDay = new St.Entry({
@@ -368,7 +372,7 @@ const PersianCalendar = new Lang.Class({
             x_expand: true,
             style_class: 'pcalendar-converter-entry',
         });
-        converterHbox.add(this.converterDay, {expand: true});
+        converterHbox.add(this.converterDay);
         this.converterDay.clutter_text.connect('text-changed', Lang.bind(this, this._onModifyConverter));
 
         this.converterVbox.add(converterHbox);
@@ -439,7 +443,7 @@ const PersianCalendar = new Lang.Class({
                 ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
-            this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            this.convertedDatesVbox.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -458,7 +462,7 @@ const PersianCalendar = new Lang.Class({
                 ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
-            this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            this.convertedDatesVbox.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));
@@ -479,7 +483,7 @@ const PersianCalendar = new Lang.Class({
                 ),
                 style_class: 'calendar-day pcalendar-date-label'
             });
-            this.convertedDatesVbox.add(button, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            this.convertedDatesVbox.add(button);
             button.connect('clicked', Lang.bind(button, function () {
                 St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
             }));

@@ -1,41 +1,37 @@
 # Basic Makefile
 
-UUID = PersianCalendar@oxygenws.com
-BASE_MODULES = $(UUID)/*
+_UUID = PersianCalendar@oxygenws.com
+_BASE_MODULES = $(_UUID)/*
 ifeq ($(strip $(DESTDIR)),)
-	INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
+	_INSTALL_BASE = $(HOME)/.local/share/gnome-shell/extensions
 else
-	INSTALLBASE = $(DESTDIR)/usr/share/gnome-shell/extensions
+	_INSTALL_BASE = $(DESTDIR)/usr/share/gnome-shell/extensions
 endif
-INSTALLNAME = PersianCalendar@oxygenws.com
+_INSTALL_NAME = PersianCalendar@oxygenws.com
 
-OLD_VERSION = $(shell jq '.version' $(UUID)/metadata.json)
-NEW_VERSION = $(shell echo $$(($(OLD_VERSION)+1)))
-
-all: extension
-
-clean:
-	rm -f ./$(UUID)/schemas/gschemas.compiled
-
-extension: ./$(UUID)/schemas/gschemas.compiled
-
-./$(UUID)/schemas/gschemas.compiled: ./$(UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
-	glib-compile-schemas ./$(UUID)/schemas/
-
-install: install-local
+_OLD_VERSION = $(shell jq '.version' $(_UUID)/metadata.json)
+_NEW_VERSION = $(shell echo $$(($(_OLD_VERSION)+1)))
 
 install-local: _build
-	rm -rf $(INSTALLBASE)/$(INSTALLNAME)
-	mkdir -p $(INSTALLBASE)/$(INSTALLNAME)
-	cp -r ./_build/* $(INSTALLBASE)/$(INSTALLNAME)/
+	rm -rf $(_INSTALL_BASE)/$(_INSTALL_NAME)
+	mkdir -p $(_INSTALL_BASE)/$(_INSTALL_NAME)
+	cp -r ./_build/* $(_INSTALL_BASE)/$(_INSTALL_NAME)/
 	-rm -fR _build
 	echo done
 
+compile-gschema: ./$(_UUID)/schemas/gschemas.compiled
+
+clean:
+	rm -f ./$(_UUID)/schemas/gschemas.compiled
+
+./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
+	glib-compile-schemas ./$(_UUID)/schemas/
+
 release: eslint _build
-	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/' $(UUID)/metadata.json;
+	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
 	cd _build ; \
-	zip -qr "$(UUID)$(NEW_VERSION).zip" .
-	mv _build/$(UUID)$(NEW_VERSION).zip ./
+	zip -qr "$(_UUID)$(_NEW_VERSION).zip" .
+	mv _build/$(_UUID)$(_NEW_VERSION).zip ./
 	gitg
 	git commit -v
 	git push
@@ -44,20 +40,20 @@ release: eslint _build
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 
-_build: all #update-translation
+_build: compile-gschema #update-translation
 	-rm -fR ./_build
 	mkdir -p _build
-	cp -r $(BASE_MODULES) _build
+	cp -r $(_BASE_MODULES) _build
 	# mkdir -p _build/locale
-	# cp -r $(UUID)/locale/* _build/locale/
+	# cp -r $(_UUID)/locale/* _build/locale/
 	mkdir -p _build/schemas
-	cp $(UUID)/schemas/*.xml _build/schemas/
-	cp $(UUID)/schemas/gschemas.compiled _build/schemas/
-	sed -i 's/"version": $(OLD_VERSION)/"version": $(NEW_VERSION)/' _build/metadata.json;
+	cp $(_UUID)/schemas/*.xml _build/schemas/
+	cp $(_UUID)/schemas/gschemas.compiled _build/schemas/
+	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' _build/metadata.json;
 
 #update-translation: all
 #	cd po; \
 #	./compile.sh ../PersianCalendar@oxygenws.com/locale;
 
 tailLog:
-	sudo journalctl -f -g $(UUID)
+	sudo journalctl -f -g $(_UUID)
