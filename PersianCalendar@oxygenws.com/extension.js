@@ -306,7 +306,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
             track_hover: true,
             x_expand: true,
-            label: _('از فارسی'),
+            label: _('از هـ.خورشیدی'),
             accessible_name: 'fromPersian',
             style_class: 'popup-menu-item button pcalendar-button fromPersian active',
         });
@@ -330,7 +330,7 @@ const PersianCalendar = new Lang.Class({
             can_focus: true,
             track_hover: true,
             x_expand: true,
-            label: _('از قمری'),
+            label: _('از هـ.قمری'),
             accessible_name: 'fromHijri',
             style_class: 'popup-menu-item button pcalendar-button fromHijri',
         });
