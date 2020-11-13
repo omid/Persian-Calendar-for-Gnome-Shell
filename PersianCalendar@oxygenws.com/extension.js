@@ -231,6 +231,8 @@ const PersianCalendar = new Lang.Class({
                 that._calendar.setDate(now);
             }
         }));
+
+        this._prayerTimeLoop();
     },
 
     _updateDate: function (skip_notification, force) {
@@ -280,6 +282,15 @@ const PersianCalendar = new Lang.Class({
         }
 
         return true;
+    },
+
+    _prayerTimeLoop: function(){
+        if (this._prayerTimeout) {
+            MainLoop.source_remove(this._prayerTimeout);
+            this._prayerTimeout = null;
+        }
+        this._prayerTimeout = MainLoop.timeout_add(60000 - (new Date().getSeconds() * 1000), Lang.bind(this,this._prayerTimeLoop));
+        this._calendar.checkPrayTime();
     },
 
     _generateConverterPart: function () {
@@ -537,6 +548,7 @@ function enable() {
     );
     _indicator._updateDate(!Schema.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(3000, Lang.bind(_indicator, _indicator._updateDate));
+
 
     // install fonts
     let path = extension.dir.get_path();

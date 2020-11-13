@@ -9,6 +9,8 @@ const convenience = extension.imports.convenience;
 
 const PersianDate = extension.imports.PersianDate;
 const HijriDate = extension.imports.HijriDate;
+const PrayTimes = extension.imports.PrayTimes.prayTimes;
+const player = extension.imports.sound.player;
 
 const str = extension.imports.strFunctions;
 const Events = extension.imports.Events;
@@ -45,7 +47,7 @@ Calendar.prototype = {
         });
 
         this.actor.connect('scroll-event', Lang.bind(this, this._onScroll));
-
+        PrayTimes.setMethod('Tehran');
         this._buildHeader();
     },
 
@@ -431,6 +433,57 @@ Calendar.prototype = {
             }));
         }
 
+        if(Schema.get_boolean('praytime-visible'))
+        {
+            let _prayBox_v = new St.BoxLayout({style_class: 'button pcalendar-praytimes-container', vertical: true, x_expand: true});
+
+            let _prayTimes = PrayTimes.getTimes(g_selectedDate, [Schema.get_double('praytime-lat') , Schema.get_double('praytime-lng')], Schema.get_double('praytime-timezone'));
+
+            let i=0;
+            let _prayColumnBox = new St.BoxLayout({style_class: 'pcalendar-praytimes-box', x_expand: true});
+            for(let key in _prayTimes)
+            {
+
+                _prayColumnBox.add(new St.Label({
+                    text: str.format(_prayTimes[key]),
+                    style_class: 'pcalendar-praytimes-item pcalendar-praytimes-time',
+                    x_expand: true,
+                }));
+
+
+                _prayColumnBox.add(new St.Label({
+                    text: PrayTimes.persianMap[key],
+                    style_class: 'pcalendar-praytimes-item pcalendar-praytimes-key',
+                    x_expand: true,
+                }));
+
+                if( ++i % 2 ===  0)
+                {
+                    _prayBox_v.add(_prayColumnBox);
+                    _prayColumnBox = new St.BoxLayout({style_class: 'pcalendar-praytimes-box', x_expand: true});
+                }
+
+            }
+
+            this.actor.layout_manager.attach(_prayBox_v, 0, ++row, 7, i-1);
+            row+=i;
+            if(player.isPlaying())
+            {
+                let btn = new St.Button({label: 'توقف پخش اذان', style_class : 'button pcalendar-praytimes-azan'});
+                btn.connect('clicked',Lang.bind(btn, function(){
+                    player.pause();
+                }));
+                this.actor.layout_manager.attach(btn, 0, ++row, 7, 1);
+            }
+
+
+            // let _label = new St.Label();
+            // _label.set_text(_textBuilder.join('\n'));
+            // _prayBox_h.add(_label, {expand: true, x_fill: true, x_align: St.Align.MIDDLE});
+            // {"imsak":"04:43","fajr":"04:53","sunrise":"06:16","dhuhr":"12:14","asr":"15:37","sunset":"18:11","maghrib":"18:29","isha":"19:16","midnight":"23:32"}
+        }
+
+
         // add event box for selected date
         events = ev.getEvents(g_selectedDate);
 
@@ -449,5 +502,14 @@ Calendar.prototype = {
             bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
             _eventBox.add(bottomLabel);
         }
+    },
+
+    checkPrayTime: function(){
+        let now = new Date();
+        if(now.getSeconds() >= 3  || !Schema.get_boolean('praytime-play')) return;
+        let _prayTimes = PrayTimes.getTimes(now, [Schema.get_double('praytime-lat') , Schema.get_double('praytime-lng')], Schema.get_double('praytime-timezone'));
+        now = now.getHours() + ':' + now.getMinutes();
+        if([_prayTimes.fajr,_prayTimes.dhuhr,_prayTimes.maghrib].includes(now))
+            player.setVolume(1);
     }
 };
