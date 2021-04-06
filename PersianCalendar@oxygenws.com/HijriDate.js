@@ -4,28 +4,26 @@
 
 var HijriDate = {};
 
-const COUNTRY = "IR";
+const COUNTRY = 'IR';
 
-HijriDate.toHijri = function (y, m, d) {
-    [y, m, d] = gregorian_to_islamic(parseInt(y), parseInt(m), parseInt(d));
-    return { year: y, month: m, day: d };
+HijriDate.toHijri = function (year, month, day) {
+    [year, month, day] = gregorian_to_hijri(parseInt(year), parseInt(month), parseInt(day));
+    return {year, month, day};
 };
 
-HijriDate.fromHijri = function (y, m, d) {
-    [y, m, d] = islamic_to_gregorian(parseInt(y), parseInt(m), parseInt(d));
-    return { year: y, month: m, day: d };
+HijriDate.fromHijri = function (year, month, day) {
+    [year, month, day] = hijri_to_gregorian(parseInt(year), parseInt(month), parseInt(day));
+    return {year, month, day};
 };
 
 
-
-function gregorian_to_islamic(gY, gM, gD) {
-    return julianDay_to_islamic(gregorian_to_julianDay(gY, gM, gD));
+function gregorian_to_hijri(gY, gM, gD) {
+    return julianDay_to_hijri(gregorian_to_julianDay(gY, gM, gD));
 }
 
-function islamic_to_gregorian(iY, iM, iD) {
-    return julianDay_to_gregorian(islamic_to_julianDay(iY, iM, iD));
+function hijri_to_gregorian(iY, iM, iD) {
+    return julianDay_to_gregorian(hijri_to_julianDay(iY, iM, iD));
 }
-
 
 
 function gregorian_to_julianDay(gY, gM, gD) {
@@ -38,14 +36,16 @@ function gregorian_to_julianDay(gY, gM, gD) {
 }
 
 function julianDay_to_gregorian(julianDay) {
-    var gDoM, gY, gM, gD, days;
+    var days, gD, gDoM, gM, gY;
     days = -~~(1721060 - julianDay);
     gY = 400 * ~~(days / 146097);
     days %= 146097;
     if (days > 36524) {
         gY += 100 * ~~(--days / 36524);
         days %= 36524;
-        if (days >= 365) days++;
+        if (days >= 365) {
+            days++;
+        }
     }
     gY += 4 * ~~(days / 1461);
     days %= 1461;
@@ -55,82 +55,81 @@ function julianDay_to_gregorian(julianDay) {
     }
     gD = days + 1;
     gDoM = [0, 31, ((gY % 4 === 0 && gY % 100 !== 0) || (gY % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    for (gM = 0; gM < 13, gD > gDoM[gM]; gM++) {
+    for (gM = 0; gM < 13 && gD > gDoM[gM]; gM++) {
         gD -= gDoM[gM];
     }
     return [gY, gM, gD];
 }
 
 
-
-function islamicA_to_julianDay(iy, im, id) {
+function hijriA_to_julianDay(iy, im, id) {
     iy += 990;
     return ~~(id + ~~((29.5 * (im - 1)) + 0.5) + ((iy - 1) * 354) + ~~((3 + (iy * 11)) / 30) + 1597616);
 }
 
-function julianDay_to_islamicA(julianDay) {
-    var iy, im, id, tmp;
-    julianDay = ~~(julianDay) + 350822.5;//350823d=990y
+function julianDay_to_hijriA(julianDay) {
+    var id, im, iy, tmp;
+    julianDay = ~~(julianDay) + 350822.5;// 350823d=990y
     iy = ~~(((30 * (julianDay - 1948439.5)) + 10646) / 10631);
     tmp = julianDay - (1948439.5 + ((iy - 1) * 354) + ~~((3 + (11 * iy)) / 30));
     iy -= 990;
     im = ~~(((tmp - 29) / 29.5) + 1.99);
-    if (im > 12) im = 12;
+    if (im > 12) {
+        im = 12;
+    }
     id = 1 + tmp - ~~((29.5 * (im - 1)) + 0.5);
     return [iy, im, id];
 }
 
 
-
-function islamic_to_julianDay(iY, iM, iD) {
+function hijri_to_julianDay(iY, iM, iD) {
     const HILAL = hilalIM(COUNTRY);
     if (iY < HILAL.startYear || iY > HILAL.endYear) {
-        return islamicA_to_julianDay(iY, iM, iD);
-    } else {
-        let julianDay = HILAL.startJD - 1 + iD;
-        for (let y in HILAL.iDoM) {
-            if (y < iY) {
-                julianDay += HILAL.iDoM[y][0];
-            } else {
-                for (let m = 1; m < iM; m++)julianDay += HILAL.iDoM[iY][m];
-                break;
-            }
-        }
-        return julianDay;
+        return hijriA_to_julianDay(iY, iM, iD);
     }
+    let julianDay = HILAL.startJD - 1 + iD;
+    for (let y in HILAL.iDoM) {
+        if (y < iY) {
+            julianDay += HILAL.iDoM[y][0];
+        } else {
+            for (let m = 1; m < iM; m++) {
+                julianDay += HILAL.iDoM[iY][m];
+            }
+            break;
+        }
+    }
+    return julianDay;
 }
 
-function julianDay_to_islamic(julianDay) {
+function julianDay_to_hijri(julianDay) {
     const HILAL = hilalIM(COUNTRY);
     if (julianDay < HILAL.startJD || julianDay > HILAL.endJD) {
-        return julianDay_to_islamicA(julianDay);
-    } else {
-        let iY, iM;
-        let iD = julianDay - HILAL.startJD + 1;
-        for (iY in HILAL.iDoM) {
-            if (iD > HILAL.iDoM[iY][0]) {
-                iD -= HILAL.iDoM[iY][0];
-            } else {
-                for (iM = 1; iM < 13, iD > HILAL.iDoM[iY][iM]; iM++) {
-                    iD -= HILAL.iDoM[iY][iM];
-                }
-                break;
-            }
-        }
-        return [+iY, iM, ~~iD];
+        return julianDay_to_hijriA(julianDay);
     }
+    let iM, iY;
+    let iD = julianDay - HILAL.startJD + 1;
+    for (iY in HILAL.iDoM) {
+        if (iD > HILAL.iDoM[iY][0]) {
+            iD -= HILAL.iDoM[iY][0];
+        } else {
+            for (iM = 1; iM < 13 && iD > HILAL.iDoM[iY][iM]; iM++) {
+                iD -= HILAL.iDoM[iY][iM];
+            }
+            break;
+        }
+    }
+    return [+iY, iM, ~~iD];
 }
-
 
 
 function hilalIM(country = 'IR') {
     return {
-        "IR": {
-            startYear: 1427,/* =iDoM:firstYear */
-            startJD: 2453767,/* =islamicA_to_julianDay(startYear,1,1) */
+        IR: {
+            startYear: 1427, /* =iDoM:firstYear */
+            startJD: 2453767, /* =hijriA_to_julianDay(startYear,1,1) */
 
-            endYear: 1443,/* =iDoM:lastYear */
-            endJD: 2459790,/* =islamicA_to_julianDay(endYear+1,1,1)-1 */
+            endYear: 1443, /* =iDoM:lastYear */
+            endJD: 2459790, /* =hijriA_to_julianDay(endYear+1,1,1)-1 */
 
             iDoM: {
                 1427: [355, 30, 29, 29, 30, 29, 30, 30, 30, 30, 29, 29, 30],
@@ -149,9 +148,9 @@ function hilalIM(country = 'IR') {
                 1440: [355, 30, 29, 30, 30, 30, 29, 30, 30, 29, 29, 30, 29],
                 1441: [355, 29, 30, 29, 30, 30, 29, 30, 30, 29, 30, 29, 30],
                 1442: [354, 29, 29, 30, 29, 30, 29, 30, 30, 29, 30, 30, 29],
-                1443: [354/*|355*/, 29, 30, 30, 29, 29, 30, 29, 29, 30, 30, 30, 29/*|30 :Delta*/]
+                1443: [354/* |355*/, 29, 30, 30, 29, 29, 30, 29, 29, 30, 30, 30, 29/* |30 :Delta*/],
                 /*
-                  Delta = endJD - islamicA_to_julianDay(endYear,12,29)
+                  Delta = endJD - hijriA_to_julianDay(endYear,12,29)
                 */
             }
         }
