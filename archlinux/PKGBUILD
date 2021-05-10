@@ -28,7 +28,7 @@ build() {
 }
 
 package() {
-    cd "$srcdir/persian-calendar"
+    cd "$srcdir/gnome-shell-persian-calendar"
     mkdir -p "$pkgdir/usr/share/gnome-shell/extensions/"
     cp -R "PersianCalendar@oxygenws.com" "$pkgdir/usr/share/gnome-shell/extensions"
 }
