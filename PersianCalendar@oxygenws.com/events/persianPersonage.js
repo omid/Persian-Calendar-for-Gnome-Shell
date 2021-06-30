@@ -1,16 +1,12 @@
 // copyright http://www.farhangiran.com
 
-function persianPersonage() {
-    this._init();
-}
+class persianPersonage {
+    constructor() {
+        this.name = 'شخصیت‌های ایرانی';
+        this.type = 'persian';
+        /* [month][day] = [title, isHoliday] */
+        this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
-persianPersonage.prototype = {
-    name: 'شخصیت‌های ایرانی',
-    type: 'persian',
-    /* [month][day] = [title, isHoliday] */
-    events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
-
-    _init: function () {
         this.events[1][6] = ['زایش زرتشت', false];
         this.events[1][25] = ['بزرگ‌داشت عطار نیشابوری', false];
         this.events[2][1] = ['بزرگ‌داشت سعدی', false];
@@ -30,4 +26,4 @@ persianPersonage.prototype = {
         this.events[11][1] = ['زادروز فردوسی', false];
         this.events[12][6] = ['بزرگ‌داشت خواجه نصیر‌الدین توسی', false];
     }
-};
+}

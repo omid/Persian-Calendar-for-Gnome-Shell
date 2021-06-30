@@ -1,16 +1,13 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-function persian(pdate) {
-    this._init(pdate);
-}
+class persian {
+    constructor(pdate) {
+        this.name = 'مناسبت‌های ملی';
+        this.type = 'persian';
+        /* [month][day] = [title, isHoliday] */
+        this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
-persian.prototype = {
-    name: 'مناسبت‌های ملی',
-    type: 'persian',
-    /* [month][day] = [title, isHoliday] */
-    events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
 
-    _init: function (pdate) {
         this.events[1][1] = ['جشن نوروز', false];
         this.events[1][6] = ['روز امید / روز شادباش‌نویسی', false];
         this.events[1][10] = ['جشن آبان‌گاه', false];
@@ -69,9 +66,9 @@ persian.prototype = {
         this.events[12][26] = ['فروردگان', false];
 
         this.addSpecificEvents(pdate);
-    },
+    }
 
-    addSpecificEvents: function (pdate) {
+    addSpecificEvents(pdate) {
         let date = new Date();
         date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
         let year = date.year;
@@ -125,4 +122,4 @@ persian.prototype = {
         this.events[12][last_wednesday_of_year - 1] = ['چارشنبه سوری، جشن شب چهارشنبه آخر', false];
         this.events[12][last_wednesday_of_year] = ['چارشنبه آخر', false];
     }
-};
+}

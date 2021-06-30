@@ -5,7 +5,6 @@ const Pango = imports.gi.Pango;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
-const convenience = extension.imports.convenience;
 
 const PersianDate = extension.imports.PersianDate;
 const HijriDate = extension.imports.HijriDate;
@@ -13,23 +12,23 @@ const HijriDate = extension.imports.HijriDate;
 const str = extension.imports.strFunctions;
 const Events = extension.imports.Events;
 
-const Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
-
 function _sameDay(dateA, dateB) {
     return (dateA.year === dateB.year &&
     dateA.month === dateB.month &&
     dateA.day === dateB.day);
 }
 
-function Calendar() {
-    this._init();
+function Calendar(schema) {
+    this.constructor(schema);
 }
 
 Calendar.prototype = {
     weekdayAbbr: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
     _weekStart: 6,
+    schema: null,
 
-    _init: function () {
+    constructor(schema) {
+        this.schema = schema;
         // Start off with the current date
         this._selectedDate = new Date();
         this._selectedDate = PersianDate.PersianDate.gregorianToPersian(
@@ -50,7 +49,7 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    setDate: function (date) {
+    setDate(date) {
         if (!_sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
         }
@@ -59,7 +58,7 @@ Calendar.prototype = {
     },
 
     // Sets the calendar to show a specific date
-    format: function (format, day, month, year, dow, calendar) {
+    format(format, day, month, year, dow, calendar) {
         let phrases =
         {
             gregorian:
@@ -107,7 +106,7 @@ Calendar.prototype = {
         return str.replace(find, replace, format);
     },
 
-    _buildHeader: function () {
+    _buildHeader() {
         this._rtl = (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL);
         if (this._rtl) {
             this._colPosition = 0;
@@ -193,7 +192,7 @@ Calendar.prototype = {
         this._firstDayIndex = this.actor.get_children().length;
     },
 
-    _onScroll: function (actor, event) {
+    _onScroll(actor, event) {
         switch (event.get_scroll_direction()) {
         case Clutter.ScrollDirection.UP:
         case Clutter.ScrollDirection.LEFT:
@@ -208,7 +207,7 @@ Calendar.prototype = {
         }
     },
 
-    _onPrevMonthButtonClicked: function () {
+    _onPrevMonthButtonClicked() {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
         if (oldMonth === 1) {
@@ -221,7 +220,7 @@ Calendar.prototype = {
         this.setDate(newDate);
     },
 
-    _onNextMonthButtonClicked: function () {
+    _onNextMonthButtonClicked() {
         let newDate = this._selectedDate;
         let oldMonth = newDate.month;
         if (oldMonth === 12) {
@@ -234,21 +233,21 @@ Calendar.prototype = {
         this.setDate(newDate);
     },
 
-    _onPrevYearButtonClicked: function () {
+    _onPrevYearButtonClicked() {
         let newDate = this._selectedDate;
         newDate.year--;
 
         this.setDate(newDate);
     },
 
-    _onNextYearButtonClicked: function () {
+    _onNextYearButtonClicked() {
         let newDate = this._selectedDate;
         newDate.year++;
 
         this.setDate(newDate);
     },
 
-    _update: function () {
+    _update() {
         let now = new Date();
         now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
@@ -273,7 +272,7 @@ Calendar.prototype = {
         iter.setDate(iter.getDate() - daysToWeekStart);
 
         let row = 2;
-        let ev = new Events.Events();
+        let ev = new Events.Events(this.schema);
         let events;
 
         /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
@@ -357,13 +356,13 @@ Calendar.prototype = {
         );
 
         // add persian date
-        if (Schema.get_boolean('persian-display')) {
+        if (this.schema.get_boolean('persian-display')) {
             let _datesBox_p = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
             let button = new St.Button({
                 label: str.format(
                     this.format(
-                        Schema.get_string('persian-display-format'),
+                        this.schema.get_string('persian-display-format'),
                         this._selectedDate.day,
                         this._selectedDate.month,
                         this._selectedDate.year,
@@ -382,13 +381,13 @@ Calendar.prototype = {
         }
 
         // add gregorian date
-        if (Schema.get_boolean('gregorian-display')) {
+        if (this.schema.get_boolean('gregorian-display')) {
             let _datesBox_g = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
 
             let button = new St.Button({
                 label: this.format(
-                    Schema.get_string('gregorian-display-format'),
+                    this.schema.get_string('gregorian-display-format'),
                     g_selectedDate.getDate(),
                     g_selectedDate.getMonth() + 1,
                     g_selectedDate.getFullYear(),
@@ -406,14 +405,14 @@ Calendar.prototype = {
         }
 
         // add hijri date
-        if (Schema.get_boolean('hijri-display')) {
+        if (this.schema.get_boolean('hijri-display')) {
             let _datesBox_h = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
 
             let button = new St.Button({
                 label: str.format(
                     this.format(
-                        Schema.get_string('hijri-display-format'),
+                        this.schema.get_string('hijri-display-format'),
                         h_selectedDate.day,
                         h_selectedDate.month,
                         h_selectedDate.year,

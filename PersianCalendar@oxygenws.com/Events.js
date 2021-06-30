@@ -1,6 +1,5 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
-const convenience = extension.imports.convenience;
 
 const PersianDate = extension.imports.PersianDate;
 const HijriDate = extension.imports.HijriDate;
@@ -11,34 +10,31 @@ const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
 
-const Schema = convenience.getSettings('org.gnome.shell.extensions.persian-calendar');
-
-function Events() {
-    this._init();
+function Events(schema) {
+    this.constructor(schema);
 }
 
 Events.prototype = {
-
-    _init: function () {
+    constructor(schema) {
         this._eventsList = [];
-        if (Schema.get_boolean('event-persian')) {
+        if (schema.get_boolean('event-persian')) {
             this._eventsList.push(new persian.persian(PersianDate.PersianDate));
         }
-        if (Schema.get_boolean('event-world')) {
+        if (schema.get_boolean('event-world')) {
             this._eventsList.push(new world.world());
         }
-        if (Schema.get_boolean('event-iran-solar')) {
+        if (schema.get_boolean('event-iran-solar')) {
             this._eventsList.push(new iranSolar.iranSolar());
         }
-        if (Schema.get_boolean('event-iran-lunar')) {
+        if (schema.get_boolean('event-iran-lunar')) {
             this._eventsList.push(new iranLunar.iranLunar());
         }
-        if (Schema.get_boolean('event-persian-personage')) {
+        if (schema.get_boolean('event-persian-personage')) {
             this._eventsList.push(new persianPersonage.persianPersonage());
         }
     },
 
-    getEvents: function (today) {
+    getEvents(today) {
         this._events = '';
         this._isHoliday = false;
         this._today = [];
@@ -63,7 +59,7 @@ Events.prototype = {
         return [this._events, this._isHoliday];
     },
 
-    _checkEvent: function (el) {
+    _checkEvent(el) {
         let type = 0;
 
         switch (el.type) {

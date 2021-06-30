@@ -1,15 +1,11 @@
 // copyright http://www.farhangiran.com
-function world() {
-    this._init();
-}
+class world {
+    constructor() {
+        this.name = 'مناسبت‌های جهانی';
+        this.type = 'gregorian';
+        /* [month][day] = [title, isHoliday] */
+        this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
-world.prototype = {
-    name: 'مناسبت‌های جهانی',
-    type: 'gregorian',
-    /* [month][day] = [title, isHoliday] */
-    events: [[], [], [], [], [], [], [], [], [], [], [], [], []],
-
-    _init: function () {
         this.events[2][2] = ['روز جهانی عدالت اجتماعی', false];
         this.events[2][3] = ['روز جهانی زبان مادری', false];
         this.events[3][8] = ['روز جهانی زن', false];
@@ -64,4 +60,4 @@ world.prototype = {
         this.events[12][18] = ['روز جهانی مهاجرین', false];
         this.events[12][30] = ['روز جهانی همبستگی انسانی', false];
     }
-};
+}
