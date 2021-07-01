@@ -1,4 +1,4 @@
-const {GLib, GObject, Clutter, St, Pango} = imports.gi
+const {GLib, GObject, Clutter, St, Pango} = imports.gi;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -23,7 +23,7 @@ const str = extension.imports.strFunctions;
 const ConverterTypes = {
     fromPersian: 0,
     fromGregorian: 1,
-    fromHijri: 2
+    fromHijri: 2,
 };
 
 let _indicator,
@@ -48,18 +48,18 @@ const PersianCalendar = GObject.registerClass(
 
             // some codes for coloring label
             if (this.schema.get_boolean('custom-color')) {
-                this.label.set_style('color:' + this.schema.get_string('color'));
+                this.label.set_style(`color:${this.schema.get_string('color')}`);
             }
 
             this.schema_color_change_signal = this.schema.connect('changed::color', () => {
                 if (this.schema.get_boolean('custom-color')) {
-                    this.label.set_style('color:' + this.schema.get_string('color'));
+                    this.label.set_style(`color:${this.schema.get_string('color')}`);
                 }
             });
 
             this.schema_custom_color_signal = this.schema.connect('changed::custom-color', () => {
                 if (this.schema.get_boolean('custom-color')) {
-                    this.label.set_style('color:' + this.schema.get_string('color'));
+                    this.label.set_style(`color:${this.schema.get_string('color')}`);
                 } else {
                     this.label.set_style('color:');
                 }
@@ -92,12 +92,12 @@ const PersianCalendar = GObject.registerClass(
 
             // remove the size
             MainLoop.timeout_add(1000, () => {
-                this._onFontChangeForIcon()
+                this._onFontChangeForIcon();
             });
             this.schema.connect('changed::font', this._onFontChangeForIcon.bind(this));
             this.schema.connect('changed::custom-font', this._onFontChangeForIcon.bind(this));
             MainLoop.timeout_add(1000, () => {
-                this._onFontChangeForCalendar()
+                this._onFontChangeForCalendar();
             });
             this.schema.connect('changed::font', this._onFontChangeForCalendar.bind(this));
             this.schema.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
@@ -133,7 +133,7 @@ const PersianCalendar = GObject.registerClass(
                     // support previous gnome shell versions.
                     Util.spawn([
                         'gnome-shell-extension-prefs',
-                        extension.metadata.uuid
+                        extension.metadata.uuid,
                     ]);
                 }
             });
@@ -206,7 +206,7 @@ const PersianCalendar = GObject.registerClass(
             // get events of today
             let ev = new Events.Events(this.schema);
             let events = ev.getEvents(new Date());
-            events[0] = events[0] !== '' ? '\n' + events[0] : '';
+            events[0] = events[0] !== '' ? `\n${events[0]}` : '';
 
             // is holiday?
             if (events[1]) {
@@ -228,7 +228,7 @@ const PersianCalendar = GObject.registerClass(
                 )
             );
 
-            _date = str.format(_date.day + ' ' + PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
+            _date = str.format(`${_date.day} ${PersianDate.p_month_names[_date.month - 1]} ${_date.year}`);
             if (!skip_notification) {
                 notify(_date, events[0]);
             }
@@ -380,6 +380,7 @@ const PersianCalendar = GObject.registerClass(
             if (gDate) {
                 $dayOfWeek = new Date(gDate.year, gDate.month, gDate.day);
             }
+
             $dayOfWeek = $dayOfWeek.getDay();
 
             // add persian date
@@ -395,7 +396,7 @@ const PersianCalendar = GObject.registerClass(
                             'persian'
                         )
                     ),
-                    style_class: 'calendar-day pcalendar-date-label'
+                    style_class: 'calendar-day pcalendar-date-label',
                 });
                 this.convertedDatesVbox.add(button);
                 button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
@@ -412,7 +413,7 @@ const PersianCalendar = GObject.registerClass(
                         $dayOfWeek,
                         'gregorian'
                     ),
-                    style_class: 'calendar-day pcalendar-date-label'
+                    style_class: 'calendar-day pcalendar-date-label',
                 });
                 this.convertedDatesVbox.add(button);
                 button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
@@ -431,7 +432,7 @@ const PersianCalendar = GObject.registerClass(
                             'hijri'
                         )
                     ),
-                    style_class: 'calendar-day pcalendar-date-label'
+                    style_class: 'calendar-day pcalendar-date-label',
                 });
                 this.convertedDatesVbox.add(button);
                 button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
@@ -456,7 +457,7 @@ const PersianCalendar = GObject.registerClass(
             button.add_style_class_name('active');
             this._activeConverter = button.TypeID;
 
-            this._onModifyConverter()
+            this._onModifyConverter();
         }
 
         _showNowroozNotification() {
@@ -478,14 +479,14 @@ const PersianCalendar = GObject.registerClass(
             }
 
             if (month_delta !== 0) {
-                nowrooz = month_delta + ' ماه و ';
+                nowrooz = `${month_delta} ماه و `;
             } else {
                 nowrooz = '';
             }
 
             if (day_delta !== 0) {
-                nowrooz = nowrooz + day_delta + ' روز مانده به ';
-                nowrooz = nowrooz + 'نوروز سال ' + (pdate.year + 1);
+                nowrooz = `${nowrooz + day_delta} روز مانده به `;
+                nowrooz = `${nowrooz}نوروز سال ${pdate.year + 1}`;
             }
 
             notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
@@ -522,7 +523,7 @@ function enable() {
     let path = extension.dir.get_path();
     GLib.spawn_sync(
         null,
-        ['/bin/bash', path + '/bin/install_fonts.sh', path],
+        ['/bin/bash', `${path}/bin/install_fonts.sh`, path],
         null,
         GLib.SpawnFlags.DEFAULT,
         null

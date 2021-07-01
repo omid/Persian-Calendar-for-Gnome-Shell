@@ -27,7 +27,7 @@ class Calendar {
         this.actor = new St.Widget({
             style_class: 'calendar',
             layout_manager: new Clutter.GridLayout(),
-            reactive: true
+            reactive: true,
         });
 
         this.actor.connect('scroll-event', this._onScroll.bind(this));
@@ -68,7 +68,7 @@ class Calendar {
                         monthLong: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه'],
                         weekdayShort: ['س', 'ا', 'ا', 'ث', 'ا', 'خ', 'ج'],
                         weekdayLong: ['‫السبت', '‫الأحد', '‫الاثنين', '‫الثلاثاء', '‫الأربعاء', '‫الخميس', '‫الجمعة'],
-                    }
+                    },
             };
 
         // change dow to Persian style!
@@ -80,12 +80,12 @@ class Calendar {
         let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d', '%WW', '%ww'];
         let replace = [
             year,
-            (year + '').slice(-2),
+            `${year}`.slice(-2),
             phrases[calendar].monthLong[month - 1],
             phrases[calendar].monthShort[month - 1],
-            ('0' + (month)).slice(-2),
+            `0${month}`.slice(-2),
             month,
-            ('0' + day).slice(-2),
+            `0${day}`.slice(-2),
             day,
             phrases[calendar].weekdayLong[dow],
             phrases[calendar].weekdayShort[dow],
@@ -94,7 +94,7 @@ class Calendar {
     }
 
     _buildHeader() {
-        this._rtl = (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL);
+        this._rtl = Clutter.get_default_text_direction() === Clutter.TextDirection.RTL;
         if (this._rtl) {
             this._colPosition = 0;
         } else {
@@ -170,7 +170,7 @@ class Calendar {
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
                 style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl pcalendar-weekday',
-                text: this.weekdayAbbr[i]
+                text: this.weekdayAbbr[i],
             });
             this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
@@ -268,8 +268,8 @@ class Calendar {
         if (this._selectedDate.year === now.year) {
             this._monthLabel.text = PersianDate.p_month_names[this._selectedDate.month - 1];
         } else {
-            this._monthLabel.text = PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' +
-                str.format(this._selectedDate.year);
+            this._monthLabel.text = `${PersianDate.p_month_names[this._selectedDate.month - 1]} ${
+                str.format(this._selectedDate.year)}`;
         }
 
         // Remove everything but the topBox and the weekday labels
@@ -312,10 +312,11 @@ class Calendar {
             }
 
             if (row === 2) {
-                styleClass = ' calendar-day-top ' + styleClass;
+                styleClass = ` calendar-day-top ${styleClass}`;
             }
+
             if (iter.getDay() === this._weekStart - 1) {
-                styleClass = ' calendar-day-left ' + styleClass;
+                styleClass = ` calendar-day-left ${styleClass}`;
             }
 
             if (this._sameDay(now, p_iter)) {
@@ -349,6 +350,7 @@ class Calendar {
                 if (p_iter.month > this._selectedDate.month || p_iter.year > this._selectedDate.year) {
                     break;
                 }
+
                 row++;
             }
         }
@@ -385,7 +387,7 @@ class Calendar {
                 ),
                 style_class: 'calendar-day pcalendar-date-label',
                 x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true
+                x_expand: true,
             });
             _datesBox_p.add(button);
             button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
@@ -407,7 +409,7 @@ class Calendar {
                 ),
                 style_class: 'calendar-day pcalendar-date-label',
                 x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true
+                x_expand: true,
             });
             _datesBox_g.add(button);
             button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
@@ -459,8 +461,8 @@ class Calendar {
     }
 
     _sameDay(dateA, dateB) {
-        return (dateA.year === dateB.year &&
+        return dateA.year === dateB.year &&
             dateA.month === dateB.month &&
-            dateA.day === dateB.day);
+            dateA.day === dateB.day;
     }
 }

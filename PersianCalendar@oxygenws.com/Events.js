@@ -16,15 +16,19 @@ class Events {
         if (schema.get_boolean('event-persian')) {
             this._eventsList.push(new persian.persian(PersianDate));
         }
+
         if (schema.get_boolean('event-world')) {
             this._eventsList.push(new world.world());
         }
+
         if (schema.get_boolean('event-iran-solar')) {
             this._eventsList.push(new iranSolar.iranSolar());
         }
+
         if (schema.get_boolean('event-iran-lunar')) {
             this._eventsList.push(new iranLunar.iranLunar());
         }
+
         if (schema.get_boolean('event-persian-personage')) {
             this._eventsList.push(new persianPersonage.persianPersonage());
         }
@@ -75,7 +79,7 @@ class Events {
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += '\n' + el.events[this._today[type][1]][this._today[type][2]][0];
+            this._events += `\n${el.events[this._today[type][1]][this._today[type][2]][0]}`;
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

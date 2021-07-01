@@ -9,7 +9,7 @@ class world {
         this.events[2][2] = ['روز جهانی عدالت اجتماعی', false];
         this.events[2][3] = ['روز جهانی زبان مادری', false];
         this.events[3][8] = ['روز جهانی زن', false];
-        this.events[3][13] = ['روز جهانی آزادی گفتار', false]
+        this.events[3][13] = ['روز جهانی آزادی گفتار', false];
         this.events[3][21] = ['روز جهانی شعر', false];
         this.events[3][22] = ['روز جهانی آب', false];
         this.events[3][23] = ['روز جهانی هواشناسی', false];

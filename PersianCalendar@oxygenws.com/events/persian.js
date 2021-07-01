@@ -7,7 +7,6 @@ class persian {
         /* [month][day] = [title, isHoliday] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
-
         this.events[1][1] = ['جشن نوروز', false];
         this.events[1][6] = ['روز امید / روز شادباش‌نویسی', false];
         this.events[1][10] = ['جشن آبان‌گاه', false];
@@ -98,7 +97,7 @@ class persian {
         // find last day of the year
         // and
         // find last wednesday of the year
-        let leap = ((((((year - ((year > 0) ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
+        let leap = ((((((year - (year > 0 ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
 
         if (!last_day_of_year) {
             last_day_of_year = 29 + leap;

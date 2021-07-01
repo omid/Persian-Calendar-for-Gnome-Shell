@@ -69,10 +69,12 @@ function gregorianToPersian(gy, gm, gd) {
     for (let i = 0; i < gm; ++i) {
         g_day_no += g_days_in_month[i];
     }
+
     /* leap and after Feb */
     if (gm > 1 && ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0))) {
         ++g_day_no;
     }
+
     g_day_no += gd;
 
     let p_day_no = g_day_no - 79;

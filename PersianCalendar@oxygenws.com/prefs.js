@@ -56,7 +56,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('persian-display-format'));
-        format.connect('changed', (innerFormat) => schema.set_string('persian-display-format', innerFormat.text));
+        format.connect('changed', innerFormat => schema.set_string('persian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: _('Gregorian')});
         this.vbox1.append(item);
@@ -69,7 +69,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('gregorian-display-format'));
-        format.connect('changed', (innerFormat) => schema.set_string('gregorian-display-format', innerFormat.text));
+        format.connect('changed', innerFormat => schema.set_string('gregorian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: _('Hijri')});
         this.vbox1.append(item);
@@ -82,18 +82,18 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('hijri-display-format'));
-        format.connect('changed', (innerFormat) => schema.set_string('hijri-display-format', innerFormat.text));
+        format.connect('changed', innerFormat => schema.set_string('hijri-display-format', innerFormat.text));
 
         let comment = new Gtk.Label({
             label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week</span>'),
-            use_markup: true
+            use_markup: true,
         });
         this.vbox1.append(comment);
 
         // EVENTS
         this.vbox2.append(new Gtk.Label({
             label: _('Events:\n<span size="x-small">("Official" events are needed to find holidays)</span>'),
-            use_markup: true
+            use_markup: true,
         }));
 
         item = new Gtk.CheckButton({label: _('Official Iranian lunar')});
@@ -138,7 +138,7 @@ const App = class PersianCalendarApp {
         let colorArray = new Gdk.RGBA();
         colorArray.parse(schema.get_string('color'));
         color.set_rgba(colorArray);
-        color.connect('color-set', (innerColor) => schema.set_string('color', innerColor.get_rgba().to_string()));
+        color.connect('color-set', innerColor => schema.set_string('color', innerColor.get_rgba().to_string()));
 
         item = new Gtk.CheckButton({label: _('Startup Notification')});
         this.vbox3.append(item);
@@ -151,11 +151,11 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox3.append(hbox);
         format.set_text(schema.get_string('widget-format'));
-        format.connect('changed', (innerFormat) => schema.set_string('widget-format', innerFormat.text));
+        format.connect('changed', innerFormat => schema.set_string('widget-format', innerFormat.text));
 
         comment = new Gtk.Label({
             label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week</span>'),
-            use_markup: true
+            use_markup: true,
         });
         this.vbox3.append(comment);
 
