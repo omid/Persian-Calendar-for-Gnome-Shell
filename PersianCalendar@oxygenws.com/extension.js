@@ -38,6 +38,7 @@ const PersianCalendar = GObject.registerClass(
             messageTray = new MessageTray.MessageTray();
 
             this.label = new St.Label({
+                style_class: 'pcalendar-font',
                 y_expand: true,
                 y_align: Clutter.ActorAlign.CENTER,
             });
@@ -84,6 +85,7 @@ const PersianCalendar = GObject.registerClass(
 
             this._calendar = new Calendar.Calendar(this.schema);
             vbox.add_actor(this._calendar.actor);
+            this._calendar.actor.add_style_class_name('pcalendar-font');
 
             // /////////////////////////////
             // some codes for fonts
@@ -207,11 +209,11 @@ const PersianCalendar = GObject.registerClass(
             events[0] = events[0] !== '' ? '\n' + events[0] : '';
 
             // is holiday?
-            // if (events[1]) {
-            //     this.label.add_style_class_name('pcalendar-holiday');
-            // } else {
-            //     this.label.remove_style_class_name('pcalendar-holiday');
-            // }
+            if (events[1]) {
+                this.label.add_style_class_name('pcalendar-holiday');
+            } else {
+                this.label.remove_style_class_name('pcalendar-holiday');
+            }
 
             this.label.set_text(
                 str.format(
@@ -238,10 +240,10 @@ const PersianCalendar = GObject.registerClass(
             // Add date conversion button
             let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
             converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
-            // converterMenu.actor.add_style_class_name('pcalendar-font');
+            converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);
-            this.converterVbox = new St.BoxLayout({/* style_class: 'pcalendar-font',*/ vertical: true, x_expand: true});
+            this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
             let converterSubMenu = new PopupMenu.PopupBaseMenuItem();
             converterSubMenu.actor.add_child(this.converterVbox);
             converterMenu.menu.addMenuItem(converterSubMenu);
