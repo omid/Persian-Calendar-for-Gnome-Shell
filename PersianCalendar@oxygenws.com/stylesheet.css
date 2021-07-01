@@ -1,3 +1,7 @@
+.pcalendar-font {
+    font-family: Vazir, sans-serif;
+}
+
 .pcalendar-holiday, .pcalendar-day-with-events {
     text-decoration: underline;
 }
