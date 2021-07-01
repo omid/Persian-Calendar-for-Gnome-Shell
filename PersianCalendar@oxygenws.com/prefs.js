@@ -1,7 +1,4 @@
-const Gtk = imports.gi.Gtk;
-const Gio = imports.gi.Gio;
-const Gdk = imports.gi.Gdk;
-const GObject = imports.gi.GObject;
+const {Gtk, Gio, Gdk, Pango} = imports.gi;
 
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
@@ -59,9 +56,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('persian-display-format'));
-        format.connect('changed', function (innerFormat) {
-            schema.set_string('persian-display-format', innerFormat.text);
-        });
+        format.connect('changed', (innerFormat) => schema.set_string('persian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: _('Gregorian')});
         this.vbox1.append(item);
@@ -74,9 +69,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('gregorian-display-format'));
-        format.connect('changed', function (innerFormat) {
-            schema.set_string('gregorian-display-format', innerFormat.text);
-        });
+        format.connect('changed', (innerFormat) => schema.set_string('gregorian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: _('Hijri')});
         this.vbox1.append(item);
@@ -89,9 +82,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox1.append(hbox);
         format.set_text(schema.get_string('hijri-display-format'));
-        format.connect('changed', function (innerFormat) {
-            schema.set_string('hijri-display-format', innerFormat.text);
-        });
+        format.connect('changed', (innerFormat) => schema.set_string('hijri-display-format', innerFormat.text));
 
         let comment = new Gtk.Label({
             label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week</span>'),
@@ -147,10 +138,7 @@ const App = class PersianCalendarApp {
         let colorArray = new Gdk.RGBA();
         colorArray.parse(schema.get_string('color'));
         color.set_rgba(colorArray);
-
-        color.connect('color-set', (function (innerColor) {
-            schema.set_string('color', innerColor.get_rgba().to_string());
-        }));
+        color.connect('color-set', (innerColor) => schema.set_string('color', innerColor.get_rgba().to_string()));
 
         item = new Gtk.CheckButton({label: _('Startup Notification')});
         this.vbox3.append(item);
@@ -163,9 +151,7 @@ const App = class PersianCalendarApp {
         hbox.append(format);
         this.vbox3.append(hbox);
         format.set_text(schema.get_string('widget-format'));
-        format.connect('changed', function (innerFormat) {
-            schema.set_string('widget-format', innerFormat.text);
-        });
+        format.connect('changed', (innerFormat) => schema.set_string('widget-format', innerFormat.text));
 
         comment = new Gtk.Label({
             label: _('<span size="x-small">Formatting possible values:\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week</span>'),
@@ -174,24 +160,21 @@ const App = class PersianCalendarApp {
         this.vbox3.append(comment);
 
         // FONT
-        /*item = new Gtk.CheckButton({label: _('Use custom font')})
-        this.vbox3.append(item)
-        schema.bind('custom-font', item, 'active', Gio.SettingsBindFlags.DEFAULT);
-
-        label = new Gtk.Label({label: "Font: "});
-        let font = new Gtk.FontButton();
-        font.set_show_size(false);
-        //font.set_show_style(false);
-
-        let _actor = new Gtk.Box();
-        _actor.append(label);
-        _actor.append(font);
-        font.set_font_name(schema.get_string('font'));
-
-        this.vbox3.append(_actor);
-        font.connect('font-set', function (font) {
-            schema.set_string('font', font.get_font_name());
-        });*/
+        // item = new Gtk.CheckButton({label: _('Use custom font')})
+        // this.vbox3.append(item)
+        // schema.bind('custom-font', item, 'active', Gio.SettingsBindFlags.DEFAULT);
+        //
+        // label = new Gtk.Label({label: 'Font: '});
+        // let font = new Gtk.FontButton();
+        //
+        // let _actor = new Gtk.Box();
+        // _actor.append(label);
+        // _actor.append(font);
+        // let font_desc = Pango.FontDescription.from_string(schema.get_string('font'));
+        // font.set_font_desc(font_desc);
+        //
+        // this.vbox3.append(_actor);
+        // font.connect('font-set', () => schema.set_string('font', font.get_font()));
 
         this.main_hbox.show();
     }

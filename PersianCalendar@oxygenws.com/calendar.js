@@ -1,5 +1,4 @@
 const Clutter = imports.gi.Clutter;
-const Lang = imports.lang;
 const St = imports.gi.St;
 const Pango = imports.gi.Pango;
 
@@ -12,26 +11,14 @@ const HijriDate = extension.imports.HijriDate;
 const str = extension.imports.strFunctions;
 const Events = extension.imports.Events;
 
-function _sameDay(dateA, dateB) {
-    return (dateA.year === dateB.year &&
-    dateA.month === dateB.month &&
-    dateA.day === dateB.day);
-}
-
-function Calendar(schema) {
-    this.constructor(schema);
-}
-
-Calendar.prototype = {
-    weekdayAbbr: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
-    _weekStart: 6,
-    schema: null,
-
+class Calendar {
     constructor(schema) {
+        this.weekdayAbbr = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'];
+        this._weekStart = 6;
         this.schema = schema;
         // Start off with the current date
         this._selectedDate = new Date();
-        this._selectedDate = PersianDate.PersianDate.gregorianToPersian(
+        this._selectedDate = PersianDate.gregorianToPersian(
             this._selectedDate.getFullYear(),
             this._selectedDate.getMonth() + 1,
             this._selectedDate.getDate()
@@ -43,46 +30,46 @@ Calendar.prototype = {
             reactive: true
         });
 
-        this.actor.connect('scroll-event', Lang.bind(this, this._onScroll));
+        this.actor.connect('scroll-event', this._onScroll.bind(this));
 
         this._buildHeader();
-    },
+    }
 
     // Sets the calendar to show a specific date
     setDate(date) {
-        if (!_sameDay(date, this._selectedDate)) {
+        if (!this._sameDay(date, this._selectedDate)) {
             this._selectedDate = date;
         }
 
         this._update();
-    },
+    }
 
     // Sets the calendar to show a specific date
     format(format, day, month, year, dow, calendar) {
         let phrases =
-        {
-            gregorian:
             {
-                monthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                monthLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                weekdayShort: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                weekdayLong: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            },
-            persian:
-            {
-                monthShort: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
-                monthLong: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
-                weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
-                weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'],
-            },
-            hijri:
-            {
-                monthShort: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
-                monthLong: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه'],
-                weekdayShort: ['س', 'ا', 'ا', 'ث', 'ا', 'خ', 'ج'],
-                weekdayLong: ['‫السبت', '‫الأحد', '‫الاثنين', '‫الثلاثاء', '‫الأربعاء', '‫الخميس', '‫الجمعة'],
-            }
-        };
+                gregorian:
+                    {
+                        monthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        monthLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        weekdayShort: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                        weekdayLong: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                    },
+                persian:
+                    {
+                        monthShort: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
+                        monthLong: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
+                        weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
+                        weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'],
+                    },
+                hijri:
+                    {
+                        monthShort: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
+                        monthLong: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه'],
+                        weekdayShort: ['س', 'ا', 'ا', 'ث', 'ا', 'خ', 'ج'],
+                        weekdayLong: ['‫السبت', '‫الأحد', '‫الاثنين', '‫الثلاثاء', '‫الأربعاء', '‫الخميس', '‫الجمعة'],
+                    }
+            };
 
         // change dow to Persian style!
         dow += 1;
@@ -104,7 +91,7 @@ Calendar.prototype = {
             phrases[calendar].weekdayShort[dow],
         ];
         return str.replace(find, replace, format);
-    },
+    }
 
     _buildHeader() {
         this._rtl = (Clutter.get_default_text_direction() === Clutter.TextDirection.RTL);
@@ -120,17 +107,17 @@ Calendar.prototype = {
         this._topBox = new St.BoxLayout();
         this.actor.layout_manager.attach(this._topBox, 0, 0, 7, 1);
 
-        let rightButton = null;
-        let icon = null;
-        let style = 'pager-button pcalendar-top-button';
+        let icon,
+            leftButton, rightButton;
+        let style = 'pager-button';
         if (this._rtl) {
             icon = new St.Icon({icon_name: 'go-last-symbolic'});
             rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', Lang.bind(this, this._onPrevYearButtonClicked));
+            rightButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         } else {
             icon = new St.Icon({icon_name: 'go-first-symbolic'});
             rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', Lang.bind(this, this._onNextYearButtonClicked));
+            rightButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
         }
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
@@ -138,11 +125,11 @@ Calendar.prototype = {
         if (this._rtl) {
             icon = new St.Icon({icon_name: 'go-next-symbolic'});
             rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+            rightButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
         } else {
             icon = new St.Icon({icon_name: 'go-previous-symbolic'});
             rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+            rightButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
         }
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
@@ -152,17 +139,17 @@ Calendar.prototype = {
             x_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
+        this._setFont(this._monthLabel);
         this._topBox.add(this._monthLabel);
 
-        let leftButton = null;
         if (this._rtl) {
             icon = new St.Icon({icon_name: 'go-previous-symbolic'});
             leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', Lang.bind(this, this._onNextMonthButtonClicked));
+            leftButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
         } else {
             icon = new St.Icon({icon_name: 'go-next-symbolic'});
             leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', Lang.bind(this, this._onPrevMonthButtonClicked));
+            leftButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
         }
         icon.set_icon_size(16);
         this._topBox.add(leftButton);
@@ -170,11 +157,11 @@ Calendar.prototype = {
         if (this._rtl) {
             icon = new St.Icon({icon_name: 'go-first-symbolic'});
             leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', Lang.bind(this, this._onNextYearButtonClicked));
+            leftButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
         } else {
             icon = new St.Icon({icon_name: 'go-last-symbolic'});
             leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', Lang.bind(this, this._onPrevYearButtonClicked));
+            leftButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         }
         icon.set_icon_size(16);
         this._topBox.add(leftButton);
@@ -182,15 +169,42 @@ Calendar.prototype = {
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
-                style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl',
+                style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl pcalendar-weekday',
                 text: this.weekdayAbbr[i]
             });
+            this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
         }
 
         // All the children after this are days, and get removed when we update the calendar
         this._firstDayIndex = this.actor.get_children().length;
-    },
+    }
+
+    _setFont(el) {
+        // let font_desc = Pango.FontDescription.from_string(this.schema.get_string('font'));
+        //
+        // if (this.schema.get_boolean('custom-font')) {
+        //     el.clutter_text.set_font_description(font_desc);
+        // } else {
+        //     el.clutter_text.set_font_name(null);
+        // }
+    }
+
+    _modifyFont(el) {
+        // let font_desc = Pango.FontDescription.from_string(this.schema.get_string('font'));
+        //
+        // if (this.schema.get_boolean('custom-font')) {
+        //     el.modify_font(font_desc);
+        // } else {
+        //     el.modify_font(null);
+        // }
+
+        // let font_desc = Pango.FontDescription.from_string(this.schema.get_string('font'));
+        // let pc = el.get_pango_context();
+        //
+        // pc.set_font_description(font_desc);
+        // pc.changed();
+    }
 
     _onScroll(actor, event) {
         switch (event.get_scroll_direction()) {
@@ -205,7 +219,7 @@ Calendar.prototype = {
         default:
             // do nothing
         }
-    },
+    }
 
     _onPrevMonthButtonClicked() {
         let newDate = this._selectedDate;
@@ -218,7 +232,7 @@ Calendar.prototype = {
         }
 
         this.setDate(newDate);
-    },
+    }
 
     _onNextMonthButtonClicked() {
         let newDate = this._selectedDate;
@@ -231,30 +245,30 @@ Calendar.prototype = {
         }
 
         this.setDate(newDate);
-    },
+    }
 
     _onPrevYearButtonClicked() {
         let newDate = this._selectedDate;
         newDate.year--;
 
         this.setDate(newDate);
-    },
+    }
 
     _onNextYearButtonClicked() {
         let newDate = this._selectedDate;
         newDate.year++;
 
         this.setDate(newDate);
-    },
+    }
 
     _update() {
         let now = new Date();
-        now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+        now = PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
         if (this._selectedDate.year === now.year) {
-            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1];
+            this._monthLabel.text = PersianDate.p_month_names[this._selectedDate.month - 1];
         } else {
-            this._monthLabel.text = PersianDate.PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' +
+            this._monthLabel.text = PersianDate.p_month_names[this._selectedDate.month - 1] + ' ' +
                 str.format(this._selectedDate.year);
         }
 
@@ -266,7 +280,7 @@ Calendar.prototype = {
 
         // Start at the beginning of the week before the start of the month
         let iter = this._selectedDate;
-        iter = PersianDate.PersianDate.persianToGregorian(iter.year, iter.month, 1);
+        iter = PersianDate.persianToGregorian(iter.year, iter.month, 1);
         iter = new Date(iter.year, iter.month - 1, iter.day);
         let daysToWeekStart = (7 + iter.getDay() - this._weekStart) % 7;
         iter.setDate(iter.getDate() - daysToWeekStart);
@@ -277,16 +291,15 @@ Calendar.prototype = {
 
         /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
         while (true) {
-            let p_iter = PersianDate.PersianDate.gregorianToPersian(
+            let p_iter = PersianDate.gregorianToPersian(
                 iter.getFullYear(),
                 iter.getMonth() + 1,
                 iter.getDate()
             );
             let button = new St.Button({label: str.format(p_iter.day)});
+            this._modifyFont(button);
 
-            button.connect('clicked', Lang.bind(this, function () {
-                this.setDate(p_iter);
-            }));
+            button.connect('clicked', () => this.setDate(p_iter));
 
             // find events and holidays
             events = ev.getEvents(iter);
@@ -305,13 +318,13 @@ Calendar.prototype = {
                 styleClass = ' calendar-day-left ' + styleClass;
             }
 
-            if (_sameDay(now, p_iter)) {
+            if (this._sameDay(now, p_iter)) {
                 styleClass += ' calendar-today ';
             } else if (p_iter.month !== this._selectedDate.month) {
                 styleClass += ' calendar-other-month-day pcalendar-other-month-day ';
             }
 
-            if (_sameDay(this._selectedDate, p_iter)) {
+            if (this._sameDay(this._selectedDate, p_iter)) {
                 button.add_style_pseudo_class('active');
             }
 
@@ -341,7 +354,7 @@ Calendar.prototype = {
         }
 
         // find gregorian date
-        let g_selectedDate = PersianDate.PersianDate.persianToGregorian(
+        let g_selectedDate = PersianDate.persianToGregorian(
             this._selectedDate.year,
             this._selectedDate.month,
             this._selectedDate.day
@@ -349,7 +362,7 @@ Calendar.prototype = {
         g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
 
         // find hijri date of today
-        let h_selectedDate = HijriDate.HijriDate.toHijri(
+        let h_selectedDate = HijriDate.fromGregorian(
             g_selectedDate.getFullYear(),
             g_selectedDate.getMonth() + 1,
             g_selectedDate.getDate()
@@ -375,9 +388,7 @@ Calendar.prototype = {
                 x_expand: true
             });
             _datesBox_p.add(button);
-            button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
-            }));
+            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add gregorian date
@@ -399,9 +410,7 @@ Calendar.prototype = {
                 x_expand: true
             });
             _datesBox_g.add(button);
-            button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
-            }));
+            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add hijri date
@@ -425,9 +434,7 @@ Calendar.prototype = {
                 x_expand: true,
             });
             _datesBox_h.add(button);
-            button.connect('clicked', Lang.bind(button, function () {
-                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, this.label)
-            }));
+            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add event box for selected date
@@ -442,6 +449,7 @@ Calendar.prototype = {
                 x_align: Clutter.ActorAlign.FILL,
                 x_expand: true,
             });
+            this._setFont(bottomLabel);
 
             bottomLabel.clutter_text.line_wrap = true;
             bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
@@ -449,4 +457,10 @@ Calendar.prototype = {
             _eventBox.add(bottomLabel);
         }
     }
-};
+
+    _sameDay(dateA, dateB) {
+        return (dateA.year === dateB.year &&
+            dateA.month === dateB.month &&
+            dateA.day === dateB.day);
+    }
+}

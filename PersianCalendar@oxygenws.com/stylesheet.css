@@ -1,12 +1,5 @@
-.pcalendar-font {
-    font-family: Vazir, sans-serif;
-}
 .pcalendar-holiday, .pcalendar-day-with-events {
     text-decoration: underline;
-}
-
-.pcalendar-top-button {
-    opacity: .5; /* for future compatibility! */
 }
 
 .calendar-nonwork-day {
@@ -14,24 +7,20 @@
 }
 
 .pcalendar-month-label {
-    font-size: .9em;
+    font-size: 1.2em;
 }
 
-.pcalendar-day {
-    font-size: 1em;
-    width: 2em;
-    height: 1.85em;
+.pcalendar-weekday, .pcalendar-day {
+    font-size: 1.1em;
 }
 
 .pcalendar-date-label {
     padding: .4em 0;
-    font-size: .8em;
 }
 
 .pcalendar-event-label {
     text-align: right;
     padding: 0;
-    width: 150px; /* this should be useless, but when we have events, it fixes HEIGHT! */
 }
 
 .pcalendar-date-label:hover {
@@ -54,7 +43,6 @@
     border-radius: 0 0 0 0;
     border: 1px solid black;
     padding: 5px;
-    font-size: .9em;
 }
 
 .pcalendar-button.active {

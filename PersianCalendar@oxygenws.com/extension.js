@@ -1,9 +1,9 @@
+const {GLib, GObject, Clutter, St, Pango} = imports.gi
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
 const MainLoop = imports.mainloop;
 const MessageTray = imports.ui.messageTray;
-const {GLib, GObject, Clutter, St} = imports.gi
 
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
@@ -38,78 +38,38 @@ const PersianCalendar = GObject.registerClass(
             messageTray = new MessageTray.MessageTray();
 
             this.label = new St.Label({
-                style_class: 'pcalendar-font',
                 y_expand: true,
                 y_align: Clutter.ActorAlign.CENTER,
             });
+            this.hide();
+
             this.add_actor(this.label);
 
             // some codes for coloring label
             if (this.schema.get_boolean('custom-color')) {
-                this.label.set_style('color: ' + this.schema.get_string('color'));
+                this.label.set_style('color:' + this.schema.get_string('color'));
             }
 
             this.schema_color_change_signal = this.schema.connect('changed::color', () => {
                 if (this.schema.get_boolean('custom-color')) {
-                    this.label.set_style('color: ' + this.schema.get_string('color'));
+                    this.label.set_style('color:' + this.schema.get_string('color'));
                 }
-            }
-            );
+            });
 
             this.schema_custom_color_signal = this.schema.connect('changed::custom-color', () => {
                 if (this.schema.get_boolean('custom-color')) {
-                    this.label.set_style('color: ' + this.schema.get_string('color'));
+                    this.label.set_style('color:' + this.schema.get_string('color'));
                 } else {
                     this.label.set_style('color:');
                 }
-            }
-            );
+            });
 
-            this.schema_widget_format_signal = this.schema.connect('changed::widget-format', () => {
-                this._updateDate(true, true)
-            }
-            );
+            this.schema_widget_format_signal = this.schema.connect('changed::widget-format', () => this._updateDate(true, true));
 
             this.schema_position_signal = this.schema.connect('changed::position', () => {
                 disable();
                 enable();
-            }
-            );
-            // /////////////////////////////
-
-            // some codes for fonts
-            /*
-             let font = this.schema.get_string('font').split(' ');
-             font.pop(); // remove size
-             font = font.join(' ');
-
-             if(this.schema.get_boolean('custom-font')){
-             this.label.set_style('font-family: ' + font);
-             }
-
-             this.schema.connect('changed::font', (schema, key) => {
-             if(this.schema.get_boolean('custom-font')){
-             let font = this.schema.get_string('font').split(' ');
-             font.pop(); // remove size
-             font = font.join(' ');
-
-             this.label.set_style('font-family: ' + font);
-             }
-             });
-
-             this.schema.connect('changed::custom-font', (schema, key) => {
-             if(this.schema.get_boolean('custom-font')){
-             let font = this.schema.get_string('font').split(' ');
-             font.pop(); // remove size
-             font = font.join(' ');
-
-             this.label.set_style('font-family: ' + font);
-             } else {
-             this.label.set_style('font-family: ');
-             }
-             });
-             */
-            // /////////////////////////////
+            });
 
             this._today = '';
 
@@ -124,7 +84,22 @@ const PersianCalendar = GObject.registerClass(
 
             this._calendar = new Calendar.Calendar(this.schema);
             vbox.add_actor(this._calendar.actor);
-            this._calendar.actor.add_style_class_name('pcalendar-font');
+
+            // /////////////////////////////
+            // some codes for fonts
+
+            // remove the size
+            MainLoop.timeout_add(1000, () => {
+                this._onFontChangeForIcon()
+            });
+            this.schema.connect('changed::font', this._onFontChangeForIcon.bind(this));
+            this.schema.connect('changed::custom-font', this._onFontChangeForIcon.bind(this));
+            MainLoop.timeout_add(1000, () => {
+                this._onFontChangeForCalendar()
+            });
+            this.schema.connect('changed::font', this._onFontChangeForCalendar.bind(this));
+            this.schema.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
+            // /////////////////////////////
 
             this._generateConverterPart();
 
@@ -149,7 +124,7 @@ const PersianCalendar = GObject.registerClass(
                 x_align: Clutter.ActorAlign.CENTER,
                 x_expand: true,
             });
-            preferencesIcon.connect('clicked', function () {
+            preferencesIcon.connect('clicked', () => {
                 if (typeof ExtensionUtils.openPrefs === 'function') {
                     ExtensionUtils.openPrefs();
                 } else {
@@ -176,46 +151,38 @@ const PersianCalendar = GObject.registerClass(
                 x_align: Clutter.ActorAlign.CENTER,
                 x_expand: true,
             });
-            nowroozIcon.connect('clicked', function () {
-                /* calculate exact hour/minute/second of the next new year.
-                 it calculates with some small differences!*/
-                let now = new Date();
-                let pdate = PersianDate.PersianDate.gregorianToPersian(
-                    now.getFullYear(),
-                    now.getMonth() + 1,
-                    now.getDate()
-                );
-
-                let month_delta = 12 - pdate.month;
-                let day_delta, nowrooz;
-                if (month_delta >= 6) {
-                    day_delta = 31 - pdate.day;
-                } else {
-                    day_delta = 30 - pdate.day;
-                }
-
-                if (month_delta !== 0) {
-                    nowrooz = month_delta + ' ماه و ';
-                } else {
-                    nowrooz = '';
-                }
-
-                if (day_delta !== 0) {
-                    nowrooz = nowrooz + day_delta + ' روز مانده به ';
-                    nowrooz = nowrooz + 'نوروز سال ' + (pdate.year + 1);
-                }
-
-                notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
-            });
+            nowroozIcon.connect('clicked', this._showNowroozNotification);
             actionButtons.actor.add(nowroozIcon);
 
             this.menu.connect('open-state-changed', (menu, isOpen) => {
                 if (isOpen) {
                     let now = new Date();
-                    now = PersianDate.PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+                    now = PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
                     this._calendar.setDate(now);
                 }
             });
+
+            this.show();
+        }
+
+        _onFontChangeForIcon() {
+            // let font_desc = Pango.FontDescription.from_string(this.schema.get_string('font'));
+            // font_desc = Pango.FontDescription.from_string(font_desc.get_family());
+            //
+            // if (this.schema.get_boolean('custom-font')) {
+            //     this.label.clutter_text.set_font_description(font_desc);
+            // } else {
+            //     this.label.clutter_text.set_font_name(null);
+            // }
+        }
+
+        _onFontChangeForCalendar() {
+            // let font_desc = Pango.FontDescription.from_string(this.schema.get_string('font'));
+            // let pc = this._calendar.actor.get_pango_context();
+            //
+            // global.log("PersianCalendar@oxygenws.com22", font_desc.get_family());
+            // pc.set_font_description(font_desc);
+            // pc.changed();
         }
 
         _updateDate(skip_notification, force) {
@@ -223,7 +190,7 @@ const PersianCalendar = GObject.registerClass(
             let _dayOfWeek = _date.getDay();
 
             // convert to Persian
-            _date = PersianDate.PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
+            _date = PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
 
             // if today is "today" just return, don't change anything!
             if (!force && this._today === _date.yearDays) {
@@ -240,11 +207,11 @@ const PersianCalendar = GObject.registerClass(
             events[0] = events[0] !== '' ? '\n' + events[0] : '';
 
             // is holiday?
-            if (events[1]) {
-                this.label.add_style_class_name('pcalendar-holiday');
-            } else {
-                this.label.remove_style_class_name('pcalendar-holiday');
-            }
+            // if (events[1]) {
+            //     this.label.add_style_class_name('pcalendar-holiday');
+            // } else {
+            //     this.label.remove_style_class_name('pcalendar-holiday');
+            // }
 
             this.label.set_text(
                 str.format(
@@ -259,7 +226,7 @@ const PersianCalendar = GObject.registerClass(
                 )
             );
 
-            _date = str.format(_date.day + ' ' + PersianDate.PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
+            _date = str.format(_date.day + ' ' + PersianDate.p_month_names[_date.month - 1] + ' ' + _date.year);
             if (!skip_notification) {
                 notify(_date, events[0]);
             }
@@ -271,14 +238,11 @@ const PersianCalendar = GObject.registerClass(
             // Add date conversion button
             let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
             converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
-            converterMenu.actor.add_style_class_name('pcalendar-font');
+            // converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);
-            this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
-            let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
-                reactive: false,
-                can_focus: false,
-            });
+            this.converterVbox = new St.BoxLayout({/* style_class: 'pcalendar-font',*/ vertical: true, x_expand: true});
+            let converterSubMenu = new PopupMenu.PopupBaseMenuItem();
             converterSubMenu.actor.add_child(this.converterVbox);
             converterMenu.menu.addMenuItem(converterSubMenu);
 
@@ -388,18 +352,18 @@ const PersianCalendar = GObject.registerClass(
 
             switch (this._activeConverter) {
             case ConverterTypes.fromGregorian:
-                pDate = PersianDate.PersianDate.gregorianToPersian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(year, month, day);
+                pDate = PersianDate.gregorianToPersian(year, month, day);
+                hDate = HijriDate.fromGregorian(year, month, day);
                 break;
 
             case ConverterTypes.fromPersian:
-                gDate = PersianDate.PersianDate.persianToGregorian(year, month, day);
-                hDate = HijriDate.HijriDate.toHijri(gDate.year, gDate.month, gDate.day);
+                gDate = PersianDate.persianToGregorian(year, month, day);
+                hDate = HijriDate.fromGregorian(gDate.year, gDate.month, gDate.day);
                 break;
 
             case ConverterTypes.fromHijri:
-                gDate = HijriDate.HijriDate.fromHijri(year, month, day);
-                pDate = PersianDate.PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+                gDate = HijriDate.toGregorian(year, month, day);
+                pDate = PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
                 break;
 
             default:
@@ -429,9 +393,7 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'calendar-day pcalendar-date-label'
                 });
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => {
-                    St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label)
-                });
+                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
 
             // add gregorian date
@@ -448,9 +410,7 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'calendar-day pcalendar-date-label'
                 });
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => {
-                    St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label)
-                });
+                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
 
             // add hijri date
@@ -469,9 +429,7 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'calendar-day pcalendar-date-label'
                 });
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => {
-                    St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label)
-                });
+                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
         }
 
@@ -494,6 +452,38 @@ const PersianCalendar = GObject.registerClass(
             this._activeConverter = button.TypeID;
 
             this._onModifyConverter()
+        }
+
+        _showNowroozNotification() {
+            /* calculate exact hour/minute/second of the next new year.
+             it calculates with some small differences!*/
+            let now = new Date();
+            let pdate = PersianDate.gregorianToPersian(
+                now.getFullYear(),
+                now.getMonth() + 1,
+                now.getDate()
+            );
+
+            let month_delta = 12 - pdate.month;
+            let day_delta, nowrooz;
+            if (month_delta >= 6) {
+                day_delta = 31 - pdate.day;
+            } else {
+                day_delta = 30 - pdate.day;
+            }
+
+            if (month_delta !== 0) {
+                nowrooz = month_delta + ' ماه و ';
+            } else {
+                nowrooz = '';
+            }
+
+            if (day_delta !== 0) {
+                nowrooz = nowrooz + day_delta + ' روز مانده به ';
+                nowrooz = nowrooz + 'نوروز سال ' + (pdate.year + 1);
+            }
+
+            notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
         }
     });
 
