@@ -244,7 +244,10 @@ const PersianCalendar = GObject.registerClass(
 
             this.menu.addMenuItem(converterMenu);
             this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
-            let converterSubMenu = new PopupMenu.PopupBaseMenuItem();
+            let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
+                reactive: false,
+                can_focus: false,
+            });
             converterSubMenu.actor.add_child(this.converterVbox);
             converterMenu.menu.addMenuItem(converterSubMenu);
 
