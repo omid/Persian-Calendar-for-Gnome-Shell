@@ -29,12 +29,12 @@ clean:
 
 release: eslint _build
 	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
-	cd _build ; \
-	zip -qr "$(_UUID)$(_NEW_VERSION).zip" .
-	mv _build/$(_UUID)$(_NEW_VERSION).zip ./
 	gitg
 	git commit -v
 	git push
+	cd _build ; \
+	zip -qr "$(_UUID)$(_NEW_VERSION).zip" .
+	mv _build/$(_UUID)$(_NEW_VERSION).zip ./
 	-rm -fR _build
 
 eslint:
