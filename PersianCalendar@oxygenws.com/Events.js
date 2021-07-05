@@ -10,6 +10,8 @@ const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
 
+const str = extension.imports.strFunctions;
+
 class Events {
     constructor(schema) {
         this._eventsList = [];
@@ -79,7 +81,7 @@ class Events {
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += `\n${el.events[this._today[type][1]][this._today[type][2]][0]}`;
+            this._events += `\n 🞄  ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 35)}`;
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

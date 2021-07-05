@@ -15,3 +15,9 @@ function replace(search, substitute, subject) {
 
     return subject;
 }
+
+function wordWrap(str, maxWidth) {
+    return str.replace(
+        new RegExp(`(?![^\\n]{1,${maxWidth}}$)([^\\n]{1,${maxWidth}})\\s`, 'g'), '$1\n'
+    );
+}

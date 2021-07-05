@@ -296,6 +296,7 @@ class Calendar {
                 iter.getMonth() + 1,
                 iter.getDate()
             );
+            let is_same_month = p_iter.month === this._selectedDate.month;
             let button = new St.Button({label: str.format(p_iter.day)});
             this._modifyFont(button);
 
@@ -305,32 +306,26 @@ class Calendar {
             events = ev.getEvents(iter);
 
             let styleClass = 'calendar-day-base calendar-day pcalendar-day';
-            if (events[1]) {
-                styleClass += ' calendar-nonwork-day pcalendar-nonwork-day ';
-            } else {
-                styleClass += ' calendar-work-day pcalendar-work-day ';
-            }
+            if (is_same_month) {
+                if (events[0]) {
+                    styleClass += ' pcalendar-day-with-events ';
+                }
 
-            if (row === 2) {
-                styleClass = ` calendar-day-top ${styleClass}`;
-            }
-
-            if (iter.getDay() === this._weekStart - 1) {
-                styleClass = ` calendar-day-left ${styleClass}`;
+                if (events[1]) {
+                    styleClass += ' calendar-nonwork-day pcalendar-nonwork-day ';
+                } else {
+                    styleClass += ' calendar-work-day pcalendar-work-day ';
+                }
             }
 
             if (this._sameDay(now, p_iter)) {
                 styleClass += ' calendar-today ';
-            } else if (p_iter.month !== this._selectedDate.month) {
+            } else if (!is_same_month) {
                 styleClass += ' calendar-other-month-day pcalendar-other-month-day ';
             }
 
             if (this._sameDay(this._selectedDate, p_iter)) {
                 button.add_style_pseudo_class('active');
-            }
-
-            if (events[0]) {
-                styleClass += ' pcalendar-day-with-events ';
             }
 
             button.style_class = styleClass;
@@ -453,9 +448,6 @@ class Calendar {
             });
             this._setFont(bottomLabel);
 
-            bottomLabel.clutter_text.line_wrap = true;
-            bottomLabel.clutter_text.line_wrap_mode = Pango.WrapMode.WORD_CHAR;
-            bottomLabel.clutter_text.ellipsize = Pango.EllipsizeMode.NONE;
             _eventBox.add(bottomLabel);
         }
     }
