@@ -127,15 +127,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
             });
             preferencesIcon.connect('clicked', () => {
-                if (typeof ExtensionUtils.openPrefs === 'function') {
-                    ExtensionUtils.openPrefs();
-                } else {
-                    // support previous gnome shell versions.
-                    Util.spawn([
-                        'gnome-shell-extension-prefs',
-                        extension.metadata.uuid,
-                    ]);
-                }
+                ExtensionUtils.openPrefs();
             });
             actionButtons.actor.add(preferencesIcon);
 
