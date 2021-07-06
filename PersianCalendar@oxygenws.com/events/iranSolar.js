@@ -1,4 +1,4 @@
-class iranSolar {
+var iranSolar = class {
     constructor() {
         this.name = 'مناسبت‌های رسمی ایران';
         this.type = 'persian';
@@ -20,4 +20,4 @@ class iranSolar {
         this.events[11][22] = ['پیروزی انقلاب اسلامی', true];
         this.events[12][29] = ['روز ملی شدن صنعت نفت', true];
     }
-}
+};

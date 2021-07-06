@@ -1,4 +1,4 @@
-class iranLunar {
+var iranLunar = class {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';
         this.type = 'hijri';
@@ -23,4 +23,4 @@ class iranLunar {
         this.events[12][10] = ['عید قربان', true];
         this.events[12][18] = ['عید غدیر خم', true];
     }
-}
+};

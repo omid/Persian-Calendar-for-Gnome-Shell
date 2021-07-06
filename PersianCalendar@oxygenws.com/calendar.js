@@ -1,6 +1,4 @@
-const Clutter = imports.gi.Clutter;
-const St = imports.gi.St;
-const Pango = imports.gi.Pango;
+const {Clutter, St, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
@@ -11,7 +9,7 @@ const HijriDate = extension.imports.HijriDate;
 const str = extension.imports.utils.str;
 const Events = extension.imports.Events;
 
-class Calendar {
+var Calendar = class {
     constructor(schema) {
         this.weekdayAbbr = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'];
         this._weekStart = 6;
@@ -428,4 +426,4 @@ class Calendar {
             dateA.month === dateB.month &&
             dateA.day === dateB.day;
     }
-}
+};

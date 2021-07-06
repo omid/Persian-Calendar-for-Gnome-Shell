@@ -1,6 +1,6 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-class persian {
+var persian = class {
     constructor(pdate) {
         this.name = 'مناسبت‌های ملی';
         this.type = 'persian';
@@ -121,4 +121,4 @@ class persian {
         this.events[12][last_wednesday_of_year - 1] = ['چارشنبه سوری، جشن شب چهارشنبه آخر', false];
         this.events[12][last_wednesday_of_year] = ['چارشنبه آخر', false];
     }
-}
+};

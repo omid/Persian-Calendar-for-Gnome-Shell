@@ -1,6 +1,6 @@
 // copyright http://www.farhangiran.com
 
-class persianPersonage {
+var persianPersonage = class {
     constructor() {
         this.name = 'شخصیت‌های ایرانی';
         this.type = 'persian';
@@ -26,4 +26,4 @@ class persianPersonage {
         this.events[11][1] = ['زادروز فردوسی', false];
         this.events[12][6] = ['بزرگ‌داشت خواجه نصیر‌الدین توسی', false];
     }
-}
+};

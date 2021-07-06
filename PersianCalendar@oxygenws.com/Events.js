@@ -12,7 +12,7 @@ const persianPersonage = extension.imports.events.persianPersonage;
 
 const str = extension.imports.utils.str;
 
-class Events {
+var Events = class {
     constructor(schema) {
         this._eventsList = [];
         if (schema.get_boolean('event-persian')) {
@@ -85,4 +85,4 @@ class Events {
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }
-}
+};

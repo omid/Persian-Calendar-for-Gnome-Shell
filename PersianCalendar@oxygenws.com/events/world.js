@@ -1,5 +1,5 @@
 // copyright http://www.farhangiran.com
-class world {
+var world = class {
     constructor() {
         this.name = 'مناسبت‌های جهانی';
         this.type = 'gregorian';
@@ -60,4 +60,4 @@ class world {
         this.events[12][18] = ['روز جهانی مهاجرین', false];
         this.events[12][30] = ['روز جهانی همبستگی انسانی', false];
     }
-}
+};
