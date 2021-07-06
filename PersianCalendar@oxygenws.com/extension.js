@@ -338,7 +338,7 @@ const PersianCalendar = GObject.registerClass(
             let day = this.converterDay.get_text();
 
             // check if data is numerical and not empty
-            if (isNaN(day) || isNaN(month) || isNaN(year) || year.length !== 4 || day < 1 || day > 31 || month < 1 || month > 12 ) {
+            if (isNaN(day) || isNaN(month) || isNaN(year) || year.length !== 4 || day < 1 || day > 31 || month < 1 || month > 12) {
                 return;
             }
 

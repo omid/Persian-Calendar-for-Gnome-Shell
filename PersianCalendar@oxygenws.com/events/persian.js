@@ -1,7 +1,11 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
+const ExtensionUtils = imports.misc.extensionUtils;
+const extension = ExtensionUtils.getCurrentExtension();
+const PersianDate = extension.imports.PersianDate;
+
 var persian = class {
-    constructor(pdate) {
+    constructor(pyear) {
         this.name = 'مناسبت‌های ملی';
         this.type = 'persian';
         /* [month][day] = [title, isHoliday] */
@@ -64,14 +68,10 @@ var persian = class {
         this.events[12][25] = ['پایان سرایش شاهنامه فردوسی', false];
         this.events[12][26] = ['فروردگان', false];
 
-        this.addSpecificEvents(pdate);
+        this.addSpecificEvents(pyear);
     }
 
-    addSpecificEvents(pdate) {
-        let date = new Date();
-        date = pdate.gregorianToPersian(date.getFullYear(), date.getMonth() + 1, date.getDate());
-        let year = date.year;
-
+    addSpecificEvents(pyear) {
         let first_saturday_of_year,
             first_wednesday_of_year,
             last_day_of_year,
@@ -81,35 +81,31 @@ var persian = class {
         // and
         // find first wednesday of the year
         for (let i = 1; i <= 7; i++) {
-            let p_ts = pdate.persianToGregorian(year, 1, i);
+            let p_ts = PersianDate.persianToGregorian(pyear, 1, i);
+            // do not remove this 5 :D
             p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day, 5);
-            /* do not remove this 5 :D */
             if (p_ts.getDay() === 3) {
-                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                first_wednesday_of_year = dummy_date.day;
+                first_wednesday_of_year = PersianDate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
             }
             if (p_ts.getDay() === 6) {
-                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                first_saturday_of_year = dummy_date.day;
+                first_saturday_of_year = PersianDate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
             }
         }
 
         // find last day of the year
-        // and
-        // find last wednesday of the year
-        let leap = ((((((year - (year > 0 ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
+        let leap = PersianDate.isLeap(pyear);
 
         if (!last_day_of_year) {
             last_day_of_year = 29 + leap;
         }
 
-        for (let i = 0; i < 6; i++) {
-            let p_ts = pdate.persianToGregorian(year, 12, 29 + leap - i);
+        // find last wednesday of the year
+        for (let i = 0; i < 7; i++) {
+            let p_ts = PersianDate.persianToGregorian(pyear, 12, 29 + leap - i);
 
             p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day);
             if (p_ts.getDay() === 3) {
-                let dummy_date = pdate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate());
-                last_wednesday_of_year = dummy_date.day;
+                last_wednesday_of_year = PersianDate.gregorianToPersian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
                 break;
             }
         }

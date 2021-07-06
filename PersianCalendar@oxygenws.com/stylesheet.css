@@ -91,40 +91,34 @@
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Regular.ttf') format('truetype');
     font-weight: normal;
-    font-display:swap;
 }
 
 @font-face {
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Bold.ttf') format('truetype');
     font-weight: bold;
-    font-display:swap;
 }
 
 @font-face {
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Thin.ttf') format('truetype');
     font-weight: 100;
-    font-display:swap;
 }
 
 @font-face {
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Light.ttf') format('truetype');
     font-weight: 300;
-    font-display:swap;
 }
 
 @font-face {
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Medium.ttf') format('truetype');
     font-weight: 500;
-    font-display:swap;
 }
 
 @font-face {
     font-family: Vazir;
     src: url('../../../fonts/pcalendarFonts/Vazir-Black.ttf') format('truetype');
     font-weight: 900;
-    font-display:swap;
 }

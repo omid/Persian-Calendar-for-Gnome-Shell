@@ -14,26 +14,7 @@ const str = extension.imports.utils.str;
 
 var Events = class {
     constructor(schema) {
-        this._eventsList = [];
-        if (schema.get_boolean('event-persian')) {
-            this._eventsList.push(new persian.persian(PersianDate));
-        }
-
-        if (schema.get_boolean('event-world')) {
-            this._eventsList.push(new world.world());
-        }
-
-        if (schema.get_boolean('event-iran-solar')) {
-            this._eventsList.push(new iranSolar.iranSolar());
-        }
-
-        if (schema.get_boolean('event-iran-lunar')) {
-            this._eventsList.push(new iranLunar.iranLunar());
-        }
-
-        if (schema.get_boolean('event-persian-personage')) {
-            this._eventsList.push(new persianPersonage.persianPersonage());
-        }
+        this.schema = schema;
     }
 
     getEvents(today) {
@@ -50,14 +31,37 @@ var Events = class {
         this._today[0] = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
 
         // convert to Persian
-        today = PersianDate.gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        let ptoday = PersianDate.gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
         // store persian date of today
-        this._today[1] = [today.year, today.month, today.day];
+        this._today[1] = [ptoday.year, ptoday.month, ptoday.day];
         // store hijri date of today
         today = HijriDate.fromGregorian(this._today[0][0], this._today[0][1], this._today[0][2]);
         this._today[2] = [today.year, today.month, today.day];
 
-        this._eventsList.forEach(this._checkEvent, this);
+        // ///
+        let eventsList = [];
+        if (this.schema.get_boolean('event-persian')) {
+            eventsList.push(new persian.persian(ptoday.year));
+        }
+
+        if (this.schema.get_boolean('event-world')) {
+            eventsList.push(new world.world());
+        }
+
+        if (this.schema.get_boolean('event-iran-solar')) {
+            eventsList.push(new iranSolar.iranSolar());
+        }
+
+        if (this.schema.get_boolean('event-iran-lunar')) {
+            eventsList.push(new iranLunar.iranLunar());
+        }
+
+        if (this.schema.get_boolean('event-persian-personage')) {
+            eventsList.push(new persianPersonage.persianPersonage());
+        }
+        // ///
+
+        eventsList.forEach(this._checkEvent, this);
         return [this._events, this._isHoliday];
     }
 
@@ -81,7 +85,7 @@ var Events = class {
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += `\n 🞄  ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 35)}`;
+            this._events += `\n 🞄  ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 27)}`;
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

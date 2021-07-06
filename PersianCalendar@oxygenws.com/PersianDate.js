@@ -97,3 +97,7 @@ function gregorianToPersian(gy, gm, gd) {
 
     return {year: py, month: i + 1, day: p_day_no + 1, yearDays: day_in_year};
 }
+
+function isLeap(py) {
+    return ((((((py - (py > 0 ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
+}
