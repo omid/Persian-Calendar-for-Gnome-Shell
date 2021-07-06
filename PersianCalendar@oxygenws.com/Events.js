@@ -10,7 +10,7 @@ const iranSolar = extension.imports.events.iranSolar;
 const iranLunar = extension.imports.events.iranLunar;
 const persianPersonage = extension.imports.events.persianPersonage;
 
-const str = extension.imports.strFunctions;
+const str = extension.imports.utils.str;
 
 class Events {
     constructor(schema) {

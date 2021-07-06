@@ -1,9 +1,21 @@
-.pcalendar-font {
+.pcalendar-tray-font {
     font-family: Vazir, sans-serif;
+    font-weight: 500;
 }
 
-.pcalendar-holiday, .pcalendar-day-with-events {
+.pcalendar-tray-holiday {
     text-decoration: underline;
+    font-weight: 900;
+}
+
+.pcalendar-font {
+    font-family: Vazir, sans-serif;
+    font-weight: 300;
+    font-size: 1.2em;
+}
+
+.pcalendar-day-with-events {
+    font-weight: 900;
 }
 
 .pcalendar-nonwork-day {
@@ -72,4 +84,47 @@
 .pcalendar-converter-entry {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+/**/
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: Vazir;
+    src: url('../../../fonts/pcalendarFonts/Vazir-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-display:swap;
 }

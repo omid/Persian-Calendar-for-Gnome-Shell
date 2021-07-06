@@ -8,7 +8,7 @@ const extension = ExtensionUtils.getCurrentExtension();
 const PersianDate = extension.imports.PersianDate;
 const HijriDate = extension.imports.HijriDate;
 
-const str = extension.imports.strFunctions;
+const str = extension.imports.utils.str;
 const Events = extension.imports.Events;
 
 class Calendar {
@@ -94,12 +94,7 @@ class Calendar {
     }
 
     _buildHeader() {
-        this._rtl = Clutter.get_default_text_direction() === Clutter.TextDirection.RTL;
-        if (this._rtl) {
-            this._colPosition = 0;
-        } else {
-            this._colPosition = 6;
-        }
+        this._colPosition = 6;
 
         this.actor.destroy_all_children();
 
@@ -110,27 +105,15 @@ class Calendar {
         let icon,
             leftButton, rightButton;
         let style = 'pager-button';
-        if (this._rtl) {
-            icon = new St.Icon({icon_name: 'go-last-symbolic'});
-            rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
-        } else {
-            icon = new St.Icon({icon_name: 'go-first-symbolic'});
-            rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
-        }
+        icon = new St.Icon({icon_name: 'go-first-symbolic'});
+        rightButton = new St.Button({style_class: style, child: icon});
+        rightButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
 
-        if (this._rtl) {
-            icon = new St.Icon({icon_name: 'go-next-symbolic'});
-            rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
-        } else {
-            icon = new St.Icon({icon_name: 'go-previous-symbolic'});
-            rightButton = new St.Button({style_class: style, child: icon});
-            rightButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
-        }
+        icon = new St.Icon({icon_name: 'go-previous-symbolic'});
+        rightButton = new St.Button({style_class: style, child: icon});
+        rightButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
         this._topBox.add(rightButton);
 
@@ -142,27 +125,15 @@ class Calendar {
         this._setFont(this._monthLabel);
         this._topBox.add(this._monthLabel);
 
-        if (this._rtl) {
-            icon = new St.Icon({icon_name: 'go-previous-symbolic'});
-            leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
-        } else {
-            icon = new St.Icon({icon_name: 'go-next-symbolic'});
-            leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
-        }
+        icon = new St.Icon({icon_name: 'go-next-symbolic'});
+        leftButton = new St.Button({style_class: style, child: icon});
+        leftButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
         this._topBox.add(leftButton);
 
-        if (this._rtl) {
-            icon = new St.Icon({icon_name: 'go-first-symbolic'});
-            leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
-        } else {
-            icon = new St.Icon({icon_name: 'go-last-symbolic'});
-            leftButton = new St.Button({style_class: style, child: icon});
-            leftButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
-        }
+        icon = new St.Icon({icon_name: 'go-last-symbolic'});
+        leftButton = new St.Button({style_class: style, child: icon});
+        leftButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         icon.set_icon_size(16);
         this._topBox.add(leftButton);
 

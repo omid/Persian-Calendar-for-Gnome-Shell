@@ -1,4 +1,4 @@
-const {GLib, GObject, Clutter, St, Pango} = imports.gi;
+const {GObject, Clutter, St, Pango, Gio} = imports.gi;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
@@ -8,7 +8,6 @@ const MessageTray = imports.ui.messageTray;
 const Gettext = imports.gettext.domain('persian-calendar');
 const _ = Gettext.gettext;
 
-const Util = imports.misc.util;
 const ExtensionUtils = imports.misc.extensionUtils;
 const extension = ExtensionUtils.getCurrentExtension();
 const convenience = extension.imports.convenience;
@@ -18,7 +17,7 @@ const HijriDate = extension.imports.HijriDate;
 const Calendar = extension.imports.calendar;
 
 const Events = extension.imports.Events;
-const str = extension.imports.strFunctions;
+const {str, file} = extension.imports.utils;
 
 const ConverterTypes = {
     fromPersian: 0,
@@ -38,7 +37,7 @@ const PersianCalendar = GObject.registerClass(
             messageTray = new MessageTray.MessageTray();
 
             this.label = new St.Label({
-                style_class: 'pcalendar-font',
+                style_class: 'pcalendar-tray-font',
                 y_expand: true,
                 y_align: Clutter.ActorAlign.CENTER,
             });
@@ -202,9 +201,9 @@ const PersianCalendar = GObject.registerClass(
 
             // is holiday?
             if (events[1]) {
-                this.label.add_style_class_name('pcalendar-holiday');
+                this.label.add_style_class_name('pcalendar-tray-holiday');
             } else {
-                this.label.remove_style_class_name('pcalendar-holiday');
+                this.label.remove_style_class_name('pcalendar-tray-holiday');
             }
 
             this.label.set_text(
@@ -511,15 +510,7 @@ function enable() {
     _indicator._updateDate(!_indicator.schema.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(3000, _indicator._updateDate.bind(_indicator));
 
-    // install fonts
-    let path = extension.dir.get_path();
-    GLib.spawn_sync(
-        null,
-        ['/bin/bash', `${path}/bin/install_fonts.sh`, path],
-        null,
-        GLib.SpawnFlags.DEFAULT,
-        null
-    );
+    install_fonts();
 }
 
 function disable() {
@@ -530,4 +521,24 @@ function disable() {
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);
+
+    uninstall_fonts();
+}
+
+function install_fonts() {
+    let path = extension.dir.get_path();
+    let dst = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
+    if (!dst.query_exists(null)) {
+        let src = Gio.file_new_for_path(`${path}/fonts`);
+        file.copyDir(src, dst);
+    }
+}
+
+function uninstall_fonts() {
+    let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
+    let path = extension.dir.get_path();
+    let dir = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
+    if (dir.query_exists(null) && !isLocked) {
+        file.deleteDir(dir);
+    }
 }
