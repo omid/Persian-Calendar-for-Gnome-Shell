@@ -61,7 +61,7 @@
       <description>Display official international events.</description>
     </key>
     <key name="widget-format" type="s">
-      <default>'%d'</default>
+      <default>'%WW %d %MM %Y'</default>
       <summary>Widget date format</summary>
       <description>Widget date format</description>
     </key>
