@@ -282,6 +282,7 @@ var Calendar = class {
 
                 if (events[1]) {
                     styleClass += ' calendar-nonwork-day pcalendar-nonwork-day ';
+                    button.set_style(`color:${this.schema.get_string('nonwork-color')}`);
                 } else {
                     styleClass += ' calendar-work-day pcalendar-work-day ';
                 }

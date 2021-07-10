@@ -80,6 +80,11 @@
       <summary>Custom color</summary>
       <description>Custom color.</description>
     </key>
+    <key name="nonwork-color" type="s">
+      <default>'#f57f91'</default>
+      <summary>Nonwork color</summary>
+      <description>Nonwork color.</description>
+    </key>
     <key name="position" enum="org.gnome.shell.extensions.persian-calendar.positions">
       <default>'right'</default>
       <summary>Where to display calendar (left, center, right)</summary>
