@@ -9,9 +9,6 @@ else
 endif
 _INSTALL_NAME = PersianCalendar@oxygenws.com
 
-_OLD_VERSION = $(shell jq '.version' $(_UUID)/metadata.json)
-_NEW_VERSION = $(shell echo $$(($(_OLD_VERSION)+1)))
-
 install-local: _build
 	rm -rf $(_INSTALL_BASE)/$(_INSTALL_NAME)
 	mkdir -p $(_INSTALL_BASE)/$(_INSTALL_NAME)
@@ -27,7 +24,7 @@ clean:
 ./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
 	glib-compile-schemas ./$(_UUID)/schemas/
 
-release: eslint _build
+release: eslint _build env
 	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
 	gitg
 	git commit -v
@@ -49,7 +46,6 @@ _build: compile-gschema #update-translation
 	mkdir -p _build/schemas
 	cp $(_UUID)/schemas/*.xml _build/schemas/
 	cp $(_UUID)/schemas/gschemas.compiled _build/schemas/
-	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' _build/metadata.json;
 
 #update-translation: all
 #	cd po; \
@@ -57,3 +53,7 @@ _build: compile-gschema #update-translation
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
+
+env: 
+	export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
+	export _NEW_VERSION=$(shell echo $$(($(_OLD_VERSION)+1)))
