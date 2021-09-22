@@ -24,8 +24,12 @@ clean:
 ./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
 	glib-compile-schemas ./$(_UUID)/schemas/
 
-release: eslint _build env
+
+release: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
+release: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
+release: eslint _build
 	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
+	exit
 	gitg
 	git commit -v
 	git push
@@ -53,7 +57,3 @@ _build: compile-gschema #update-translation
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
-
-env: 
-	export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
-	export _NEW_VERSION=$(shell echo $$(($(_OLD_VERSION)+1)))
