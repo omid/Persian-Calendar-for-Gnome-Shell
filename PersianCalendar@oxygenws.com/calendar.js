@@ -11,7 +11,7 @@ const Events = extension.imports.Events;
 
 var Calendar = class {
     constructor(schema) {
-        this.weekdayAbbr = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'];
+        this.weekdayAbbr = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
         this._weekStart = 6;
         this.schema = schema;
         // Start off with the current date
@@ -57,8 +57,8 @@ var Calendar = class {
                     {
                         monthShort: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
                         monthLong: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
-                        weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
-                        weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'],
+                        weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'],
+                        weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه'],
                     },
                 hijri:
                     {
