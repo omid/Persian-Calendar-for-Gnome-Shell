@@ -141,11 +141,11 @@ const App = class PersianCalendarApp {
         item = new Gtk.SpinButton();
         let adjustment;
         adjustment = new Gtk.Adjustment();
-        adjustment.set_lower(-99)
-        adjustment.set_upper(99)
-        adjustment.set_step_increment(1)
-        item.set_adjustment(adjustment)
-        item.set_value(schema.get_int('index'))
+        adjustment.set_lower(-99);
+        adjustment.set_upper(99);
+        adjustment.set_step_increment(1);
+        item.set_adjustment(adjustment);
+        item.set_value(schema.get_int('index'));
         this.vbox3.append(item);
         schema.bind('index', item, 'value', Gio.SettingsBindFlags.DEFAULT);
 
