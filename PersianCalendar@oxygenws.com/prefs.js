@@ -138,6 +138,17 @@ const App = class PersianCalendarApp {
         this.vbox3.append(item);
         schema.bind('position', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 
+        item = new Gtk.SpinButton();
+        let adjustment;
+        adjustment = new Gtk.Adjustment();
+        adjustment.set_lower(-99)
+        adjustment.set_upper(99)
+        adjustment.set_step_increment(1)
+        item.set_adjustment(adjustment)
+        item.set_value(schema.get_int('index'))
+        this.vbox3.append(item);
+        schema.bind('index', item, 'value', Gio.SettingsBindFlags.DEFAULT);
+
         item = new Gtk.CheckButton({label: _('Use custom color')});
         this.vbox3.append(item);
         schema.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);
