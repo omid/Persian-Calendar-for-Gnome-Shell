@@ -89,6 +89,10 @@
       <default>'right'</default>
       <summary>Where to display calendar (left, center, right)</summary>
     </key>
+    <key name="index" type="i">
+      <default>0</default>
+      <summary>Indicator position in selected area</summary>
+    </key>
     <!--
     <key name="custom-font" type="b">
       <default>false</default>

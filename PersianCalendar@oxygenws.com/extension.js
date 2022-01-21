@@ -71,6 +71,11 @@ const PersianCalendar = GObject.registerClass(
                 enable();
             });
 
+            this.schema_index_signal = this.schema.connect('changed::index', () => {
+                disable();
+                enable();
+            });
+
             this._today = '';
 
             let vbox = new St.BoxLayout({vertical: true});
@@ -499,12 +504,11 @@ function enable() {
     _indicator = new PersianCalendar();
 
     let positions = ['left', 'center', 'right'];
-    let indexes = ['99999', '99999', '0'];
 
     Main.panel.addToStatusArea(
         'persian_calendar',
         _indicator,
-        indexes[_indicator.schema.get_enum('position')],
+        _indicator.schema.get_int('index'),
         positions[_indicator.schema.get_enum('position')]
     );
     _indicator._updateDate(!_indicator.schema.get_boolean('startup-notification'));
@@ -518,6 +522,7 @@ function disable() {
     _indicator.schema.disconnect(_indicator.schema_custom_color_signal);
     _indicator.schema.disconnect(_indicator.schema_widget_format_signal);
     _indicator.schema.disconnect(_indicator.schema_position_signal);
+    _indicator.schema.disconnect(_indicator.schema_index_signal);
 
     _indicator.destroy();
     MainLoop.source_remove(_timer);
