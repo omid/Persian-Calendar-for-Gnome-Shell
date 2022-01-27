@@ -7,9 +7,9 @@ An extension for Gnome-Shell to show Persian date and calendar
 #### To install:
 * Clone the repository
 * Go to the cloned directory
-* run ```make```
+* run ```make``` command in the terminal
 * Restart Gnome-shell. (ALT+F2, r, Enter)
-* You may need to enable the extension via Gnome Tweaks
+* You may need to enable the extension via Gnome Extensions Application
 
 #### Links:
 * :octocat: https://github.com/omid/Persian-Calendar-for-Gnome-Shell
