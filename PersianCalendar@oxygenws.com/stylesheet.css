@@ -1,3 +1,9 @@
+.pcalendar-day-heading {
+    color: mix(#fff, #3584e4, 50%); /*gnome originaly gets mix values from theme to do heading so I picked defualt values*/
+    padding-top: 6px;
+    font-weight: bold;
+}
+
 .pcalendar-tray-font {
     font-family: Vazir, sans-serif;
     font-weight: 500;
