@@ -24,6 +24,6 @@ var persianPersonage = class {
         this.events[10][5] = ['بزرگ‌داشت رودکی', false];
         this.events[10][20] = ['کشته شدن امیرکبیر', false];
         this.events[11][1] = ['زادروز فردوسی', false];
-        this.events[12][6] = ['بزرگ‌داشت خواجه نصیر‌الدین توسی', false];
+        this.events[12][5] = ['بزرگ‌داشت خواجه نصیر‌الدین طوسی', false];
     }
 };
