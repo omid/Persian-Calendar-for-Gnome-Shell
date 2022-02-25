@@ -5,7 +5,8 @@
   "original-authors": "Omid Mottaghi Rad",
   "shell-version": [
     "40",
-    "41"
+    "41",
+    "42"
   ],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",

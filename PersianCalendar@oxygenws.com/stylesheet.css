@@ -28,6 +28,7 @@
 
 .pcalendar-weekday, .pcalendar-day {
     font-size: 1.1em;
+    height: auto;
 }
 
 .pcalendar-date-label {
