@@ -138,7 +138,7 @@ var Calendar = class {
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
-                style_class: 'calendar-day-base pcalendar-day-heading pcalendar-rtl pcalendar-weekday',
+                style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl pcalendar-weekday',
                 text: this.weekdayAbbr[i],
             });
             this._setFont(label);
