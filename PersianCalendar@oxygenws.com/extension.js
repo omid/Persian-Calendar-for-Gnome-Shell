@@ -231,7 +231,7 @@ const PersianCalendar = GObject.registerClass(
 
         _generateConverterPart() {
             // Add date conversion button
-            let converterMenu = new PopupMenu.PopupSubMenuMenuItem('تبدیل تاریخ');
+            let converterMenu = new PopupMenu.PopupSubMenuMenuItem(_('Date conversion'));
             converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
             converterMenu.actor.add_style_class_name('pcalendar-font');
 
@@ -253,7 +253,7 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: _('از هـ.خورشیدی'),
+                label: _('from Persian'),
                 accessible_name: 'fromPersian',
                 style_class: 'popup-menu-item button pcalendar-button fromPersian active',
             });
@@ -265,7 +265,7 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: _('از میلادی'),
+                label: _('from Gregorian'),
                 accessible_name: 'fromGregorian',
                 style_class: 'popup-menu-item button pcalendar-button fromGregorian',
             });
@@ -277,7 +277,7 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: _('از هـ.قمری'),
+                label: _('from Hijri'),
                 accessible_name: 'fromHijri',
                 style_class: 'popup-menu-item button pcalendar-button fromHijri',
             });
@@ -294,7 +294,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterYear = new St.Entry({
                 name: 'year',
-                hint_text: _('سال'),
+                hint_text: _('year'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
@@ -304,7 +304,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterMonth = new St.Entry({
                 name: 'month',
-                hint_text: _('ماه'),
+                hint_text: _('month'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
@@ -314,7 +314,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterDay = new St.Entry({
                 name: 'day',
-                hint_text: _('روز'),
+                hint_text: _('day'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
@@ -495,6 +495,7 @@ function notify(msg, details) {
 }
 
 function init(metadata) {
+    ExtensionUtils.initTranslations('persian-calendar');
 }
 
 function enable() {
