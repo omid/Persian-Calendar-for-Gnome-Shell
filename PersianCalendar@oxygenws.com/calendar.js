@@ -339,69 +339,29 @@ var Calendar = class {
         if (this.schema.get_boolean('persian-display')) {
             let _datesBox_p = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
-            let button = new St.Button({
-                label: str.format(
-                    this.format(
-                        this.schema.get_string('persian-display-format'),
-                        this._selectedDate.day,
-                        this._selectedDate.month,
-                        this._selectedDate.year,
-                        g_selectedDate.getDay(),
-                        'persian'
-                    )
-                ),
-                style_class: 'calendar-day pcalendar-date-label',
-                x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-            });
+            let button = this.getPersianDateButton(this._selectedDate, g_selectedDate.getDay());
             _datesBox_p.add(button);
-            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add gregorian date
         if (this.schema.get_boolean('gregorian-display')) {
             let _datesBox_g = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
-
-            let button = new St.Button({
-                label: this.format(
-                    this.schema.get_string('gregorian-display-format'),
-                    g_selectedDate.getDate(),
-                    g_selectedDate.getMonth() + 1,
-                    g_selectedDate.getFullYear(),
-                    g_selectedDate.getDay(),
-                    'gregorian'
-                ),
-                style_class: 'calendar-day pcalendar-date-label',
-                x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-            });
+            let gDate = {
+                day: g_selectedDate.getDate(),
+                month: g_selectedDate.getMonth() + 1,
+                year: g_selectedDate.getFullYear(),
+            };
+            let button = this.getGregorianDateButton(gDate, g_selectedDate.getDay());
             _datesBox_g.add(button);
-            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add hijri date
         if (this.schema.get_boolean('hijri-display')) {
             let _datesBox_h = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
-
-            let button = new St.Button({
-                label: str.format(
-                    this.format(
-                        this.schema.get_string('hijri-display-format'),
-                        h_selectedDate.day,
-                        h_selectedDate.month,
-                        h_selectedDate.year,
-                        g_selectedDate.getDay(),
-                        'hijri'
-                    )
-                ),
-                style_class: 'calendar-day pcalendar-date-label',
-                x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-            });
+            let button = this.getHijriDateButton(h_selectedDate, g_selectedDate.getDay());
             _datesBox_h.add(button);
-            button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
         }
 
         // add event box for selected date
@@ -426,5 +386,35 @@ var Calendar = class {
         return dateA.year === dateB.year &&
             dateA.month === dateB.month &&
             dateA.day === dateB.day;
+    }
+
+    getPersianDateButton(date, dayOfWeek) {
+        return this._getDateButton(date, dayOfWeek, 'persian');
+    }
+
+    getGregorianDateButton(date, dayOfWeek) {
+        return this._getDateButton(date, dayOfWeek, 'gregorian');
+    }
+
+    getHijriDateButton(date, dayOfWeek) {
+        return this._getDateButton(date, dayOfWeek, 'hijri');
+    }
+
+    _getDateButton(date, dayOfWeek, calendar) {
+        let button = new St.Button({
+            label: this.format(
+                this.schema.get_string(`${calendar}-display-format`),
+                date.day,
+                date.month,
+                date.year,
+                dayOfWeek,
+                calendar
+            ),
+            style_class: 'calendar-day-base pcalendar-date-label',
+            x_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
+        });
+        button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
+        return button;
     }
 };

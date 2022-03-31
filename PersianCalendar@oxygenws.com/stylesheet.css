@@ -32,7 +32,8 @@
 }
 
 .pcalendar-date-label {
-    padding: .4em 0;
+    padding: .4em 1em;
+    width: auto;
 }
 
 .pcalendar-event-label {

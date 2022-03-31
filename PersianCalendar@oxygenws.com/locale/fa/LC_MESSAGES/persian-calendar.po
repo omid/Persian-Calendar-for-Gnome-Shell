@@ -78,15 +78,15 @@ msgstr ""
 
 #: prefs.js:96
 msgid "Official Iranian lunar"
-msgstr "مناسبت‌های مذهبی ایران"
+msgstr "رویدادهای مذهبی ایران"
 
 #: prefs.js:100
 msgid "Official Iranian solar"
-msgstr "مناسبت‌های رسمی ایران"
+msgstr "رویدادهای رسمی ایران"
 
 #: prefs.js:104
 msgid "Old Persian"
-msgstr "مناسبت‌های ملّی"
+msgstr "رویدادهای ملّی"
 
 #: prefs.js:108
 msgid "Persian personages"
@@ -94,7 +94,7 @@ msgstr "شخصیت‌های ایرانی"
 
 #: prefs.js:112
 msgid "International"
-msgstr "مناسبت‌های جهانی"
+msgstr "رویدادهای جهانی"
 
 #: prefs.js:116
 msgid "Holidays and weekends color:"

@@ -132,13 +132,13 @@ const PersianCalendar = GObject.registerClass(
             });
             actionButtons.actor.add(preferencesIcon);
 
-            // Add Nowrooz button
+            // Add Nowruz button
             icon = new St.Icon({
                 icon_name: 'emblem-favorite-symbolic',
                 style_class: 'popup-menu-icon calendar-popup-menu-icon',
             });
 
-            let nowroozIcon = new St.Button({
+            let nowruzIcon = new St.Button({
                 child: icon,
                 style_class: 'button system-menu-action calendar-preferences-button',
                 reactive: true,
@@ -146,8 +146,8 @@ const PersianCalendar = GObject.registerClass(
                 x_align: Clutter.ActorAlign.CENTER,
                 x_expand: true,
             });
-            nowroozIcon.connect('clicked', this._showNowroozNotification);
-            actionButtons.actor.add(nowroozIcon);
+            nowruzIcon.connect('clicked', this._showNowruzNotification);
+            actionButtons.actor.add(nowruzIcon);
 
             this.menu.connect('open-state-changed', (menu, isOpen) => {
                 if (isOpen) {
@@ -369,66 +369,31 @@ const PersianCalendar = GObject.registerClass(
             }
 
             // calc day of week
-            let $dayOfWeek = new Date(year, month, day);
+            let dayOfWeek;
             if (gDate) {
-                $dayOfWeek = new Date(gDate.year, gDate.month, gDate.day);
+                dayOfWeek = new Date(gDate.year, gDate.month, gDate.day);
+            } else {
+                dayOfWeek = new Date(year, month, day);
             }
 
-            $dayOfWeek = $dayOfWeek.getDay();
+            dayOfWeek = dayOfWeek.getDay();
 
             // add persian date
             if (pDate) {
-                let button = new St.Button({
-                    label: str.format(
-                        this._calendar.format(
-                            settings.get_string('persian-display-format'),
-                            pDate.day,
-                            pDate.month,
-                            pDate.year,
-                            $dayOfWeek,
-                            'persian'
-                        )
-                    ),
-                    style_class: 'calendar-day pcalendar-date-label',
-                });
+                let button = this._calendar.getPersianDateButton(pDate, dayOfWeek);
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
 
             // add gregorian date
             if (gDate) {
-                let button = new St.Button({
-                    label: this._calendar.format(
-                        settings.get_string('gregorian-display-format'),
-                        gDate.day,
-                        gDate.month,
-                        gDate.year,
-                        $dayOfWeek,
-                        'gregorian'
-                    ),
-                    style_class: 'calendar-day pcalendar-date-label',
-                });
+                let button = this._calendar.getGregorianDateButton(gDate, dayOfWeek);
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
 
             // add hijri date
             if (hDate) {
-                let button = new St.Button({
-                    label: str.format(
-                        this._calendar.format(
-                            settings.get_string('hijri-display-format'),
-                            hDate.day,
-                            hDate.month,
-                            hDate.year,
-                            $dayOfWeek,
-                            'hijri'
-                        )
-                    ),
-                    style_class: 'calendar-day pcalendar-date-label',
-                });
+                let button = this._calendar.getHijriDateButton(hDate, dayOfWeek);
                 this.convertedDatesVbox.add(button);
-                button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));
             }
         }
 
@@ -453,7 +418,7 @@ const PersianCalendar = GObject.registerClass(
             this._onModifyConverter();
         }
 
-        _showNowroozNotification() {
+        _showNowruzNotification() {
             /* calculate exact hour/minute/second of the next new year.
              it calculates with some small differences!*/
             let now = new Date();
@@ -464,7 +429,7 @@ const PersianCalendar = GObject.registerClass(
             );
 
             let month_delta = 12 - pdate.month;
-            let day_delta, nowrooz;
+            let day_delta, nowruz;
             if (month_delta >= 6) {
                 day_delta = 31 - pdate.day;
             } else {
@@ -472,17 +437,17 @@ const PersianCalendar = GObject.registerClass(
             }
 
             if (month_delta !== 0) {
-                nowrooz = `${month_delta} ماه و `;
+                nowruz = `${month_delta} ماه و `;
             } else {
-                nowrooz = '';
+                nowruz = '';
             }
 
             if (day_delta !== 0) {
-                nowrooz = `${nowrooz + day_delta} روز مانده به `;
-                nowrooz = `${nowrooz}نوروز سال ${pdate.year + 1}`;
+                nowruz = `${nowruz + day_delta} روز مانده به `;
+                nowruz = `${nowruz}نوروز سال ${pdate.year + 1}`;
             }
 
-            notify(str.format(nowrooz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
+            notify(str.format(nowruz) + (day_delta < 7 ? str.format(' - نوروزتان فرخنده باد') : ''));
         }
     });
 
@@ -494,7 +459,7 @@ function notify(msg, details) {
     source.showNotification(notification);
 }
 
-function init(metadata) {
+function init() {
     ExtensionUtils.initTranslations('persian-calendar');
 }
 
