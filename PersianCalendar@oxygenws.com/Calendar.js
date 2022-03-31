@@ -1,13 +1,10 @@
 const {Clutter, St, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const extension = ExtensionUtils.getCurrentExtension();
+const Me = ExtensionUtils.getCurrentExtension();
 
-const PersianDate = extension.imports.PersianDate;
-const HijriDate = extension.imports.HijriDate;
-
-const str = extension.imports.utils.str;
-const Events = extension.imports.Events;
+const {PersianDate, HijriDate, Events} = Me.imports;
+const str = Me.imports.utils.str;
 
 var Calendar = class {
     constructor(schema) {

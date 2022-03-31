@@ -1,16 +1,9 @@
 const ExtensionUtils = imports.misc.extensionUtils;
-const extension = ExtensionUtils.getCurrentExtension();
+const Me = ExtensionUtils.getCurrentExtension();
 
-const PersianDate = extension.imports.PersianDate;
-const HijriDate = extension.imports.HijriDate;
-
-const persian = extension.imports.events.persian;
-const world = extension.imports.events.world;
-const iranSolar = extension.imports.events.iranSolar;
-const iranLunar = extension.imports.events.iranLunar;
-const persianPersonage = extension.imports.events.persianPersonage;
-
-const str = extension.imports.utils.str;
+const {PersianDate, HijriDate} = Me.imports;
+const {persian, world, iranSolar, iranLunar, persianPersonage} = Me.imports.events;
+const str = Me.imports.utils.str;
 
 var Events = class {
     constructor(schema) {
