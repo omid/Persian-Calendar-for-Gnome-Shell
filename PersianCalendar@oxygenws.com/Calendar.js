@@ -2,13 +2,14 @@ const {Clutter, St, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const {__, n__} = Me.imports.utils.gettext;
 
 const {PersianDate, HijriDate, Events} = Me.imports;
 const str = Me.imports.utils.str;
 
 var Calendar = class {
     constructor(schema) {
-        this.weekdayAbbr = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'];
+        this.weekdayAbbr = [__('Sh'), __('Y'), __('D'), __('S'), __('Ch'), __('P'), __('A')];
         this._weekStart = 6;
         this.schema = schema;
         // Start off with the current date
@@ -45,24 +46,24 @@ var Calendar = class {
             {
                 gregorian:
                     {
-                        monthShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        monthLong: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                        weekdayShort: ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                        weekdayLong: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+                        monthShort: [__('Jan'), __('Feb'), __('Mar'), __('Apr'), __('May'), __('Jun'), __('Jul'), __('Aug'), __('Sep'), __('Oct'), __('Nov'), __('Dec')],
+                        monthLong: [__('January'), __('February'), __('March'), __('April'), __('May'), __('June'), __('July'), __('August'), __('September'), __('October'), __('November'), __('December')],
+                        weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
+                        weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
                     },
                 persian:
                     {
-                        monthShort: ['فرو', 'ارد', 'خرد', 'تیر', 'مرد', 'شهر', 'مهر', 'آبا', 'آذر', 'دی', 'بهم', 'اسف'],
-                        monthLong: ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
-                        weekdayShort: ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'آ'],
-                        weekdayLong: ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'آدینه'],
+                        monthShort: [__('Far'), __('Ord'), __('Kho'), __('Tir'), __('Mor'), __('Sha'), __('Meh'), __('Aba'), __('Aza'), __('Dey'), __('Bah'), __('Esf')],
+                        monthLong: [__('Farvardin'), __('Ordibehesht'), __('Khordad'), __('Tir'), __('Mordad'), __('Shahrivar'), __('Mehr'), __('Aban'), __('Azar'), __('Dey'), __('Bahman'), __('Esfand')],
+                        weekdayShort: [__('Sh'), __('Y'), __('D'), __('S'), __('Ch'), __('P'), __('A')],
+                        weekdayLong: [__('Shanbe'), __('Yekshanbe'), __('Doshanbe'), __('Seshanbe'), __('Choharshanbe'), __('Panjshanbe'), __('Adine')],
                     },
                 hijri:
                     {
-                        monthShort: ['محر', 'صفر', 'رب۱', 'رب۲', 'جم۱', 'جم۲', 'رجب', 'شعب', 'رمض', 'شوا', 'ذیق', 'ذیح'],
-                        monthLong: ['محرم', 'صفر', 'ربیع‌الاول', 'ربیع‌الثانی', 'جمادی‌الاول', 'جمادی‌الثانی', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذیقعده', 'ذیحجه'],
-                        weekdayShort: ['س', 'ا', 'ا', 'ث', 'ا', 'خ', 'ج'],
-                        weekdayLong: ['‫السبت', '‫الأحد', '‫الاثنين', '‫الثلاثاء', '‫الأربعاء', '‫الخميس', '‫الجمعة'],
+                        monthShort: [__('Moh'), __('Saf'), __('R-a'), __('R-s'), __('J-a'), __('J-s'), __('Raj'), __('Shb'), __('Ram'), __('Shv'), __('Zig'), __('Zih')],
+                        monthLong: [__('Moharram'), __('Safar'), __('Rabi-ol-avval'), __('Rabi-ol-sani'), __('Jamadi-ol-avval'), __('Jamadi-ol-sani'), __('Rajab'), __('Shaban'), __('Ramazan'), __('Shaval'), __('Zighade'), __('Zihajje')],
+                        weekdayShort: [__('S'), __('A'), __('A'), __('S'), __('A'), __('K'), __('J')],
+                        weekdayLong: [__('Alsabt'), __('Alahad'), __('Alasnin'), __('Alsalasa'), __('Alarbaa'), __('Alkhamis'), __('Aljomaat')],
                     },
             };
 
@@ -231,12 +232,20 @@ var Calendar = class {
         let now = new Date();
         now = PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
+        let pattern;
         if (this._selectedDate.year === now.year) {
-            this._monthLabel.text = PersianDate.p_month_names[this._selectedDate.month - 1];
+            pattern = '%MM';
         } else {
-            this._monthLabel.text = `${PersianDate.p_month_names[this._selectedDate.month - 1]} ${
-                str.format(this._selectedDate.year)}`;
+            pattern = '%MM %Y';
         }
+        this._monthLabel.text = str.trans_digits(this.format(
+            pattern,
+            this._selectedDate.day,
+            this._selectedDate.month,
+            this._selectedDate.year,
+            0,
+            'persian',
+        ));
 
         // Remove everything but the topBox and the weekday labels
         let children = this.actor.get_children();
@@ -263,7 +272,7 @@ var Calendar = class {
                 iter.getDate()
             );
             let is_same_month = p_iter.month === this._selectedDate.month;
-            let button = new St.Button({label: str.format(p_iter.day)});
+            let button = new St.Button({label: str.trans_digits(p_iter.day)});
             this._modifyFont(button);
 
             button.connect('clicked', () => this.setDate(p_iter));
@@ -368,7 +377,7 @@ var Calendar = class {
             let _eventBox = new St.BoxLayout();
             this.actor.layout_manager.attach(_eventBox, 0, ++row, 7, 1);
             let bottomLabel = new St.Label({
-                text: str.format(events[0]),
+                text: str.trans_digits(events[0]),
                 style_class: 'pcalendar-event-label',
                 x_align: Clutter.ActorAlign.FILL,
                 x_expand: true,

@@ -203,7 +203,7 @@ const PersianCalendar = GObject.registerClass(
             }
 
             this.label.set_text(
-                str.format(
+                str.trans_digits(
                     this._calendar.format(
                         Settings.get_string('widget-format'),
                         _date.day,
@@ -215,7 +215,14 @@ const PersianCalendar = GObject.registerClass(
                 )
             );
 
-            _date = str.format(`${_date.day} ${PersianDate.p_month_names[_date.month - 1]} ${_date.year}`);
+            _date = str.trans_digits(this._calendar.format(
+                '%d %MM %Y',
+                _date.day,
+                _date.month,
+                _date.year,
+                _dayOfWeek,
+                'persian',
+            ));
             if (!skip_notification) {
                 notify(_date, events[0]);
             }
