@@ -4,7 +4,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const PersianDate = Me.imports.PersianDate;
 
-var persian = class {
+const persian = class {
     constructor(pyear) {
         this.name = 'مناسبت‌های ملی';
         this.type = 'persian';

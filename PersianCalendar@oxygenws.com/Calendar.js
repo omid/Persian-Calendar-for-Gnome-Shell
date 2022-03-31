@@ -7,7 +7,7 @@ const {__, n__} = Me.imports.utils.gettext;
 const {PersianDate, HijriDate, Events} = Me.imports;
 const str = Me.imports.utils.str;
 
-var Calendar = class {
+const Calendar = class {
     constructor(schema) {
         this.weekdayAbbr = [__('Sh'), __('Y'), __('D'), __('S'), __('Ch'), __('P'), __('A')];
         this._weekStart = 6;

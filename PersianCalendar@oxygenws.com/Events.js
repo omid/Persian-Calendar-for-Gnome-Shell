@@ -5,7 +5,7 @@ const {PersianDate, HijriDate} = Me.imports;
 const {persian, world, iranSolar, iranLunar, persianPersonage} = Me.imports.events;
 const str = Me.imports.utils.str;
 
-var Events = class {
+const Events = class {
     constructor(schema) {
         this.schema = schema;
     }

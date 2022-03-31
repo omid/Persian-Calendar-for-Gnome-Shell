@@ -1,4 +1,4 @@
-var iranSolar = class {
+const iranSolar = class {
     constructor() {
         this.name = 'مناسبت‌های رسمی ایران';
         this.type = 'persian';
