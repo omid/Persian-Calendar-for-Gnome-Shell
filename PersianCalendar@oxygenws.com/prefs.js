@@ -193,8 +193,8 @@ const App = class PersianCalendarApp {
         }));
         item = new Gtk.ComboBoxText();
         // item.set_direction(Gtk.TextDirection.RTL);
-        item.append('fa_IR.UTF-8', __('Persian'));
-        item.append('en_US.UTF-8', __('English'));
+        item.append('fa_IR.UTF-8', 'فارسی');
+        item.append('en_US.UTF-8', 'English');
         item.set_active(Settings.get_enum('language'));
         this.vbox4.append(item);
         Settings.bind('language', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
