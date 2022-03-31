@@ -187,7 +187,7 @@ const App = class PersianCalendarApp {
         format.set_text(Settings.get_string('widget-format'));
         format.connect('changed', innerFormat => Settings.set_string('widget-format', innerFormat.text));
 
-        this.vbox2.append(new Gtk.Label({
+        this.vbox4.append(new Gtk.Label({
             label: __('Language:\n<span size="x-small">(It needs to reload Gnome-Shell)</span>'),
             use_markup: true,
         }));
