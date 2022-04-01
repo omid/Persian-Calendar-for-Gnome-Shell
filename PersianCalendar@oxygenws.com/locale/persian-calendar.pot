@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-01 10:36+0430\n"
+"POT-Creation-Date: 2022-04-01 13:43+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: PersianCalendar@oxygenws.com/utils/str.js:7
 msgid "0"
@@ -452,17 +453,23 @@ msgstr ""
 #: PersianCalendar@oxygenws.com/extension.js:443
 #, javascript-format
 msgid "%d month and 1 day left to Nowruz %d"
-msgstr ""
+msgid_plural "%d months and 1 day left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: PersianCalendar@oxygenws.com/extension.js:449
 #, javascript-format
 msgid "%d month and %d days left to Nowruz %d"
-msgstr ""
+msgid_plural "%d months and %d days left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: PersianCalendar@oxygenws.com/extension.js:458
 #, javascript-format
 msgid "%d day left to Nowruz %d"
-msgstr ""
+msgid_plural "%d days left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
 
 #: PersianCalendar@oxygenws.com/extension.js:464
 msgid "Happy New Year"
