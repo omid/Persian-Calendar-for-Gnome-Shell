@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-30 15:15+0430\n"
+"POT-Creation-Date: 2022-04-01 13:43+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,121 +16,557 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "0"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "1"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "2"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "3"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "4"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "5"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "6"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "7"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "8"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/utils/str.js:7
+msgid "9"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Sa"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Su"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Mo"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Tu"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "We"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Th"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:12
+msgid "Fr"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Sat"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Sun"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Mon"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Tue"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Wed"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Thu"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:47
+msgid "Fri"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Saturday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Sunday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Monday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Tuesday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Wednesday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Thursday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:48
+msgid "Friday"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Jan"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Feb"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Mar"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Apr"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "May"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Jun"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Jul"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Aug"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Sep"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Oct"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Nov"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:51
+msgid "Dec"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "January"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "February"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "March"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "April"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "June"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "July"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "August"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "September"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "October"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "November"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:52
+msgid "December"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Far"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Ord"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Kho"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Tir"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Mor"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Sha"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Meh"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Aba"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Aza"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Dey"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Bah"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:56
+msgid "Esf"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Farvardin"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Ordibehesht"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Khordad"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Mordad"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Shahrivar"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Mehr"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Aban"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Azar"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Bahman"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:57
+msgid "Esfand"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Moh"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Saf"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "R-a"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "R-s"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "J-a"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "J-s"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Raj"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Shb"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Ram"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Shv"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Zig"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:61
+msgid "Zih"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Moharram"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Safar"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Rabi-ol-avval"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Rabi-ol-sani"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Jamadi-ol-avval"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Jamadi-ol-sani"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Rajab"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Shaban"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Ramazan"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Shaval"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Zighade"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/Calendar.js:62
+msgid "Zihajje"
+msgstr ""
 
 #. Add date conversion button
-#: PersianCalendar@oxygenws.com/extension.js:234
+#: PersianCalendar@oxygenws.com/extension.js:235
 msgid "Date conversion"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:256
+#: PersianCalendar@oxygenws.com/extension.js:257
 msgid "from Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:268
+#: PersianCalendar@oxygenws.com/extension.js:269
 msgid "from Gregorian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:280
+#: PersianCalendar@oxygenws.com/extension.js:281
 msgid "from Hijri"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:297
+#: PersianCalendar@oxygenws.com/extension.js:298
 msgid "year"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:307
+#: PersianCalendar@oxygenws.com/extension.js:308
 msgid "month"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:317
+#: PersianCalendar@oxygenws.com/extension.js:318
 msgid "day"
 msgstr ""
 
+#: PersianCalendar@oxygenws.com/extension.js:443
+#, javascript-format
+msgid "%d month and 1 day left to Nowruz %d"
+msgid_plural "%d months and 1 day left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
+
+#: PersianCalendar@oxygenws.com/extension.js:449
+#, javascript-format
+msgid "%d month and %d days left to Nowruz %d"
+msgid_plural "%d months and %d days left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
+
+#: PersianCalendar@oxygenws.com/extension.js:458
+#, javascript-format
+msgid "%d day left to Nowruz %d"
+msgid_plural "%d days left to Nowruz %d"
+msgstr[0] ""
+msgstr[1] ""
+
+#: PersianCalendar@oxygenws.com/extension.js:464
+msgid "Happy New Year"
+msgstr ""
+
 #. DATES FORMAT
-#: PersianCalendar@oxygenws.com/prefs.js:49
+#: PersianCalendar@oxygenws.com/prefs.js:50
 msgid "Date Conversions:"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:51
+#: PersianCalendar@oxygenws.com/prefs.js:52
 msgid "Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:55
-#: PersianCalendar@oxygenws.com/prefs.js:68
-#: PersianCalendar@oxygenws.com/prefs.js:81
-#: PersianCalendar@oxygenws.com/prefs.js:165
+#: PersianCalendar@oxygenws.com/prefs.js:57
+#: PersianCalendar@oxygenws.com/prefs.js:72
+#: PersianCalendar@oxygenws.com/prefs.js:87
+#: PersianCalendar@oxygenws.com/prefs.js:180
 msgid "Format:"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:64
+#: PersianCalendar@oxygenws.com/prefs.js:67
 msgid "Gregorian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:77
+#: PersianCalendar@oxygenws.com/prefs.js:82
 msgid "Hijri"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:92
+#: PersianCalendar@oxygenws.com/prefs.js:99
 msgid ""
 "Events:\n"
 "<span size=\"x-small\">(\"Official\" events are needed to find holidays)</"
 "span>"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:96
+#: PersianCalendar@oxygenws.com/prefs.js:103
 msgid "Official Iranian lunar"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:100
+#: PersianCalendar@oxygenws.com/prefs.js:108
 msgid "Official Iranian solar"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:104
+#: PersianCalendar@oxygenws.com/prefs.js:113
 msgid "Old Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:108
+#: PersianCalendar@oxygenws.com/prefs.js:118
 msgid "Persian personages"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:112
+#: PersianCalendar@oxygenws.com/prefs.js:123
 msgid "International"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:116
+#: PersianCalendar@oxygenws.com/prefs.js:128
 msgid "Holidays and weekends color:"
 msgstr ""
 
 #. TRAY OPTIONS
-#: PersianCalendar@oxygenws.com/prefs.js:127
+#: PersianCalendar@oxygenws.com/prefs.js:139
 msgid "Tray widget options:"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:129
+#: PersianCalendar@oxygenws.com/prefs.js:141
 msgid "Position:"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:131
+#. item.set_direction(Gtk.TextDirection.RTL);
+#: PersianCalendar@oxygenws.com/prefs.js:144
 msgid "Left"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:132
+#: PersianCalendar@oxygenws.com/prefs.js:145
 msgid "Center"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:133
+#: PersianCalendar@oxygenws.com/prefs.js:146
 msgid "Right"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:149
+#: PersianCalendar@oxygenws.com/prefs.js:162
 msgid "Use custom color"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:161
+#: PersianCalendar@oxygenws.com/prefs.js:175
 msgid "Startup Notification"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:175
+#: PersianCalendar@oxygenws.com/prefs.js:191
+msgid ""
+"Language:\n"
+"<span size=\"x-small\">(It needs to reload Gnome-Shell)</span>"
+msgstr ""
+
+#: PersianCalendar@oxygenws.com/prefs.js:203
 msgid ""
 "<span>Possible Formatting values:\n"
 "\n"

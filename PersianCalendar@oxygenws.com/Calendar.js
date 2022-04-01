@@ -9,7 +9,7 @@ const str = Me.imports.utils.str;
 
 const Calendar = class {
     constructor(schema) {
-        this.weekdayAbbr = [__('Sh'), __('Y'), __('D'), __('S'), __('Ch'), __('P'), __('A')];
+        this.weekdayAbbr = [__('Sa'), __('Su'), __('Mo'), __('Tu'), __('We'), __('Th'), __('Fr')];
         this._weekStart = 6;
         this.schema = schema;
         // Start off with the current date
@@ -44,26 +44,22 @@ const Calendar = class {
     format(format, day, month, year, dow, calendar) {
         let phrases =
             {
+                weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
+                weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
                 gregorian:
                     {
                         monthShort: [__('Jan'), __('Feb'), __('Mar'), __('Apr'), __('May'), __('Jun'), __('Jul'), __('Aug'), __('Sep'), __('Oct'), __('Nov'), __('Dec')],
                         monthLong: [__('January'), __('February'), __('March'), __('April'), __('May'), __('June'), __('July'), __('August'), __('September'), __('October'), __('November'), __('December')],
-                        weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
-                        weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
                     },
                 persian:
                     {
                         monthShort: [__('Far'), __('Ord'), __('Kho'), __('Tir'), __('Mor'), __('Sha'), __('Meh'), __('Aba'), __('Aza'), __('Dey'), __('Bah'), __('Esf')],
                         monthLong: [__('Farvardin'), __('Ordibehesht'), __('Khordad'), __('Tir'), __('Mordad'), __('Shahrivar'), __('Mehr'), __('Aban'), __('Azar'), __('Dey'), __('Bahman'), __('Esfand')],
-                        weekdayShort: [__('Sh'), __('Y'), __('D'), __('S'), __('Ch'), __('P'), __('A')],
-                        weekdayLong: [__('Shanbe'), __('Yekshanbe'), __('Doshanbe'), __('Seshanbe'), __('Choharshanbe'), __('Panjshanbe'), __('Adine')],
                     },
                 hijri:
                     {
                         monthShort: [__('Moh'), __('Saf'), __('R-a'), __('R-s'), __('J-a'), __('J-s'), __('Raj'), __('Shb'), __('Ram'), __('Shv'), __('Zig'), __('Zih')],
                         monthLong: [__('Moharram'), __('Safar'), __('Rabi-ol-avval'), __('Rabi-ol-sani'), __('Jamadi-ol-avval'), __('Jamadi-ol-sani'), __('Rajab'), __('Shaban'), __('Ramazan'), __('Shaval'), __('Zighade'), __('Zihajje')],
-                        weekdayShort: [__('S'), __('A'), __('A'), __('S'), __('A'), __('K'), __('J')],
-                        weekdayLong: [__('Alsabt'), __('Alahad'), __('Alasnin'), __('Alsalasa'), __('Alarbaa'), __('Alkhamis'), __('Aljomaat')],
                     },
             };
 
@@ -83,8 +79,8 @@ const Calendar = class {
             month,
             `0${day}`.slice(-2),
             day,
-            phrases[calendar].weekdayLong[dow],
-            phrases[calendar].weekdayShort[dow],
+            phrases.weekdayLong[dow],
+            phrases.weekdayShort[dow],
         ];
         return str.replace(find, replace, format);
     }
