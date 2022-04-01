@@ -15,14 +15,9 @@ install-local: build
 	-rm -rf build/
 	echo done
 
-compile-gschema: ./$(_UUID)/schemas/gschemas.compiled
-
 clean:
 	rm -f ./$(_UUID)/schemas/gschemas.compiled
 	rm -rf build/
-
-./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
-	glib-compile-schemas ./$(_UUID)/schemas/
 
 release: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 release: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
@@ -46,10 +41,15 @@ build: compile-gschema update-translation
 	cp -r $(_BASE_MODULES) build
 
 update-translation:
-	@xgettext --add-comments --keyword='__' --keyword='n__:1,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/str.js $(_UUID)/*.js
-	@find . -type f -iname '*.po' -exec msgmerge --update {} $(_UUID)/locale/persian-calendar.pot \;
+	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/str.js $(_UUID)/*.js
+	find . -type f -iname '*.po' -exec msgmerge --update {} $(_UUID)/locale/persian-calendar.pot \;
 # fix me
-	@find . -type f -iname '*.po' -exec msgfmt {} -o {}.mo \;
+	find . -type f -iname '*.po' -exec msgfmt {} -o {}.mo \;
+
+./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
+	glib-compile-schemas ./$(_UUID)/schemas/
+
+compile-gschema: ./$(_UUID)/schemas/gschemas.compiled
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
