@@ -1,4 +1,4 @@
-# Basic Makefile
+#!/usr/bin/make -f
 
 _UUID = PersianCalendar@oxygenws.com
 _BASE_MODULES = $(_UUID)/*
@@ -7,53 +7,49 @@ ifeq ($(strip $(DESTDIR)),)
 else
 	_INSTALL_BASE = $(DESTDIR)/usr/share/gnome-shell/extensions
 endif
-_INSTALL_NAME = PersianCalendar@oxygenws.com
 
-install-local: _build
-	rm -rf $(_INSTALL_BASE)/$(_INSTALL_NAME)
-	mkdir -p $(_INSTALL_BASE)/$(_INSTALL_NAME)
-	cp -r ./_build/* $(_INSTALL_BASE)/$(_INSTALL_NAME)/
-	-rm -fR _build
+install-local: build
+	rm -rf $(_INSTALL_BASE)/$(_UUID)
+	mkdir -p $(_INSTALL_BASE)/$(_UUID)
+	cp -r ./build/* $(_INSTALL_BASE)/$(_UUID)/
+	-rm -rf build/
 	echo done
 
 compile-gschema: ./$(_UUID)/schemas/gschemas.compiled
 
 clean:
 	rm -f ./$(_UUID)/schemas/gschemas.compiled
+	rm -rf build/
 
 ./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
 	glib-compile-schemas ./$(_UUID)/schemas/
 
-
 release: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 release: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
-release: eslint _build
+release: eslint build
 	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
 	exit
 	gitg
 	git commit -v
 	git push
-	cd _build ; \
+	cd build ; \
 	zip -qr "$(_UUID)$(_NEW_VERSION).zip" .
-	mv _build/$(_UUID)$(_NEW_VERSION).zip ./
-	-rm -fR _build
+	mv build/$(_UUID)$(_NEW_VERSION).zip ./
+	-rm -rf build
 
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 
-_build: compile-gschema #update-translation
-	-rm -fR ./_build
-	mkdir -p _build
-	cp -r $(_BASE_MODULES) _build
-	# mkdir -p _build/locale
-	# cp -r $(_UUID)/locale/* _build/locale/
-	mkdir -p _build/schemas
-	cp $(_UUID)/schemas/*.xml _build/schemas/
-	cp $(_UUID)/schemas/gschemas.compiled _build/schemas/
+build: compile-gschema update-translation
+	rm -rf ./build
+	mkdir -p build
+	cp -r $(_BASE_MODULES) build
 
-#update-translation: all
-#	cd po; \
-#	./compile.sh ../PersianCalendar@oxygenws.com/locale;
+update-translation:
+	@xgettext --add-comments --keyword='__' --keyword='n__' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/str.js $(_UUID)/*.js
+	@find . -type f -iname '*.po' -exec msgmerge --update {} $(_UUID)/locale/persian-calendar.pot \;
+# fix me
+	@find . -type f -iname '*.po' -exec msgfmt {} -o {}.mo \;
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
