@@ -27,7 +27,7 @@ rules:
   - error
   - arrays: always-multiline
     objects: always-multiline
-    functions: never
+    functions: always-multiline
   comma-spacing:
   - error
   - before: false

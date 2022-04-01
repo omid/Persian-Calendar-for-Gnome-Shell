@@ -140,7 +140,7 @@ const App = class PersianCalendarApp {
 
         this.vbox3.append(new Gtk.Label({label: __('Position:')}));
         item = new Gtk.ComboBoxText();
-        //item.set_direction(Gtk.TextDirection.RTL);
+        // item.set_direction(Gtk.TextDirection.RTL);
         item.append('left', __('Left'));
         item.append('center', __('Center'));
         item.append('right', __('Right'));

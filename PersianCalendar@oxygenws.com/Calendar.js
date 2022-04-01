@@ -17,7 +17,7 @@ const Calendar = class {
         this._selectedDate = PersianDate.gregorianToPersian(
             this._selectedDate.getFullYear(),
             this._selectedDate.getMonth() + 1,
-            this._selectedDate.getDate()
+            this._selectedDate.getDate(),
         );
 
         this.actor = new St.Widget({
@@ -265,7 +265,7 @@ const Calendar = class {
             let p_iter = PersianDate.gregorianToPersian(
                 iter.getFullYear(),
                 iter.getMonth() + 1,
-                iter.getDate()
+                iter.getDate(),
             );
             let is_same_month = p_iter.month === this._selectedDate.month;
             let button = new St.Button({label: str.trans_digits(p_iter.day)});
@@ -307,7 +307,7 @@ const Calendar = class {
                 Math.abs(this._colPosition - (7 + iter.getDay() - this._weekStart) % 7),
                 row,
                 1,
-                1
+                1,
             );
 
             iter.setDate(iter.getDate() + 1);
@@ -326,7 +326,7 @@ const Calendar = class {
         let g_selectedDate = PersianDate.persianToGregorian(
             this._selectedDate.year,
             this._selectedDate.month,
-            this._selectedDate.day
+            this._selectedDate.day,
         );
         g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
 
@@ -334,7 +334,7 @@ const Calendar = class {
         let h_selectedDate = HijriDate.fromGregorian(
             g_selectedDate.getFullYear(),
             g_selectedDate.getMonth() + 1,
-            g_selectedDate.getDate()
+            g_selectedDate.getDate(),
         );
 
         // add persian date
@@ -410,7 +410,7 @@ const Calendar = class {
                 date.month,
                 date.year,
                 dayOfWeek,
-                calendar
+                calendar,
             ),
             style_class: 'calendar-day-base pcalendar-date-label',
             x_align: Clutter.ActorAlign.CENTER,

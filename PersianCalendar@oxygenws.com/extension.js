@@ -210,9 +210,9 @@ const PersianCalendar = GObject.registerClass(
                         _date.month,
                         _date.year,
                         _dayOfWeek,
-                        'persian'
-                    )
-                )
+                        'persian',
+                    ),
+                ),
             );
 
             _date = str.trans_digits(this._calendar.format(
@@ -426,7 +426,7 @@ const PersianCalendar = GObject.registerClass(
             let pdate = PersianDate.gregorianToPersian(
                 now.getFullYear(),
                 now.getMonth() + 1,
-                now.getDate()
+                now.getDate(),
             );
 
             let month_delta = 12 - pdate.month;
@@ -442,27 +442,25 @@ const PersianCalendar = GObject.registerClass(
                     nowruz = n__(
                         '%d month and 1 day left to Nowruz %d',
                         '%d months and 1 day left to Nowruz %d',
-                        month_delta
+                        month_delta,
                     ).format(month_delta, pdate.year + 1);
                 } else {
                     nowruz = n__(
                         '%d month and %d days left to Nowruz %d',
                         '%d months and %d days left to Nowruz %d',
-                        month_delta
+                        month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
                 notify(nowruz);
+            } else if (day_delta !== 0) {
+                nowruz = n__(
+                    '%d day left to Nowruz %d',
+                    '%d days left to Nowruz %d',
+                    day_delta,
+                ).format(day_delta, pdate.year + 1);
+                notify(nowruz);
             } else {
-                if (day_delta !== 0) {
-                    nowruz = n__(
-                        '%d day left to Nowruz %d',
-                        '%d days left to Nowruz %d',
-                        day_delta
-                    ).format(day_delta, pdate.year + 1);
-                    notify(nowruz);
-                } else {
-                    notify(__('Happy New Year'));
-                }
+                notify(__('Happy New Year'));
             }
         }
     });
@@ -488,7 +486,7 @@ function enable() {
         'persian_calendar',
         _indicator,
         Settings.get_int('index'),
-        positions[Settings.get_enum('position')]
+        positions[Settings.get_enum('position')],
     );
     _indicator._updateDate(!Settings.get_boolean('startup-notification'));
     _timer = MainLoop.timeout_add(10000, _indicator._updateDate.bind(_indicator));

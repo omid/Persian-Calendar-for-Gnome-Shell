@@ -22,6 +22,6 @@ function replace(search, substitute, subject) {
 
 function wordWrap(str, maxWidth) {
     return str.replace(
-        new RegExp(`(?![^\\n]{1,${maxWidth}}$)([^\\n]{1,${maxWidth}})\\s`, 'g'), '$1\n'
+        new RegExp(`(?![^\\n]{1,${maxWidth}}$)([^\\n]{1,${maxWidth}})\\s`, 'g'), '$1\n',
     );
 }
