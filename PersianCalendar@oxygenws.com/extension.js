@@ -451,14 +451,14 @@ const PersianCalendar = GObject.registerClass(
                         month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
-                notify(nowruz);
+                notify(str.trans_digits(nowruz));
             } else if (day_delta !== 0) {
                 nowruz = n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
                     day_delta,
                 ).format(day_delta, pdate.year + 1);
-                notify(nowruz);
+                notify(str.trans_digits(nowruz));
             } else {
                 notify(__('Happy New Year'));
             }
