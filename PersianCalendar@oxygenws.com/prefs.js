@@ -18,7 +18,12 @@ const App = class PersianCalendarApp {
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
+            margin_top: 20,
+            margin_bottom: 20,
+            margin_start: 20,
+            margin_end: 20,
         });
+
         this.vbox1 = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             spacing: 10,
@@ -39,24 +44,22 @@ const App = class PersianCalendarApp {
             spacing: 10,
         });
 
-        this.main_hbox.set_margin_top(20);
-        this.main_hbox.set_margin_bottom(20);
-        this.main_hbox.set_margin_start(20);
-        this.main_hbox.set_margin_end(20);
-
         this.main_hbox.append(this.vbox1);
         this.main_hbox.append(this.vbox2);
         this.main_hbox.append(this.vbox3);
         this.main_hbox.append(this.vbox4);
 
         // DATES FORMAT
-        this.vbox1.append(new Gtk.Label({label: __('Date Conversions:')}));
+        this.vbox1.append(new Gtk.Label({
+            label: __('Show date:\n<span size="x-small">(Will be displayed below the calendar)</span>'),
+            use_markup: true,
+        }));
 
         let item = new Gtk.CheckButton({label: __('Persian')});
         this.vbox1.append(item);
         Settings.bind('persian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        let label = new Gtk.Label({label: __('Format:')});
+        let label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         let format = new Gtk.Entry();
         let hbox = new Gtk.Box();
         hbox.append(label);
@@ -69,7 +72,7 @@ const App = class PersianCalendarApp {
         this.vbox1.append(item);
         Settings.bind('gregorian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
         hbox.append(label);
@@ -82,7 +85,7 @@ const App = class PersianCalendarApp {
         this.vbox1.append(item);
         Settings.bind('hijri-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
         hbox.append(label);
@@ -167,7 +170,7 @@ const App = class PersianCalendarApp {
         this.vbox3.append(item);
         Settings.bind('startup-notification', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
         hbox.append(label);
