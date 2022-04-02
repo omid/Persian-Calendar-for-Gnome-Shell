@@ -11,8 +11,8 @@ function init() {
 
 const App = class PersianCalendarApp {
     constructor() {
-        if (Settings.get_string('language') == 'fa_IR.UTF-8'){
-            // set direction for alll element to RTL
+        if (Settings.get_string('language') === 'fa_IR.UTF-8'){
+            // set direction for all element to RTL
             Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
         }
         this.main_hbox = new Gtk.Box({
