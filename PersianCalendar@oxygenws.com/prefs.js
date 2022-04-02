@@ -11,11 +11,19 @@ function init() {
 
 const App = class PersianCalendarApp {
     constructor() {
+        if (Settings.get_string('language') === 'fa_IR.UTF-8'){
+            // set direction for all element to RTL
+            Gtk.Widget.set_default_direction(Gtk.TextDirection.RTL);
+        }
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
+            margin_top: 20,
+            margin_bottom: 20,
+            margin_start: 20,
+            margin_end: 20,
         });
-        this.main_hbox.set_direction(Gtk.TextDirection.RTL);
+
         this.vbox1 = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             spacing: 10,
@@ -36,28 +44,24 @@ const App = class PersianCalendarApp {
             spacing: 10,
         });
 
-        this.main_hbox.set_margin_top(20);
-        this.main_hbox.set_margin_bottom(20);
-        this.main_hbox.set_margin_start(20);
-        this.main_hbox.set_margin_end(20);
-
         this.main_hbox.append(this.vbox1);
         this.main_hbox.append(this.vbox2);
         this.main_hbox.append(this.vbox3);
         this.main_hbox.append(this.vbox4);
 
         // DATES FORMAT
-        this.vbox1.append(new Gtk.Label({label: __('Date Conversions:')}));
+        this.vbox1.append(new Gtk.Label({
+            label: __('Show date:\n<span size="x-small">(Will be displayed below the calendar)</span>'),
+            use_markup: true,
+        }));
 
         let item = new Gtk.CheckButton({label: __('Persian')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox1.append(item);
         Settings.bind('persian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        let label = new Gtk.Label({label: __('Format:')});
+        let label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         let format = new Gtk.Entry();
         let hbox = new Gtk.Box();
-        hbox.set_direction(Gtk.TextDirection.RTL);
         hbox.append(label);
         hbox.append(format);
         this.vbox1.append(hbox);
@@ -65,14 +69,12 @@ const App = class PersianCalendarApp {
         format.connect('changed', innerFormat => Settings.set_string('persian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: __('Gregorian')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox1.append(item);
         Settings.bind('gregorian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
-        hbox.set_direction(Gtk.TextDirection.RTL);
         hbox.append(label);
         hbox.append(format);
         this.vbox1.append(hbox);
@@ -80,14 +82,12 @@ const App = class PersianCalendarApp {
         format.connect('changed', innerFormat => Settings.set_string('gregorian-display-format', innerFormat.text));
 
         item = new Gtk.CheckButton({label: __('Hijri')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox1.append(item);
         Settings.bind('hijri-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
-        hbox.set_direction(Gtk.TextDirection.RTL);
         hbox.append(label);
         hbox.append(format);
         this.vbox1.append(hbox);
@@ -101,12 +101,10 @@ const App = class PersianCalendarApp {
         }));
 
         item = new Gtk.CheckButton({label: __('Official Iranian lunar')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox2.append(item);
         Settings.bind('event-iran-lunar', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         item = new Gtk.CheckButton({label: __('Official Iranian solar')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox2.append(item);
         Settings.bind('event-iran-solar', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -116,12 +114,10 @@ const App = class PersianCalendarApp {
         Settings.bind('event-persian', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         item = new Gtk.CheckButton({label: __('Persian personages')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox2.append(item);
         Settings.bind('event-persian-personage', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         item = new Gtk.CheckButton({label: __('International')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox2.append(item);
         Settings.bind('event-world', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -140,7 +136,6 @@ const App = class PersianCalendarApp {
 
         this.vbox3.append(new Gtk.Label({label: __('Position:')}));
         item = new Gtk.ComboBoxText();
-        // item.set_direction(Gtk.TextDirection.RTL);
         item.append('left', __('Left'));
         item.append('center', __('Center'));
         item.append('right', __('Right'));
@@ -160,7 +155,6 @@ const App = class PersianCalendarApp {
         Settings.bind('index', item, 'value', Gio.SettingsBindFlags.DEFAULT);
 
         item = new Gtk.CheckButton({label: __('Use custom color')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox3.append(item);
         Settings.bind('custom-color', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
@@ -173,14 +167,12 @@ const App = class PersianCalendarApp {
         color.connect('color-set', innerColor => Settings.set_string('color', innerColor.get_rgba().to_string()));
 
         item = new Gtk.CheckButton({label: __('Startup Notification')});
-        item.set_direction(Gtk.TextDirection.RTL);
         this.vbox3.append(item);
         Settings.bind('startup-notification', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        label = new Gtk.Label({label: __('Format:')});
+        label = new Gtk.Label({label: __('Format:'), margin_end: 10});
         format = new Gtk.Entry();
         hbox = new Gtk.Box();
-        hbox.set_direction(Gtk.TextDirection.RTL);
         hbox.append(label);
         hbox.append(format);
         this.vbox3.append(hbox);
@@ -192,7 +184,6 @@ const App = class PersianCalendarApp {
             use_markup: true,
         }));
         item = new Gtk.ComboBoxText();
-        // item.set_direction(Gtk.TextDirection.RTL);
         item.append('fa_IR.UTF-8', 'فارسی');
         item.append('en_US.UTF-8', 'English');
         item.set_active(Settings.get_enum('language'));
