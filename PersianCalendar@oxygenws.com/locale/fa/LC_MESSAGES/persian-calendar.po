@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-01 13:22+0430\n"
-"PO-Revision-Date: 2022-04-01 13:33+0430\n"
+"PO-Revision-Date: 2022-04-01 22:32+0430\n"
 "Last-Translator: eshagh <eshagh094@gmail.com>\n"
 "Language-Team: \n"
 "Language: fa\n"
@@ -461,15 +461,15 @@ msgstr[1] "۱ ماه و ۱ روز مانده به نوروز %d"
 #, javascript-format
 msgid "%d month and %d days left to Nowruz %d"
 msgid_plural "%d months and %d days left to Nowruz %d"
-msgstr[0] "%d ماه و %d روز مانده به نوروز%d"
-msgstr[1] "۱ ماه و %d روز مانده به نوروز%d"
+msgstr[0] "%d ماه و %d روز مانده به نوروز %d"
+msgstr[1] "۱ ماه و %d روز مانده به نوروز %d"
 
 #: PersianCalendar@oxygenws.com/extension.js:458
 #, javascript-format
 msgid "%d day left to Nowruz %d"
 msgid_plural "%d days left to Nowruz %d"
 msgstr[0] "%d روز ماننده به نوروز %d"
-msgstr[1] "۱ روز ماننده به نوروز %d"
+msgstr[1] "۱ روز مانده به نوروز %d"
 
 #: PersianCalendar@oxygenws.com/extension.js:464
 msgid "Happy New Year"
