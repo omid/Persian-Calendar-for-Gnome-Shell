@@ -2,6 +2,7 @@ const {Clutter, St, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const Settings = ExtensionUtils.getSettings();
 const {__, n__} = Me.imports.utils.gettext;
 
 const {PersianDate, HijriDate, Events} = Me.imports;
@@ -86,7 +87,11 @@ const Calendar = class {
     }
 
     _buildHeader() {
-        this._colPosition = 6;
+        if (Settings.get_string('language') === 'fa_IR.UTF-8'){
+            this._colPosition = 6;
+        } else {
+            this._colPosition = 0;
+        }
 
         this.actor.destroy_all_children();
 
@@ -114,7 +119,7 @@ const Calendar = class {
             x_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
-        this._setFont(this._monthLabel);
+        //this._setFont(this._monthLabel);
         this._topBox.add(this._monthLabel);
 
         icon = new St.Icon({icon_name: 'go-next-symbolic'});
@@ -135,7 +140,7 @@ const Calendar = class {
                 style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl pcalendar-weekday',
                 text: this.weekdayAbbr[i],
             });
-            this._setFont(label);
+            //this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
         }
 
