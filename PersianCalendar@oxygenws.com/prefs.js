@@ -1,10 +1,10 @@
-const {Gtk, Gio, Gdk, Pango, Clutter} = imports.gi;
+const {Gtk, Gio, Gdk, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Settings = ExtensionUtils.getSettings();
 const {__} = Me.imports.utils.gettext;
-const {getTextDirection, getJustification, isLtr, isRtl} = Me.imports.utils.locale;
+const {getTextDirection, getJustification} = Me.imports.utils.locale;
 
 function init() {
     ExtensionUtils.initTranslations();
