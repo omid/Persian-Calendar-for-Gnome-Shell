@@ -233,7 +233,6 @@ const PersianCalendar = GObject.registerClass(
         _generateConverterPart() {
             // Add date conversion button
             let converterMenu = new PopupMenu.PopupSubMenuMenuItem(__('Date conversion'));
-            converterMenu.actor.set_text_direction(Clutter.TextDirection.RTL);
             converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);

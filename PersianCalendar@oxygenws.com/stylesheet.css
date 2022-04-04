@@ -53,10 +53,6 @@
     background-color: rgba(128, 128, 128, .1);
 }
 
-.pcalendar-rtl {
-    direction: rtl;
-}
-
 .pcalendar-button {
     border-radius: 0 0 0 0;
     border: 1px solid black;

@@ -3,13 +3,34 @@ const {Clutter, St, Pango} = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const {__, n__} = Me.imports.utils.gettext;
+const {isRtl} = Me.imports.utils.locale;
 
 const {PersianDate, HijriDate, Events} = Me.imports;
 const str = Me.imports.utils.str;
 
 const Calendar = class {
     constructor(schema) {
-        this.weekdayAbbr = [__('Sa'), __('Su'), __('Mo'), __('Tu'), __('We'), __('Th'), __('Fr')];
+        this.phrases =
+            {
+                weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
+                weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
+                gregorian:
+                    {
+                        monthShort: [__('Jan'), __('Feb'), __('Mar'), __('Apr'), __('May'), __('Jun'), __('Jul'), __('Aug'), __('Sep'), __('Oct'), __('Nov'), __('Dec')],
+                        monthLong: [__('January'), __('February'), __('March'), __('April'), __('May'), __('June'), __('July'), __('August'), __('September'), __('October'), __('November'), __('December')],
+                    },
+                persian:
+                    {
+                        monthShort: [__('Far'), __('Ord'), __('Kho'), __('Tir'), __('Mor'), __('Sha'), __('Meh'), __('Aba'), __('Aza'), __('Dey'), __('Bah'), __('Esf')],
+                        monthLong: [__('Farvardin'), __('Ordibehesht'), __('Khordad'), __('Tir'), __('Mordad'), __('Shahrivar'), __('Mehr'), __('Aban'), __('Azar'), __('Dey'), __('Bahman'), __('Esfand')],
+                    },
+                hijri:
+                    {
+                        monthShort: [__('Moh'), __('Saf'), __('R-a'), __('R-s'), __('J-a'), __('J-s'), __('Raj'), __('Shb'), __('Ram'), __('Shv'), __('Zig'), __('Zih')],
+                        monthLong: [__('Moharram'), __('Safar'), __('Rabi-ol-avval'), __('Rabi-ol-sani'), __('Jamadi-ol-avval'), __('Jamadi-ol-sani'), __('Rajab'), __('Shaban'), __('Ramazan'), __('Shaval'), __('Zighade'), __('Zihajje')],
+                    },
+            };
+
         this._weekStart = 6;
         this.schema = schema;
         // Start off with the current date
@@ -42,27 +63,6 @@ const Calendar = class {
 
     // Sets the calendar to show a specific date
     format(format, day, month, year, dow, calendar) {
-        let phrases =
-            {
-                weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
-                weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
-                gregorian:
-                    {
-                        monthShort: [__('Jan'), __('Feb'), __('Mar'), __('Apr'), __('May'), __('Jun'), __('Jul'), __('Aug'), __('Sep'), __('Oct'), __('Nov'), __('Dec')],
-                        monthLong: [__('January'), __('February'), __('March'), __('April'), __('May'), __('June'), __('July'), __('August'), __('September'), __('October'), __('November'), __('December')],
-                    },
-                persian:
-                    {
-                        monthShort: [__('Far'), __('Ord'), __('Kho'), __('Tir'), __('Mor'), __('Sha'), __('Meh'), __('Aba'), __('Aza'), __('Dey'), __('Bah'), __('Esf')],
-                        monthLong: [__('Farvardin'), __('Ordibehesht'), __('Khordad'), __('Tir'), __('Mordad'), __('Shahrivar'), __('Mehr'), __('Aban'), __('Azar'), __('Dey'), __('Bahman'), __('Esfand')],
-                    },
-                hijri:
-                    {
-                        monthShort: [__('Moh'), __('Saf'), __('R-a'), __('R-s'), __('J-a'), __('J-s'), __('Raj'), __('Shb'), __('Ram'), __('Shv'), __('Zig'), __('Zih')],
-                        monthLong: [__('Moharram'), __('Safar'), __('Rabi-ol-avval'), __('Rabi-ol-sani'), __('Jamadi-ol-avval'), __('Jamadi-ol-sani'), __('Rajab'), __('Shaban'), __('Ramazan'), __('Shaval'), __('Zighade'), __('Zihajje')],
-                    },
-            };
-
         // change dow to Persian style!
         dow += 1;
         if (dow > 6) {
@@ -73,20 +73,24 @@ const Calendar = class {
         let replace = [
             year,
             `${year}`.slice(-2),
-            phrases[calendar].monthLong[month - 1],
-            phrases[calendar].monthShort[month - 1],
+            this.phrases[calendar].monthLong[month - 1],
+            this.phrases[calendar].monthShort[month - 1],
             `0${month}`.slice(-2),
             month,
             `0${day}`.slice(-2),
             day,
-            phrases.weekdayLong[dow],
-            phrases.weekdayShort[dow],
+            this.phrases.weekdayLong[dow],
+            this.phrases.weekdayShort[dow],
         ];
         return str.replace(find, replace, format);
     }
 
     _buildHeader() {
-        this._colPosition = 6;
+        if (isRtl()){
+            this._colPosition = 6;
+        } else {
+            this._colPosition = 0;
+        }
 
         this.actor.destroy_all_children();
 
@@ -94,20 +98,17 @@ const Calendar = class {
         this._topBox = new St.BoxLayout();
         this.actor.layout_manager.attach(this._topBox, 0, 0, 7, 1);
 
-        let icon,
-            leftButton, rightButton;
+        let icon, nextYearButton, prevYearButton, nextMonthButton, prevMonthButton;
         let style = 'pager-button';
-        icon = new St.Icon({icon_name: 'go-first-symbolic'});
-        rightButton = new St.Button({style_class: style, child: icon});
-        rightButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
+        icon = new St.Icon({icon_name: isRtl() ? 'go-first-symbolic' : 'go-last-symbolic'});
+        nextYearButton = new St.Button({style_class: style, child: icon});
+        nextYearButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
         icon.set_icon_size(16);
-        this._topBox.add(rightButton);
 
-        icon = new St.Icon({icon_name: 'go-previous-symbolic'});
-        rightButton = new St.Button({style_class: style, child: icon});
-        rightButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
+        icon = new St.Icon({icon_name: isRtl() ? 'go-previous-symbolic' : 'go-next-symbolic'});
+        nextMonthButton = new St.Button({style_class: style, child: icon});
+        nextMonthButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
-        this._topBox.add(rightButton);
 
         this._monthLabel = new St.Label({
             style_class: 'calendar-month-label pcalendar-month-label',
@@ -115,25 +116,36 @@ const Calendar = class {
             x_expand: true,
         });
         this._setFont(this._monthLabel);
-        this._topBox.add(this._monthLabel);
 
-        icon = new St.Icon({icon_name: 'go-next-symbolic'});
-        leftButton = new St.Button({style_class: style, child: icon});
-        leftButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
+        icon = new St.Icon({icon_name: isRtl() ? 'go-next-symbolic' : 'go-previous-symbolic'});
+        prevMonthButton = new St.Button({style_class: style, child: icon});
+        prevMonthButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
-        this._topBox.add(leftButton);
 
-        icon = new St.Icon({icon_name: 'go-last-symbolic'});
-        leftButton = new St.Button({style_class: style, child: icon});
-        leftButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
+        icon = new St.Icon({icon_name: isRtl() ? 'go-last-symbolic' : 'go-first-symbolic'});
+        prevYearButton = new St.Button({style_class: style, child: icon});
+        prevYearButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         icon.set_icon_size(16);
-        this._topBox.add(leftButton);
+
+        if (isRtl()){
+            this._topBox.add(nextYearButton);
+            this._topBox.add(nextMonthButton);
+            this._topBox.add(this._monthLabel);
+            this._topBox.add(prevMonthButton);
+            this._topBox.add(prevYearButton);
+        } else {
+            this._topBox.add(prevYearButton);
+            this._topBox.add(prevMonthButton);
+            this._topBox.add(this._monthLabel);
+            this._topBox.add(nextMonthButton);
+            this._topBox.add(nextYearButton);
+        }
 
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
-                style_class: 'calendar-day-base calendar-day-heading pcalendar-rtl pcalendar-weekday',
-                text: this.weekdayAbbr[i],
+                style_class: 'calendar-day-base calendar-day-heading pcalendar-weekday',
+                text: this.phrases.weekdayShort[i],
             });
             this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
@@ -172,11 +184,11 @@ const Calendar = class {
     _onScroll(actor, event) {
         switch (event.get_scroll_direction()) {
         case Clutter.ScrollDirection.UP:
-        case Clutter.ScrollDirection.LEFT:
+        case Clutter.ScrollDirection.RIGHT:
             this._onNextMonthButtonClicked();
             break;
         case Clutter.ScrollDirection.DOWN:
-        case Clutter.ScrollDirection.RIGHT:
+        case Clutter.ScrollDirection.LEFT:
             this._onPrevMonthButtonClicked();
             break;
         default:

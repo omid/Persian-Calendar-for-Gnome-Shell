@@ -1,3 +1,4 @@
 *.zip
 .idea
 _build
+PersianCalendar@oxygenws.com/locale/**/LC_MESSAGES/*~
