@@ -4,7 +4,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const {__} = Me.imports.utils.gettext;
 
 function isRtl() {
-    return __("__DIRECTION") === "rtl";
+    return __('__DIRECTION') === 'rtl';
 }
 
 function isLtr() {

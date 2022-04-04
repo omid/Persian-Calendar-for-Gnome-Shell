@@ -203,7 +203,7 @@ const App = class PersianCalendarApp {
         hbox = new Gtk.Box();
         hbox.append(label);
         hbox.append(format);
-        hbox.set_direction(getTextDirection())
+        hbox.set_direction(getTextDirection());
         this.vbox3.append(hbox);
         format.set_text(Settings.get_string('widget-format'));
         format.connect('changed', innerFormat => Settings.set_string('widget-format', innerFormat.text));
@@ -216,7 +216,6 @@ const App = class PersianCalendarApp {
         item.append('fa_IR.UTF-8', 'فارسی');
         item.append('en_US.UTF-8', 'English');
         item.set_direction(getTextDirection());
-        item.set_ju
         item.set_active(Settings.get_enum('language'));
         this.vbox4.append(item);
         Settings.bind('language', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);

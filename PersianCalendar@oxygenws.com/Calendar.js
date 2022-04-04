@@ -86,7 +86,7 @@ const Calendar = class {
     }
 
     _buildHeader() {
-        if (isRtl()){
+        if (isRtl()) {
             this._colPosition = 6;
         } else {
             this._colPosition = 0;
@@ -127,7 +127,7 @@ const Calendar = class {
         prevYearButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         icon.set_icon_size(16);
 
-        if (isRtl()){
+        if (isRtl()) {
             this._topBox.add(nextYearButton);
             this._topBox.add(nextMonthButton);
             this._topBox.add(this._monthLabel);
