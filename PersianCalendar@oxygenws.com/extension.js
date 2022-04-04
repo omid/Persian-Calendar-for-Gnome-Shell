@@ -203,7 +203,7 @@ const PersianCalendar = GObject.registerClass(
             }
 
             this.label.set_text(
-                str.trans_digits(
+                str.transDigits(
                     this._calendar.format(
                         Settings.get_string('widget-format'),
                         _date.day,
@@ -215,7 +215,7 @@ const PersianCalendar = GObject.registerClass(
                 ),
             );
 
-            _date = str.trans_digits(this._calendar.format(
+            _date = str.transDigits(this._calendar.format(
                 '%d %MM %Y',
                 _date.day,
                 _date.month,
@@ -451,14 +451,14 @@ const PersianCalendar = GObject.registerClass(
                         month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
-                notify(str.trans_digits(nowruz));
+                notify(str.transDigits(nowruz));
             } else if (day_delta !== 0) {
                 nowruz = n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
                     day_delta,
                 ).format(day_delta, pdate.year + 1);
-                notify(str.trans_digits(nowruz));
+                notify(str.transDigits(nowruz));
             } else {
                 notify(__('Happy New Year'));
             }

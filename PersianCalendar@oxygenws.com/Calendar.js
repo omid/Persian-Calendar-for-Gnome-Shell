@@ -234,7 +234,7 @@ const Calendar = class {
         } else {
             pattern = '%MM %Y';
         }
-        this._monthLabel.text = str.trans_digits(this.format(
+        this._monthLabel.text = str.transDigits(this.format(
             pattern,
             this._selectedDate.day,
             this._selectedDate.month,
@@ -268,7 +268,7 @@ const Calendar = class {
                 iter.getDate(),
             );
             let is_same_month = p_iter.month === this._selectedDate.month;
-            let button = new St.Button({label: str.trans_digits(p_iter.day)});
+            let button = new St.Button({label: str.transDigits(p_iter.day)});
             this._modifyFont(button);
 
             button.connect('clicked', () => this.setDate(p_iter));
@@ -373,7 +373,7 @@ const Calendar = class {
             let _eventBox = new St.BoxLayout();
             this.actor.layout_manager.attach(_eventBox, 0, ++row, 7, 1);
             let bottomLabel = new St.Label({
-                text: str.trans_digits(events[0]),
+                text: str.transDigits(events[0]),
                 style_class: 'pcalendar-event-label',
                 x_align: Clutter.ActorAlign.FILL,
                 x_expand: true,
