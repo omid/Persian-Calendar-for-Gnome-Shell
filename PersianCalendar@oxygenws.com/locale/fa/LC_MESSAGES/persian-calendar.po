@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-04 15:37+0200\n"
+"POT-Creation-Date: 2022-04-05 18:54+0200\n"
 "PO-Revision-Date: 2022-04-02 12:52+0430\n"
 "Last-Translator: eshagh <eshagh094@gmail.com>\n"
 "Language-Team: \n"
@@ -398,56 +398,56 @@ msgid "Zihajje"
 msgstr "ذیحجه"
 
 #. Add date conversion button
-#: PersianCalendar@oxygenws.com/extension.js:236
+#: PersianCalendar@oxygenws.com/extension.js:235
 msgid "Date conversion"
 msgstr "تبدیل تاریخ"
 
-#: PersianCalendar@oxygenws.com/extension.js:257
+#: PersianCalendar@oxygenws.com/extension.js:256
 msgid "from Persian"
 msgstr "از هـ.خورشیدی"
 
-#: PersianCalendar@oxygenws.com/extension.js:269
+#: PersianCalendar@oxygenws.com/extension.js:268
 msgid "from Gregorian"
 msgstr "از میلادی"
 
-#: PersianCalendar@oxygenws.com/extension.js:281
+#: PersianCalendar@oxygenws.com/extension.js:280
 msgid "from Hijri"
 msgstr "از هـ.قمری"
 
-#: PersianCalendar@oxygenws.com/extension.js:304
+#: PersianCalendar@oxygenws.com/extension.js:297
 msgid "year"
 msgstr "سال"
 
-#: PersianCalendar@oxygenws.com/extension.js:314
+#: PersianCalendar@oxygenws.com/extension.js:307
 msgid "month"
 msgstr "ماه"
 
-#: PersianCalendar@oxygenws.com/extension.js:324
+#: PersianCalendar@oxygenws.com/extension.js:317
 msgid "day"
 msgstr "روز"
 
-#: PersianCalendar@oxygenws.com/extension.js:449
+#: PersianCalendar@oxygenws.com/extension.js:442
 #, javascript-format
 msgid "%d month and 1 day left to Nowruz %d"
 msgid_plural "%d months and 1 day left to Nowruz %d"
 msgstr[0] "%d ماه و ۱ روز مانده به نوروز %d"
 msgstr[1] "۱ ماه و ۱ روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:455
+#: PersianCalendar@oxygenws.com/extension.js:448
 #, javascript-format
 msgid "%d month and %d days left to Nowruz %d"
 msgid_plural "%d months and %d days left to Nowruz %d"
 msgstr[0] "%d ماه و %d روز مانده به نوروز %d"
 msgstr[1] "۱ ماه و %d روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:463
+#: PersianCalendar@oxygenws.com/extension.js:456
 #, javascript-format
 msgid "%d day left to Nowruz %d"
 msgid_plural "%d days left to Nowruz %d"
 msgstr[0] "%d روز ماننده به نوروز %d"
 msgstr[1] "۱ روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:469
+#: PersianCalendar@oxygenws.com/extension.js:462
 msgid "Happy New Year"
 msgstr "سال نو مبارک"
 
@@ -538,7 +538,6 @@ msgid "Use custom color"
 msgstr "استفاده از رنگ سفارشی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:195
-#, fuzzy
 msgid "Startup notification"
 msgstr "راه‌اندازی آگاهی"
 
@@ -550,7 +549,7 @@ msgstr ""
 "زبان:\n"
 "<span size=\"x-small\">(بارگذاری مجدد گنوم‌شل مورد نیاز است)</span>"
 
-#: PersianCalendar@oxygenws.com/prefs.js:225
+#: PersianCalendar@oxygenws.com/prefs.js:224
 msgid ""
 "<span>Possible Formatting values:\n"
 "\n"
