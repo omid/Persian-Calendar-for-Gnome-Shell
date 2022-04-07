@@ -587,7 +587,6 @@ msgstr ""
 "<span size=\"x-small\">(بارگذاری مجدد گنوم‌شل مورد نیاز است)</span>"
 
 #: PersianCalendar@oxygenws.com/prefs.js:224
-#, fuzzy
 msgid ""
 "<span>Possible Formatting values:\n"
 "\n"
