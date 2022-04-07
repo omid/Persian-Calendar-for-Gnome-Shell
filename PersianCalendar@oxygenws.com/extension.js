@@ -12,6 +12,7 @@ const Settings = ExtensionUtils.getSettings();
 const {PersianDate, HijriDate, Calendar, Events} = Me.imports;
 const {str, file} = Me.imports.utils;
 const {__, n__} = Me.imports.utils.gettext;
+const {isGnomeRtl} = Me.imports.utils.locale;
 
 const ConverterTypes = {
     fromPersian: 0,
@@ -284,9 +285,15 @@ const PersianCalendar = GObject.registerClass(
             fromHijri.connect('clicked', this._toggleConverter.bind(this));
             fromHijri.TypeID = ConverterTypes.fromHijri;
 
-            middleBox.add(fromHijri);
-            middleBox.add(fromGregorian);
-            middleBox.add(fromPersian);
+            if (isGnomeRtl()) {
+                middleBox.add(fromPersian);
+                middleBox.add(fromGregorian);
+                middleBox.add(fromHijri);
+            } else {
+                middleBox.add(fromHijri);
+                middleBox.add(fromGregorian);
+                middleBox.add(fromPersian);
+            }
 
             this.converterVbox.add(middleBox);
 
@@ -300,7 +307,6 @@ const PersianCalendar = GObject.registerClass(
                 style_class: 'pcalendar-converter-entry',
             });
             this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
-            converterHbox.add(this.converterYear);
 
             this.converterMonth = new St.Entry({
                 name: 'month',
@@ -309,7 +315,6 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            converterHbox.add(this.converterMonth);
             this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
 
             this.converterDay = new St.Entry({
@@ -319,7 +324,17 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            converterHbox.add(this.converterDay);
+
+            if (isGnomeRtl()) {
+                converterHbox.add(this.converterDay);
+                converterHbox.add(this.converterMonth);
+                converterHbox.add(this.converterYear);
+            } else {
+                converterHbox.add(this.converterYear);
+                converterHbox.add(this.converterMonth);
+                converterHbox.add(this.converterDay);
+            }
+
             this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
 
             this.converterVbox.add(converterHbox);

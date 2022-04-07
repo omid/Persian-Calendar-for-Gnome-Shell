@@ -3,12 +3,20 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const {__} = Me.imports.utils.gettext;
 
-function isRtl() {
+function isCalendarRtl() {
     return __('__DIRECTION') === 'rtl';
 }
 
-function isLtr() {
-    return !isRtl();
+function isGnomeRtl() {
+    return Gtk.get_locale_direction() === Gtk.TextDirection.RTL;
+}
+
+function isRtl() {
+    const gnome_is_rtl = isGnomeRtl();
+    const calendar_is_rtl = isCalendarRtl();
+
+    // XOR
+    return (gnome_is_rtl || calendar_is_rtl) && !(gnome_is_rtl && calendar_is_rtl);
 }
 
 function getTextDirection() {

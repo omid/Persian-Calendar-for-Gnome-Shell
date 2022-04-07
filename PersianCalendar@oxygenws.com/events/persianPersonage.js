@@ -1,6 +1,6 @@
 // copyright http://www.farhangiran.com
 
-const persianPersonage = class {
+var persianPersonage = class {
     constructor() {
         this.name = 'شخصیت‌های ایرانی';
         this.type = 'persian';

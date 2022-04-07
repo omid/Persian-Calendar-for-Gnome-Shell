@@ -4,7 +4,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Settings = ExtensionUtils.getSettings();
 const {__} = Me.imports.utils.gettext;
-const {getTextDirection, getJustification} = Me.imports.utils.locale;
+const {getTextDirection, getJustification, isGnomeRtl} = Me.imports.utils.locale;
 
 function init() {
     ExtensionUtils.initTranslations();
@@ -158,9 +158,9 @@ const App = class PersianCalendarApp {
 
         this.vbox3.append(new Gtk.Label({label: __('Position:')}));
         item = new Gtk.ComboBoxText();
-        item.append('left', __('Left'));
+        item.append('left', isGnomeRtl() ? __('Right') : __('Left'));
         item.append('center', __('Center'));
-        item.append('right', __('Right'));
+        item.append('right', isGnomeRtl() ? __('Left') : __('Right'));
         item.set_active(Settings.get_enum('position'));
         item.set_direction(getTextDirection());
         this.vbox3.append(item);
@@ -221,7 +221,7 @@ const App = class PersianCalendarApp {
         Settings.bind('language', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 
         let comment = new Gtk.Label({
-            label: __('<span>Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week</span>'),
+            label: __('<span>Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week</span>'),
             use_markup: true,
             justify: getJustification(),
         });

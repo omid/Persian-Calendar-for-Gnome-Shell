@@ -1,5 +1,5 @@
 // copyright http://www.farhangiran.com
-const world = class {
+var world = class {
     constructor() {
         this.name = 'مناسبت‌های جهانی';
         this.type = 'gregorian';

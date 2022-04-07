@@ -2,16 +2,17 @@ const {Clutter, St, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const {__, n__} = Me.imports.utils.gettext;
-const {isRtl} = Me.imports.utils.locale;
+const {__, p__} = Me.imports.utils.gettext;
+const {isRtl, isCalendarRtl} = Me.imports.utils.locale;
 
 const {PersianDate, HijriDate, Events} = Me.imports;
 const str = Me.imports.utils.str;
 
-const Calendar = class {
+var Calendar = class {
     constructor(schema) {
         this.phrases =
             {
+                weekdayOne: [p__('Sat', 'S'), p__('Sun', 'S'), p__('Mon', 'M'), p__('Tue', 'T'), p__('Wed', 'W'), p__('Thu', 'T'), p__('Fri', 'F')],
                 weekdayShort: [__('Sat'), __('Sun'), __('Mon'), __('Tue'), __('Wed'), __('Thu'), __('Fri')],
                 weekdayLong: [__('Saturday'), __('Sunday'), __('Monday'), __('Tuesday'), __('Wednesday'), __('Thursday'), __('Friday')],
                 gregorian:
@@ -69,7 +70,7 @@ const Calendar = class {
             dow = 0;
         }
 
-        let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d', '%WW', '%ww'];
+        let find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d', '%WW', '%ww', '%w'];
         let replace = [
             year,
             `${year}`.slice(-2),
@@ -81,12 +82,13 @@ const Calendar = class {
             day,
             this.phrases.weekdayLong[dow],
             this.phrases.weekdayShort[dow],
+            this.phrases.weekdayOne[dow],
         ];
         return str.replace(find, replace, format);
     }
 
     _buildHeader() {
-        if (isRtl()) {
+        if (isCalendarRtl()) {
             this._colPosition = 6;
         } else {
             this._colPosition = 0;
@@ -145,7 +147,7 @@ const Calendar = class {
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
                 style_class: 'calendar-day-base calendar-day-heading pcalendar-weekday',
-                text: this.phrases.weekdayShort[i],
+                text: this.phrases.weekdayOne[i],
             });
             this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);

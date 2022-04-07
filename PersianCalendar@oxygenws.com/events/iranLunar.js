@@ -1,4 +1,4 @@
-const iranLunar = class {
+var iranLunar = class {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';
         this.type = 'hijri';

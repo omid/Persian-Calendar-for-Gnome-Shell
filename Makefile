@@ -41,7 +41,7 @@ build: compile-gschema update-translation
 	cp -r $(_BASE_MODULES) build
 
 update-translation:
-	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
+	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
 	find . -type f -iname '*.po' -exec msgmerge --update "{}" $(_UUID)/locale/persian-calendar.pot \;
 	find . -type f -iname '*.po' -execdir msgfmt persian-calendar.po -o persian-calendar.mo \;
 
