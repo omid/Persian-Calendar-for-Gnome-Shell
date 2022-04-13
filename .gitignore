@@ -1,4 +1,5 @@
 *.zip
 .idea
-_build
+build
+**/gschemas.compiled
 PersianCalendar@oxygenws.com/locale/**/LC_MESSAGES/*~

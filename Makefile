@@ -8,33 +8,31 @@ else
 	_INSTALL_BASE = $(DESTDIR)/usr/share/gnome-shell/extensions
 endif
 
-install-local: build
+install-local: _build
 	rm -rf $(_INSTALL_BASE)/$(_UUID)
 	mkdir -p $(_INSTALL_BASE)/$(_UUID)
 	cp -r ./build/* $(_INSTALL_BASE)/$(_UUID)/
-	-rm -rf build/
-	echo done
+	$(MAKE) clean
 
 clean:
 	rm -rf build/
 
-release: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
-release: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
-release: eslint build
-	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' build/metadata.json;
-	exit
+release: eslint _version_bump _build
 	gitg
 	git commit -v
 	git push
-	cd build ; \
-	zip -qr "$(_UUID)$(_NEW_VERSION).zip" .
-	mv build/$(_UUID)$(_NEW_VERSION).zip ./
-	-rm -rf build
+	cd build && zip -qr ../"$(_UUID)$(shell jq '.version' $(_UUID)/metadata.json).zip" .
+	$(MAKE) clean
 
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 
-build: clean update-translation
+_version_bump: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
+_version_bump: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
+_version_bump:
+	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json
+
+_build: clean update-translation
 	mkdir -p build
 	cp -r $(_BASE_MODULES) build
 	find build -type f -iname '*.po' -execdir msgfmt persian-calendar.po -o persian-calendar.mo \;
