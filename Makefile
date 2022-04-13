@@ -16,13 +16,12 @@ install-local: build
 	echo done
 
 clean:
-	rm -f ./$(_UUID)/schemas/gschemas.compiled
 	rm -rf build/
 
 release: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 release: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
 release: eslint build
-	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json;
+	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' build/metadata.json;
 	exit
 	gitg
 	git commit -v
@@ -35,20 +34,17 @@ release: eslint build
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 
-build: compile-gschema update-translation
-	rm -rf ./build
+build: clean update-translation
 	mkdir -p build
 	cp -r $(_BASE_MODULES) build
+	find build -type f -iname '*.po' -execdir msgfmt persian-calendar.po -o persian-calendar.mo \;
+	find build -type f -iname '*.po' -delete
+	find build -type f -iname '*.pot' -delete
+	glib-compile-schemas build/schemas/
 
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
-	find . -type f -iname '*.po' -exec msgmerge --update "{}" $(_UUID)/locale/persian-calendar.pot \;
-	find . -type f -iname '*.po' -execdir msgfmt persian-calendar.po -o persian-calendar.mo \;
-
-./$(_UUID)/schemas/gschemas.compiled: ./$(_UUID)/schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml
-	glib-compile-schemas ./$(_UUID)/schemas/
-
-compile-gschema: ./$(_UUID)/schemas/gschemas.compiled
+	find $(_UUID) -type f -iname '*.po' -exec msgmerge --update "{}" $(_UUID)/locale/persian-calendar.pot \;
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
