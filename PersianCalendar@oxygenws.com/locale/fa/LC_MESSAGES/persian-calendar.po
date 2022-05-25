@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-07 10:52+0200\n"
+"POT-Creation-Date: 2022-05-25 17:39+0200\n"
 "PO-Revision-Date: 2022-04-02 12:52+0430\n"
 "Last-Translator: eshagh <eshagh094@gmail.com>\n"
 "Language-Team: \n"
@@ -302,7 +302,7 @@ msgstr "فروردین"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:26
 msgid "Ordibehesht"
-msgstr "اُردیبهشت"
+msgstr "اردیبهشت"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:26
 msgid "Khordad"
@@ -433,56 +433,56 @@ msgid "Zihajje"
 msgstr "ذیحجه"
 
 #. Add date conversion button
-#: PersianCalendar@oxygenws.com/extension.js:236
+#: PersianCalendar@oxygenws.com/extension.js:241
 msgid "Date conversion"
 msgstr "تبدیل تاریخ"
 
-#: PersianCalendar@oxygenws.com/extension.js:257
+#: PersianCalendar@oxygenws.com/extension.js:262
 msgid "from Persian"
 msgstr "از هـ.خورشیدی"
 
-#: PersianCalendar@oxygenws.com/extension.js:269
+#: PersianCalendar@oxygenws.com/extension.js:274
 msgid "from Gregorian"
 msgstr "از میلادی"
 
-#: PersianCalendar@oxygenws.com/extension.js:281
+#: PersianCalendar@oxygenws.com/extension.js:286
 msgid "from Hijri"
 msgstr "از هـ.قمری"
 
-#: PersianCalendar@oxygenws.com/extension.js:304
+#: PersianCalendar@oxygenws.com/extension.js:309
 msgid "year"
 msgstr "سال"
 
-#: PersianCalendar@oxygenws.com/extension.js:313
+#: PersianCalendar@oxygenws.com/extension.js:318
 msgid "month"
 msgstr "ماه"
 
-#: PersianCalendar@oxygenws.com/extension.js:322
+#: PersianCalendar@oxygenws.com/extension.js:327
 msgid "day"
 msgstr "روز"
 
-#: PersianCalendar@oxygenws.com/extension.js:457
+#: PersianCalendar@oxygenws.com/extension.js:462
 #, javascript-format
 msgid "%d month and 1 day left to Nowruz %d"
 msgid_plural "%d months and 1 day left to Nowruz %d"
 msgstr[0] "%d ماه و ۱ روز مانده به نوروز %d"
 msgstr[1] "۱ ماه و ۱ روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:463
+#: PersianCalendar@oxygenws.com/extension.js:468
 #, javascript-format
 msgid "%d month and %d days left to Nowruz %d"
 msgid_plural "%d months and %d days left to Nowruz %d"
 msgstr[0] "%d ماه و %d روز مانده به نوروز %d"
 msgstr[1] "۱ ماه و %d روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:471
+#: PersianCalendar@oxygenws.com/extension.js:476
 #, javascript-format
 msgid "%d day left to Nowruz %d"
 msgid_plural "%d days left to Nowruz %d"
 msgstr[0] "%d روز ماننده به نوروز %d"
 msgstr[1] "۱ روز مانده به نوروز %d"
 
-#: PersianCalendar@oxygenws.com/extension.js:477
+#: PersianCalendar@oxygenws.com/extension.js:482
 msgid "Happy New Year"
 msgstr "سال نو مبارک"
 
@@ -498,22 +498,22 @@ msgstr ""
 msgid "Persian"
 msgstr "فارسی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:66
-#: PersianCalendar@oxygenws.com/prefs.js:82
-#: PersianCalendar@oxygenws.com/prefs.js:98
-#: PersianCalendar@oxygenws.com/prefs.js:201
+#: PersianCalendar@oxygenws.com/prefs.js:67
+#: PersianCalendar@oxygenws.com/prefs.js:87
+#: PersianCalendar@oxygenws.com/prefs.js:103
+#: PersianCalendar@oxygenws.com/prefs.js:206
 msgid "Format:"
 msgstr "قالب:"
 
-#: PersianCalendar@oxygenws.com/prefs.js:76
+#: PersianCalendar@oxygenws.com/prefs.js:81
 msgid "Gregorian"
 msgstr "میلادی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:92
+#: PersianCalendar@oxygenws.com/prefs.js:97
 msgid "Hijri"
 msgstr "هجری"
 
-#: PersianCalendar@oxygenws.com/prefs.js:110
+#: PersianCalendar@oxygenws.com/prefs.js:115
 msgid ""
 "Events:\n"
 "<span size=\"x-small\">(\"Official\" events are needed to find holidays)</"
@@ -523,70 +523,71 @@ msgstr ""
 "<span size=\"x-small\">(رویدادهای «رسمی» برای یافتن تعطیلات مورد نیاز است)</"
 "span>"
 
-#: PersianCalendar@oxygenws.com/prefs.js:115
+#: PersianCalendar@oxygenws.com/prefs.js:120
 msgid "Official Iranian lunar"
 msgstr "رویدادهای مذهبی ایران"
 
-#: PersianCalendar@oxygenws.com/prefs.js:121
+#: PersianCalendar@oxygenws.com/prefs.js:126
 msgid "Official Iranian solar"
 msgstr "رویدادهای رسمی ایران"
 
-#: PersianCalendar@oxygenws.com/prefs.js:127
+#: PersianCalendar@oxygenws.com/prefs.js:132
 msgid "Old Persian"
 msgstr "رویدادهای ملّی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:134
+#: PersianCalendar@oxygenws.com/prefs.js:139
 msgid "Persian personages"
 msgstr "شخصیت‌های ایرانی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:140
+#: PersianCalendar@oxygenws.com/prefs.js:145
 msgid "International"
 msgstr "رویدادهای جهانی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:146
+#: PersianCalendar@oxygenws.com/prefs.js:151
 msgid "Holidays and weekends color:"
 msgstr "رنگ تعطیلات و آخر هفته‌ها:"
 
 #. TRAY OPTIONS
-#: PersianCalendar@oxygenws.com/prefs.js:157
+#: PersianCalendar@oxygenws.com/prefs.js:162
 msgid "Tray widget options:"
 msgstr "گزینه‌های ابزارک سینی:"
 
-#: PersianCalendar@oxygenws.com/prefs.js:159
+#: PersianCalendar@oxygenws.com/prefs.js:164
 msgid "Position:"
 msgstr "موقعیت:"
 
-#: PersianCalendar@oxygenws.com/prefs.js:161
-#: PersianCalendar@oxygenws.com/prefs.js:163
+#: PersianCalendar@oxygenws.com/prefs.js:166
+#: PersianCalendar@oxygenws.com/prefs.js:168
 msgid "Right"
 msgstr "راست"
 
-#: PersianCalendar@oxygenws.com/prefs.js:161
-#: PersianCalendar@oxygenws.com/prefs.js:163
+#: PersianCalendar@oxygenws.com/prefs.js:166
+#: PersianCalendar@oxygenws.com/prefs.js:168
 msgid "Left"
 msgstr "چپ"
 
-#: PersianCalendar@oxygenws.com/prefs.js:162
+#: PersianCalendar@oxygenws.com/prefs.js:167
 msgid "Center"
 msgstr "وسط"
 
-#: PersianCalendar@oxygenws.com/prefs.js:181
+#: PersianCalendar@oxygenws.com/prefs.js:186
 msgid "Use custom color"
 msgstr "استفاده از رنگ سفارشی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:195
+#: PersianCalendar@oxygenws.com/prefs.js:200
 msgid "Startup notification"
 msgstr "راه‌اندازی آگاهی"
 
-#: PersianCalendar@oxygenws.com/prefs.js:212
+#: PersianCalendar@oxygenws.com/prefs.js:217
 msgid ""
 "Language:\n"
-"<span size=\"x-small\">(It needs to reload Gnome-Shell)</span>"
+"<span size=\"x-small\">(To make it work, you must have the locale installed "
+"locally.)</span>"
 msgstr ""
 "زبان:\n"
-"<span size=\"x-small\">(بارگذاری مجدد گنوم‌شل مورد نیاز است)</span>"
+"<span size=\"x-small\">(برای درست کار کردن این بخش، نیاز دارید locale زبان مربوطه را نصب کنید.)</span>"
 
-#: PersianCalendar@oxygenws.com/prefs.js:224
+#: PersianCalendar@oxygenws.com/prefs.js:229
 msgid ""
 "<span>Possible Formatting values:\n"
 "\n"

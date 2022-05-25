@@ -65,6 +65,11 @@ const PersianCalendar = GObject.registerClass(
                 enable();
             }));
 
+            this.event_hooks.push(Settings.connect('changed::language', () => {
+                disable();
+                enable();
+            }));
+
             this.event_hooks.push(Settings.connect('changed::index', () => {
                 disable();
                 enable();

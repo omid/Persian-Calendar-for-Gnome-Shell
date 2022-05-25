@@ -63,7 +63,12 @@ const App = class PersianCalendarApp {
         this.vbox1.append(item);
         Settings.bind('persian-display', item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        let label = new Gtk.Label({label: __('Format:'), margin_end: 10, margin_start: 10, justify: getJustification()});
+        let label = new Gtk.Label({
+            label: __('Format:'),
+            margin_end: 10,
+            margin_start: 10,
+            justify: getJustification()
+        });
         let format = new Gtk.Entry({width_request: 130});
         let hbox = new Gtk.Box();
         hbox.append(label);
@@ -209,7 +214,7 @@ const App = class PersianCalendarApp {
         format.connect('changed', innerFormat => Settings.set_string('widget-format', innerFormat.text));
 
         this.vbox4.append(new Gtk.Label({
-            label: __('Language:\n<span size="x-small">(It needs to reload Gnome-Shell)</span>'),
+            label: __('Language:\n<span size="x-small">(To make it work, you must have the locale installed locally.)</span>'),
             use_markup: true,
         }));
         item = new Gtk.ComboBoxText();
