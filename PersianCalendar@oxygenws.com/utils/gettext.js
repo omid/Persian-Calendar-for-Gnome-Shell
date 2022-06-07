@@ -4,25 +4,34 @@ const Gettext = imports.gettext;
 const Settings = ExtensionUtils.getSettings();
 const GLib = imports.gi.GLib;
 
-function __(str) {
-    let lang = pre();
-    let new_str = Gettext.dgettext(Me.metadata['gettext-domain'], str);
-    post(lang);
-    return new_str;
+let cache = {"en_US.UTF-8": {}, "fa_IR.UTF-8": {}};
+
+function __(msgid) {
+    // global.log("PersianCalendar@oxygenws.com22", "translating " + msgid);
+    if (cache[Settings.get_string('language')][msgid] == null) {
+        // global.log("PersianCalendar@oxygenws.com22", "not using cache");
+        let lang = pre();
+        cache[Settings.get_string('language')][msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
+        post(lang);
+    }
+    return cache[Settings.get_string('language')][msgid];
 }
 
 function n__(msgid1, msgid2, n) {
     let lang = pre();
+    // let's ignore caching them, since we call it rarely!
     let new_str = Gettext.dngettext(Me.metadata['gettext-domain'], msgid1, msgid2, n);
     post(lang);
     return new_str;
 }
 
 function p__(context, msgid) {
-    let lang = pre();
-    let new_str = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
-    post(lang);
-    return new_str;
+    if (cache[Settings.get_string('language')][msgid] == null) {
+        let lang = pre();
+        cache[Settings.get_string('language')][msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
+        post(lang);
+    }
+    return cache[Settings.get_string('language')][msgid];
 }
 
 // It's a hack inside another hack.
@@ -49,5 +58,7 @@ function pre() {
 
 function post(lang) {
     Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, '');
-    GLib.setenv("LANGUAGE", lang, true);
+    if (lang!=null) {
+        GLib.setenv("LANGUAGE", lang, true);
+    }
 }

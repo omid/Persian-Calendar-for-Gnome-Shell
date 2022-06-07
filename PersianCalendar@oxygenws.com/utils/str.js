@@ -1,6 +1,6 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const {__, n__} = Me.imports.utils.gettext;
+const {__} = Me.imports.utils.gettext;
 
 function transDigits(str) {
     let enums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
