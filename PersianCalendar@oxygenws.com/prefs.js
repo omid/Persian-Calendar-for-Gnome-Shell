@@ -67,7 +67,7 @@ const App = class PersianCalendarApp {
             label: __('Format:'),
             margin_end: 10,
             margin_start: 10,
-            justify: getJustification()
+            justify: getJustification(),
         });
         let format = new Gtk.Entry({width_request: 130});
         let hbox = new Gtk.Box();

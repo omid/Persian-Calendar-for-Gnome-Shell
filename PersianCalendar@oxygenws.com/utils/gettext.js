@@ -4,12 +4,12 @@ const Gettext = imports.gettext;
 const Settings = ExtensionUtils.getSettings();
 const GLib = imports.gi.GLib;
 
-let cache = {"en_US.UTF-8": {}, "fa_IR.UTF-8": {}};
+let cache = {'en_US.UTF-8': {}, 'fa_IR.UTF-8': {}};
 
 function __(msgid) {
     const setting_lang = Settings.get_string('language');
 
-    if (cache[setting_lang][msgid] == null) {
+    if (cache[setting_lang][msgid] === null) {
         let lang = pre();
         cache[setting_lang][msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
         post(lang);
@@ -28,7 +28,7 @@ function n__(msgid1, msgid2, n) {
 function p__(context, msgid) {
     const setting_lang = Settings.get_string('language');
 
-    if (cache[setting_lang][msgid] == null) {
+    if (cache[setting_lang][msgid] === null) {
         let lang = pre();
         cache[setting_lang][msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
         post(lang);
@@ -53,14 +53,16 @@ function p__(context, msgid) {
 //
 function pre() {
     Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, Settings.get_string('language'));
-    let lang = GLib.getenv("LANGUAGE");
-    GLib.unsetenv("LANGUAGE");
+    let lang = GLib.getenv('LANGUAGE');
+    if (lang !== null) {
+        GLib.unsetenv('LANGUAGE');
+    }
     return lang;
 }
 
 function post(lang) {
     Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, '');
-    if (lang!=null) {
-        GLib.setenv("LANGUAGE", lang, true);
+    if (lang !== null) {
+        GLib.setenv('LANGUAGE', lang, true);
     }
 }
