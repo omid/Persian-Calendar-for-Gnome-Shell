@@ -1,16 +1,9 @@
 const ExtensionUtils = imports.misc.extensionUtils;
-const extension = ExtensionUtils.getCurrentExtension();
+const Me = ExtensionUtils.getCurrentExtension();
 
-const PersianDate = extension.imports.PersianDate;
-const HijriDate = extension.imports.HijriDate;
-
-const persian = extension.imports.events.persian;
-const world = extension.imports.events.world;
-const iranSolar = extension.imports.events.iranSolar;
-const iranLunar = extension.imports.events.iranLunar;
-const persianPersonage = extension.imports.events.persianPersonage;
-
-const str = extension.imports.utils.str;
+const {PersianDate, HijriDate} = Me.imports;
+const {persian, world, iranSolar, iranLunar, persianPersonage} = Me.imports.events;
+const str = Me.imports.utils.str;
 
 var Events = class {
     constructor(schema) {
@@ -85,7 +78,7 @@ var Events = class {
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += `\n 🞄  ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 27)}`;
+            this._events += `\n⚫︎ ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 27)}`;
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

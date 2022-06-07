@@ -1,8 +1,8 @@
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
 const ExtensionUtils = imports.misc.extensionUtils;
-const extension = ExtensionUtils.getCurrentExtension();
-const PersianDate = extension.imports.PersianDate;
+const Me = ExtensionUtils.getCurrentExtension();
+const PersianDate = Me.imports.PersianDate;
 
 var persian = class {
     constructor(pyear) {

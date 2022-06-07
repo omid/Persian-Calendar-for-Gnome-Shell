@@ -11,7 +11,7 @@
 .pcalendar-font {
     font-family: Vazir, sans-serif;
     font-weight: 300;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 .pcalendar-day-with-events {
@@ -32,7 +32,7 @@
 }
 
 .pcalendar-date-label {
-    padding: .4em 1em;
+    padding: .1em 1em;
     width: auto;
 }
 
@@ -51,10 +51,6 @@
 
 .pcalendar-preferences-button:hover {
     background-color: rgba(128, 128, 128, .1);
-}
-
-.pcalendar-rtl {
-    direction: rtl;
 }
 
 .pcalendar-button {

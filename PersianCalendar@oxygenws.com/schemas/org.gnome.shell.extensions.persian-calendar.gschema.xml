@@ -4,7 +4,15 @@
     <value nick="center" value="1"/>
     <value nick="right" value="2"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.persian-calendar.languages">
+    <value nick="fa_IR.UTF-8" value="0"/>
+    <value nick="en_US.UTF-8" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
+    <key name="language" enum="org.gnome.shell.extensions.persian-calendar.languages">
+      <default>'fa_IR.UTF-8'</default>
+      <summary>Extension language</summary>
+    </key>
     <key name="hijri-display" type="b">
       <default>true</default>
       <summary>Display Hijri date below the calendar</summary>
