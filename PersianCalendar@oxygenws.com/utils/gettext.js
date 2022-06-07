@@ -7,14 +7,14 @@ const GLib = imports.gi.GLib;
 let cache = {"en_US.UTF-8": {}, "fa_IR.UTF-8": {}};
 
 function __(msgid) {
-    // global.log("PersianCalendar@oxygenws.com22", "translating " + msgid);
-    if (cache[Settings.get_string('language')][msgid] == null) {
-        // global.log("PersianCalendar@oxygenws.com22", "not using cache");
+    const setting_lang = Settings.get_string('language');
+
+    if (cache[setting_lang][msgid] == null) {
         let lang = pre();
-        cache[Settings.get_string('language')][msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
+        cache[setting_lang][msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
         post(lang);
     }
-    return cache[Settings.get_string('language')][msgid];
+    return cache[setting_lang][msgid];
 }
 
 function n__(msgid1, msgid2, n) {
@@ -26,12 +26,14 @@ function n__(msgid1, msgid2, n) {
 }
 
 function p__(context, msgid) {
-    if (cache[Settings.get_string('language')][msgid] == null) {
+    const setting_lang = Settings.get_string('language');
+
+    if (cache[setting_lang][msgid] == null) {
         let lang = pre();
-        cache[Settings.get_string('language')][msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
+        cache[setting_lang][msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
         post(lang);
     }
-    return cache[Settings.get_string('language')][msgid];
+    return cache[setting_lang][msgid];
 }
 
 // It's a hack inside another hack.

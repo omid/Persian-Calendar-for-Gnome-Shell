@@ -85,6 +85,7 @@ const PersianCalendar = GObject.registerClass(
             });
             calendar.actor.add_child(vbox);
             this.menu.addMenuItem(calendar);
+            this.menu._arrowAlignment = 0.5;
 
             this._calendar = new Calendar.Calendar(Settings);
             vbox.add_actor(this._calendar.actor);
