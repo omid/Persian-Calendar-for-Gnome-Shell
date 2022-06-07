@@ -43,6 +43,7 @@ _build: clean update-translation
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
 	find $(_UUID) -type f -iname '*.po' -exec msgmerge --update "{}" $(_UUID)/locale/persian-calendar.pot \;
+	find $(_UUID) -type f -iname '*.po~' -exec rm -rf "{}" \;
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
