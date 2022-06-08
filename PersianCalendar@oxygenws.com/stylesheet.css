@@ -1,3 +1,6 @@
+.pcalendar-calendar_container:hover {
+    background: inherit;
+}
 .pcalendar-tray-font {
     font-family: Vazir, sans-serif;
     font-weight: 500;
