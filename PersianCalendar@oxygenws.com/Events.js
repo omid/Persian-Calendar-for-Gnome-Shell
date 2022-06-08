@@ -78,7 +78,7 @@ var Events = class {
         // if event is available, set event
         // and if it is holiday, set today as holiday!
         if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += `\n⚫︎ ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 27)}`;
+            this._events += `\n⚫︎ ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 50)}`;
             this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
         }
     }

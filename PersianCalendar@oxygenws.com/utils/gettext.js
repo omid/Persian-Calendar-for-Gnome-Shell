@@ -1,20 +1,17 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Gettext = imports.gettext;
-const Settings = ExtensionUtils.getSettings();
 const GLib = imports.gi.GLib;
 
-let cache = {'en_US.UTF-8': {}, 'fa_IR.UTF-8': {}};
+let cache;
 
 function __(msgid) {
-    const setting_lang = Settings.get_string('language');
-
-    if (cache[setting_lang][msgid] === null) {
+    if (typeof cache[msgid] === 'undefined') {
         let lang = pre();
-        cache[setting_lang][msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
+        cache[msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
         post(lang);
     }
-    return cache[setting_lang][msgid];
+    return cache[msgid];
 }
 
 function n__(msgid1, msgid2, n) {
@@ -26,14 +23,12 @@ function n__(msgid1, msgid2, n) {
 }
 
 function p__(context, msgid) {
-    const setting_lang = Settings.get_string('language');
-
-    if (cache[setting_lang][msgid] === null) {
+    if (typeof cache[msgid] === 'undefined') {
         let lang = pre();
-        cache[setting_lang][msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
+        cache[msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
         post(lang);
     }
-    return cache[setting_lang][msgid];
+    return cache[msgid];
 }
 
 // It's a hack inside another hack.
@@ -52,7 +47,7 @@ function p__(context, msgid) {
 // 3- To be sure your code is working, run it inside `gjs` command.
 //
 function pre() {
-    Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, Settings.get_string('language'));
+    Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, ExtensionUtils.getSettings().get_string('language'));
     let lang = GLib.getenv('LANGUAGE');
     if (lang !== null) {
         GLib.unsetenv('LANGUAGE');
@@ -65,4 +60,12 @@ function post(lang) {
     if (lang !== null) {
         GLib.setenv('LANGUAGE', lang, true);
     }
+}
+
+function init_cache() {
+    cache = {};
+}
+
+function destroy_cache() {
+    cache = null;
 }

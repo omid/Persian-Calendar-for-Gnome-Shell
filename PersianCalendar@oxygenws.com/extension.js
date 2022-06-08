@@ -7,11 +7,10 @@ const MessageTray = imports.ui.messageTray;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Settings = ExtensionUtils.getSettings();
 
 const {PersianDate, HijriDate, Calendar, Events} = Me.imports;
 const {str, file} = Me.imports.utils;
-const {__, n__} = Me.imports.utils.gettext;
+const {__, n__, init_cache, destroy_cache} = Me.imports.utils.gettext;
 const {isGnomeRtl} = Me.imports.utils.locale;
 
 const ConverterTypes = {
@@ -22,7 +21,8 @@ const ConverterTypes = {
 
 let _indicator,
     _timer,
-    messageTray;
+    messageTray,
+    Settings;
 
 const PersianCalendar = GObject.registerClass(
     class PersianCalendar extends PanelMenu.Button {
@@ -498,6 +498,9 @@ function init() {
 }
 
 function enable() {
+    Settings = ExtensionUtils.getSettings();
+    init_cache();
+
     _indicator = new PersianCalendar();
 
     let positions = ['left', 'center', 'right'];
@@ -518,6 +521,8 @@ function disable() {
     _indicator.event_hooks.forEach(id => Settings.disconnect(id));
     _indicator.destroy();
     MainLoop.source_remove(_timer);
+    Settings = null;
+    destroy_cache();
 
     uninstall_fonts();
 }
