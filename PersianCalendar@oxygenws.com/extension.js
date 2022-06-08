@@ -82,6 +82,7 @@ const PersianCalendar = GObject.registerClass(
                 activate: false,
                 hover: false,
                 can_focus: false,
+                style_class: 'pcalendar-calendar_container',
             });
             calendar.actor.add_child(vbox);
             this.menu.addMenuItem(calendar);
