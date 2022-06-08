@@ -2,8 +2,8 @@ const {Gtk, Gio, Gdk, Pango} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Settings = ExtensionUtils.getSettings();
-const {__} = Me.imports.utils.gettext;
+
+const {__, init_cache, destroy_cache} = Me.imports.utils.gettext;
 const {getTextDirection, getJustification, isGnomeRtl} = Me.imports.utils.locale;
 
 function init() {
@@ -12,6 +12,8 @@ function init() {
 
 const App = class PersianCalendarApp {
     constructor() {
+        const Settings = ExtensionUtils.getSettings();
+        init_cache();
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
@@ -20,6 +22,13 @@ const App = class PersianCalendarApp {
             margin_start: 20,
             margin_end: 20,
         });
+
+        this.main_hbox.connect('realize', () => {
+            this.main_hbox.get_root().connect('close-request', () => {
+                destroy_cache();
+            });
+        });
+
         this.main_hbox.set_direction(getTextDirection());
 
         this.vbox1 = new Gtk.Box({
