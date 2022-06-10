@@ -23,12 +23,12 @@ function n__(msgid1, msgid2, n) {
 }
 
 function p__(context, msgid) {
-    if (typeof cache[msgid] === 'undefined') {
+    if (typeof cache[context + msgid] === 'undefined') {
         let lang = pre();
-        cache[msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
+        cache[context + msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
         post(lang);
     }
-    return cache[msgid];
+    return cache[context + msgid];
 }
 
 // It's a hack inside another hack.
