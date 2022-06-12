@@ -27,6 +27,9 @@ release: eslint _version_bump _build
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 
+check_eslint:
+	eslint PersianCalendar@oxygenws.com
+
 _version_bump: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 _version_bump: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
 _version_bump:
