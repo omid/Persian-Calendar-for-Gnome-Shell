@@ -502,8 +502,8 @@ msgstr "فارسی"
 #: PersianCalendar@oxygenws.com/prefs.js:95
 #: PersianCalendar@oxygenws.com/prefs.js:111
 #: PersianCalendar@oxygenws.com/prefs.js:214
-msgid "Format:"
-msgstr "قالب:"
+msgid "Format"
+msgstr "قالب"
 
 #: PersianCalendar@oxygenws.com/prefs.js:89
 msgid "Gregorian"
@@ -544,17 +544,17 @@ msgid "International"
 msgstr "رویدادهای جهانی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:159
-msgid "Holidays and weekends color:"
-msgstr "رنگ تعطیلات و آخر هفته‌ها:"
+msgid "Holidays and weekends color"
+msgstr "رنگ تعطیلات و آخر هفته‌ها"
 
 #. TRAY OPTIONS
 #: PersianCalendar@oxygenws.com/prefs.js:170
-msgid "Tray widget options:"
-msgstr "گزینه‌های ابزارک سینی:"
+msgid "Tray widget options"
+msgstr "گزینه‌های ابزارک سینی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:172
-msgid "Position:"
-msgstr "موقعیت:"
+msgid "Position"
+msgstr "موقعیت"
 
 #: PersianCalendar@oxygenws.com/prefs.js:174
 #: PersianCalendar@oxygenws.com/prefs.js:176
@@ -579,8 +579,8 @@ msgid "Startup notification"
 msgstr "راه‌اندازی آگاهی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:225
-msgid "Language:"
-msgstr "زبان:"
+msgid "Language"
+msgstr "زبان"
 
 #: PersianCalendar@oxygenws.com/prefs.js:237
 msgid ""
