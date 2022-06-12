@@ -1,71 +1,55 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
-const Gettext = imports.gettext;
-const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
 
-let cache;
+let locale;
 
 function __(msgid) {
-    if (typeof cache[msgid] === 'undefined') {
-        let lang = pre();
-        cache[msgid] = Gettext.dgettext(Me.metadata['gettext-domain'], msgid);
-        post(lang);
+    if (typeof locale[msgid] !== 'undefined') {
+        return locale[msgid][1];
+    } else {
+        return msgid;
     }
-    return cache[msgid];
 }
 
 function n__(msgid1, msgid2, n) {
-    let lang = pre();
-    // let's ignore caching them, since we call it rarely!
-    let new_str = Gettext.dngettext(Me.metadata['gettext-domain'], msgid1, msgid2, n);
-    post(lang);
-    return new_str;
+    // This naive implementation may not be correct for all locales, but it's enough for now
+    if (n === 1) {
+        if (typeof locale[msgid1] !== 'undefined') {
+            return locale[msgid1][1];
+        } else {
+            return msgid1;
+        }
+    } else if (typeof locale[msgid1] !== 'undefined') {
+        return locale[msgid1][2];
+    } else {
+        return msgid2;
+    }
 }
 
 function p__(context, msgid) {
-    if (typeof cache[context + msgid] === 'undefined') {
-        let lang = pre();
-        cache[context + msgid] = Gettext.dpgettext(Me.metadata['gettext-domain'], context, msgid);
-        post(lang);
-    }
-    return cache[context + msgid];
-}
+    // \u0004 is what po2json application put between context and msgid
+    let index = `${context}\u0004${msgid}`;
 
-// It's a hack inside another hack.
-// ATM, whenever we have the LANGUAGE env var, gettext may not work properly.
-// To test it:
-//
-// 1- Have English locale on your Gnome
-//
-// 2- Run `LANGUAGE=en gjs` command
-// then run the code bellow, it should return "year" in Persian:
-// const Gettext=imports.gettext;
-// Gettext.bindtextdomain("persian-calendar", "THE_EXTENSION_DIR/PersianCalendar@oxygenws.com/locale/");
-// Gettext.setlocale(Gettext.LocaleCategory.ALL, "fa_IR.utf8");
-// Gettext.dgettext("persian-calendar", "year");
-//
-// 3- To be sure your code is working, run it inside `gjs` command.
-//
-function pre() {
-    Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, ExtensionUtils.getSettings().get_string('language'));
-    let lang = GLib.getenv('LANGUAGE');
-    if (lang !== null) {
-        GLib.unsetenv('LANGUAGE');
-    }
-    return lang;
-}
-
-function post(lang) {
-    Gettext.setlocale(Gettext.LocaleCategory.MESSAGES, '');
-    if (lang !== null) {
-        GLib.setenv('LANGUAGE', lang, true);
+    if (typeof locale[index] !== 'undefined') {
+        return locale[index][1];
+    } else {
+        return msgid;
     }
 }
 
-function init_cache() {
-    cache = {};
+function load_locale() {
+    let path = Me.dir.get_path();
+    let lang = ExtensionUtils.getSettings().get_string('language');
+    let locale_json_file = Gio.File.new_for_path(`${path}/locale/${lang}.json`);
+    try {
+        let [_, locale_json] = locale_json_file.load_contents(null);
+        locale = JSON.parse(imports.byteArray.toString(locale_json));
+    } catch (e) {
+        locale = {};
+    }
 }
 
-function destroy_cache() {
-    cache = null;
+function unload_locale() {
+    locale = null;
 }

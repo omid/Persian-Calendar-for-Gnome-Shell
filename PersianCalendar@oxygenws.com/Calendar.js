@@ -1,4 +1,4 @@
-const {Clutter, St, Pango} = imports.gi;
+const {Clutter, St} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();

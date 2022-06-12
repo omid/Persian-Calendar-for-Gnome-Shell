@@ -1,4 +1,4 @@
-<schemalist gettext-domain="gnome-shell-extensions-persian-calendar">
+<schemalist>
   <enum id="org.gnome.shell.extensions.persian-calendar.positions">
     <value nick="left" value="0"/>
     <value nick="center" value="1"/>

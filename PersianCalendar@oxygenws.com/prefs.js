@@ -1,19 +1,18 @@
-const {Gtk, Gio, Gdk, Pango} = imports.gi;
+const {Gtk, Gio, Gdk} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const {__, init_cache, destroy_cache} = Me.imports.utils.gettext;
+const {__, load_locale, unload_locale} = Me.imports.utils.gettext;
 const {getTextDirection, getJustification, isGnomeRtl} = Me.imports.utils.locale;
 
 function init() {
-    ExtensionUtils.initTranslations();
 }
 
 const App = class PersianCalendarApp {
     constructor() {
         const Settings = ExtensionUtils.getSettings();
-        init_cache();
+        load_locale();
         this.main_hbox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 20,
@@ -25,7 +24,7 @@ const App = class PersianCalendarApp {
 
         this.main_hbox.connect('realize', () => {
             this.main_hbox.get_root().connect('close-request', () => {
-                destroy_cache();
+                unload_locale();
             });
         });
 
@@ -223,7 +222,7 @@ const App = class PersianCalendarApp {
         format.connect('changed', innerFormat => Settings.set_string('widget-format', innerFormat.text));
 
         this.vbox4.append(new Gtk.Label({
-            label: __('Language:\n<span size="x-small">(To make it work, you must have the locale installed locally.)</span>'),
+            label: __('Language:'),
             use_markup: true,
         }));
         item = new Gtk.ComboBoxText();

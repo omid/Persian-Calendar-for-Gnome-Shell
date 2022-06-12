@@ -10,7 +10,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 
 const {PersianDate, HijriDate, Calendar, Events} = Me.imports;
 const {str, file} = Me.imports.utils;
-const {__, n__, init_cache, destroy_cache} = Me.imports.utils.gettext;
+const {__, n__, load_locale, unload_locale} = Me.imports.utils.gettext;
 const {isGnomeRtl} = Me.imports.utils.locale;
 
 const ConverterTypes = {
@@ -495,12 +495,11 @@ function notify(msg, details) {
 }
 
 function init() {
-    ExtensionUtils.initTranslations();
 }
 
 function enable() {
     Settings = ExtensionUtils.getSettings();
-    init_cache();
+    load_locale();
 
     _indicator = new PersianCalendar();
 
@@ -523,7 +522,7 @@ function disable() {
     _indicator.destroy();
     MainLoop.source_remove(_timer);
     Settings = null;
-    destroy_cache();
+    unload_locale();
 
     uninstall_fonts();
 }

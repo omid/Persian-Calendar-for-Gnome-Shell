@@ -32,18 +32,24 @@ _version_bump: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
 _version_bump:
 	sed -i 's/"version": $(_OLD_VERSION)/"version": $(_NEW_VERSION)/' $(_UUID)/metadata.json
 
+_build: export _LOCALE_DIRS=$(shell cd $(_UUID)/locale && find . -maxdepth 1 -mindepth 1 -type d)
 _build: clean update-translation
 	mkdir -p build
 	cp -r $(_BASE_MODULES) build
-	find build -type f -iname '*.po' -execdir msgfmt persian-calendar.po -o persian-calendar.mo \;
-	find build -type f -iname '*.po' -delete
+	echo $$_LOCALE_DIRS
+	for dir in $$_LOCALE_DIRS; do \
+		cd build/locale; \
+		# npm -g install po2json \
+        po2json -p "$$dir/LC_MESSAGES/persian-calendar.po" "$$dir.UTF-8.json"; \
+        rm -rf $$dir; \
+	done
 	find build -type f -iname '*.pot' -delete
 	glib-compile-schemas build/schemas/
 
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
 	find $(_UUID) -type f -iname '*.po' -exec msgmerge --update "{}" $(_UUID)/locale/persian-calendar.pot \;
-	find $(_UUID) -type f -iname '*.po~' -exec rm -rf "{}" \;
+	find $(_UUID) -type f -iname '*~' -delete
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
