@@ -8,7 +8,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install modules
-      run: yarn
+      run: npm install eslint
     - name: Lint
       run: |
         make check_eslint
