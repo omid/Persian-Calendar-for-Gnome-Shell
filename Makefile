@@ -40,7 +40,7 @@ _build: clean update-translation
 	for dir in $$_LOCALE_DIRS; do \
 		cd build/locale; \
 		# npm -g install po2json \
-        po2json -p "$$dir/LC_MESSAGES/persian-calendar.po" "$$dir.UTF-8.json"; \
+        po2json "$$dir/LC_MESSAGES/persian-calendar.po" "$$dir.UTF-8.json"; \
         rm -rf $$dir; \
 	done
 	find build -type f -iname '*.pot' -delete
