@@ -28,12 +28,6 @@ function fillPreferencesWindow(window) {
 
   const page = new Adw.PreferencesPage();
 
-  // language group
-  const languageGroup = new Adw.PreferencesGroup();
-  page.add(languageGroup);
-
-  languageGroup.add(languageField(settings));
-
   // Indicator group
   const indicatorGroup = new Adw.PreferencesGroup();
   indicatorGroup.set_title(__("Tray widget options"));
@@ -93,6 +87,12 @@ function fillPreferencesWindow(window) {
       __("Hijri")
     )
   );
+
+  // language group
+  const languageGroup = new Adw.PreferencesGroup();
+  page.add(languageGroup);
+
+  languageGroup.add(languageField(settings));
 
   // Add our page to the window
   window.add(page);
