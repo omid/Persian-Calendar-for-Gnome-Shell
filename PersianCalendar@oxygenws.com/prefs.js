@@ -281,19 +281,19 @@ function toggleField(settings, field, title, subtitle = null) {
     return row;
 }
 
-function toggleTextField(settings, toggleField, textField, title) {
+function toggleTextField(settings, toggle_field, text_field, title) {
     const row = new Adw.ActionRow({title});
 
     const toggle = new Gtk.Switch({
-        active: settings.get_boolean(toggleField),
+        active: settings.get_boolean(toggle_field),
         valign: Gtk.Align.CENTER,
     });
-    settings.bind(toggleField, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
+    settings.bind(toggle_field, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
     let text = new Gtk.Entry({width_request: 130, valign: Gtk.Align.CENTER});
-    text.set_text(settings.get_string(textField));
+    text.set_text(settings.get_string(text_field));
     text.connect('changed', innerFormat =>
-        settings.set_string(textField, innerFormat.text),
+        settings.set_string(text_field, innerFormat.text),
     );
     text.set_icon_from_icon_name(
         Gtk.EntryIconPosition.SECONDARY,
