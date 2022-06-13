@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 12:21+0430\n"
+"POT-Creation-Date: 2022-06-13 12:54+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -488,7 +488,7 @@ msgstr ""
 
 #: PersianCalendar@oxygenws.com/prefs.js:26
 msgid ""
-"<span>Possible Formatting values:\n"
+"Possible Formatting values:\n"
 "\n"
 "%Y: 4-digit year\n"
 "%y: 2-digit year\n"
@@ -500,7 +500,7 @@ msgid ""
 "%d: 1 or 2-digit day\n"
 "%WW: Full day of week\n"
 "%ww: Abbreviated day of week\n"
-"%w: One-letter day of week</span>"
+"%w: One-letter day of week"
 msgstr ""
 
 #: PersianCalendar@oxygenws.com/prefs.js:31
@@ -511,93 +511,93 @@ msgstr ""
 msgid "Tray widget options"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:43
+#: PersianCalendar@oxygenws.com/prefs.js:46
 msgid "Startup notification"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:56
+#: PersianCalendar@oxygenws.com/prefs.js:60
 msgid "Events"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:68
+#: PersianCalendar@oxygenws.com/prefs.js:72
 msgid "Official Iranian lunar"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:69
-#: PersianCalendar@oxygenws.com/prefs.js:77
+#: PersianCalendar@oxygenws.com/prefs.js:73
+#: PersianCalendar@oxygenws.com/prefs.js:81
 msgid "It is needed to find holidays"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:76
+#: PersianCalendar@oxygenws.com/prefs.js:80
 msgid "Official Iranian solar"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:80
+#: PersianCalendar@oxygenws.com/prefs.js:84
 msgid "Old Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:82
+#: PersianCalendar@oxygenws.com/prefs.js:89
 msgid "Persian personages"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:84
+#: PersianCalendar@oxygenws.com/prefs.js:92
 msgid "International"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:90
+#: PersianCalendar@oxygenws.com/prefs.js:98
 msgid "Misc"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:96
+#: PersianCalendar@oxygenws.com/prefs.js:104
 msgid "Show date"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:97
+#: PersianCalendar@oxygenws.com/prefs.js:105
 msgid "Will be displayed below the calendar"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:106
+#: PersianCalendar@oxygenws.com/prefs.js:114
 msgid "Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:114
+#: PersianCalendar@oxygenws.com/prefs.js:122
 msgid "Gregorian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:122
+#: PersianCalendar@oxygenws.com/prefs.js:130
 msgid "Hijri"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:136
+#: PersianCalendar@oxygenws.com/prefs.js:144
 msgid "Language"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:152
+#: PersianCalendar@oxygenws.com/prefs.js:160
 msgid "Holidays and weekends color"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:172
+#: PersianCalendar@oxygenws.com/prefs.js:180
 msgid "Position"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:175
-#: PersianCalendar@oxygenws.com/prefs.js:177
+#: PersianCalendar@oxygenws.com/prefs.js:183
+#: PersianCalendar@oxygenws.com/prefs.js:185
 msgid "Right"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:175
-#: PersianCalendar@oxygenws.com/prefs.js:177
+#: PersianCalendar@oxygenws.com/prefs.js:183
+#: PersianCalendar@oxygenws.com/prefs.js:185
 msgid "Left"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:176
+#: PersianCalendar@oxygenws.com/prefs.js:184
 msgid "Center"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:201
+#: PersianCalendar@oxygenws.com/prefs.js:209
 msgid "Format"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/prefs.js:227
+#: PersianCalendar@oxygenws.com/prefs.js:235
 msgid "Use custom color"
 msgstr ""
