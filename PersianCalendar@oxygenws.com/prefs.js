@@ -26,12 +26,17 @@ function fillPreferencesWindow(window) {
     "<span>Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week</span>"
   );
 
-  const page = new Adw.PreferencesPage();
+  // Page Appearance
+  const pageAppearance = new Adw.PreferencesPage({
+    title: __("Appearance"),
+    icon_name: "applications-graphics-symbolic",
+  });
 
-  // Indicator group
-  const indicatorGroup = new Adw.PreferencesGroup();
-  indicatorGroup.set_title(__("Tray widget options"));
-  page.add(indicatorGroup);
+  // Page Appearance - Indicator group
+  const indicatorGroup = new Adw.PreferencesGroup({
+    title: __("Tray widget options"),
+  });
+  pageAppearance.add(indicatorGroup);
 
   indicatorGroup.add(indicatorPositionField(settings));
   indicatorGroup.add(
@@ -40,28 +45,58 @@ function fillPreferencesWindow(window) {
   indicatorGroup.add(customColorField(settings));
   indicatorGroup.add(indicatorFormatField(settings));
 
-  // Events group
+  const appearanceEventsGroup = new Adw.PreferencesGroup();
+  pageAppearance.add(appearanceEventsGroup);
+  appearanceEventsGroup.add(vacationColorField(settings));
+
+  window.add(pageAppearance);
+
+  // Page Events
+  const pageEvents = new Adw.PreferencesPage({
+    title: __("Events"),
+    icon_name: "org.gnome.Calendar-symbolic",
+  });
+
+  // Page Events - Events group
   const eventsGroup = new Adw.PreferencesGroup();
-  eventsGroup.set_title(__("Events"));
-  page.add(eventsGroup);
+  pageEvents.add(eventsGroup);
 
   eventsGroup.add(
-    toggleField(settings, "event-iran-lunar", __("Official Iranian lunar"))
+    toggleField(
+      settings,
+      "event-iran-lunar",
+      __("Official Iranian lunar"),
+      __("It is needed to find holidays")
+    )
   );
   eventsGroup.add(
-    toggleField(settings, "event-iran-solar", __("Official Iranian solar"))
+    toggleField(
+      settings,
+      "event-iran-solar",
+      __("Official Iranian solar"),
+      __("It is needed to find holidays")
+    )
   );
   eventsGroup.add(toggleField(settings, "event-persian", __("Old Persian")));
   eventsGroup.add(
     toggleField(settings, "event-persian-personage", __("Persian personages"))
   );
   eventsGroup.add(toggleField(settings, "event-world", __("International")));
-  eventsGroup.add(vacationColorField(settings));
 
-  // Show date Group
-  const showDatesGroup = new Adw.PreferencesGroup();
-  showDatesGroup.set_title(__("Show date"));
-  page.add(showDatesGroup);
+  window.add(pageEvents);
+
+  // Page Misc
+  const pageMisc = new Adw.PreferencesPage({
+    title: __("Misc"),
+    icon_name: "preferences-other-symbolic",
+  });
+
+  // Page Misc - Show date Group
+  const showDatesGroup = new Adw.PreferencesGroup({
+    title: __("Show date"),
+    description: __("Will be displayed below the calendar"),
+  });
+  pageMisc.add(showDatesGroup);
 
   showDatesGroup.add(
     toggleTextField(
@@ -88,14 +123,12 @@ function fillPreferencesWindow(window) {
     )
   );
 
-  // language group
+  // Page Misc - language group
   const languageGroup = new Adw.PreferencesGroup();
-  page.add(languageGroup);
-
+  pageMisc.add(languageGroup);
   languageGroup.add(languageField(settings));
 
-  // Add our page to the window
-  window.add(page);
+  window.add(pageMisc);
 }
 
 // Custom Fields
@@ -224,8 +257,8 @@ function customColorField(settings) {
 }
 
 // Most used Fields
-function toggleField(settings, field, title) {
-  const row = new Adw.ActionRow({ title: title });
+function toggleField(settings, field, title, subtitle = null) {
+  const row = new Adw.ActionRow({ title: title, subtitle: subtitle });
 
   const toggle = new Gtk.Switch({
     active: settings.get_boolean(field),
