@@ -11,8 +11,6 @@ const {getTextDirection, getJustification, isGnomeRtl} =
 
 function init() {}
 
-let possibleForamts = null;
-
 function fillPreferencesWindow(window) {
     const settings = ExtensionUtils.getSettings();
 
@@ -21,10 +19,6 @@ function fillPreferencesWindow(window) {
     window.connect('close-request', () => {
         unload_locale();
     });
-
-    possibleForamts = __(
-        'Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week',
-    );
 
     // Page Appearance
     const pageAppearance = new Adw.PreferencesPage({
@@ -218,7 +212,7 @@ function indicatorFormatField(settings) {
     );
     format.set_icon_tooltip_markup(
         Gtk.EntryIconPosition.SECONDARY,
-        possibleForamts,
+        __('Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week'),
     );
     format.set_text(settings.get_string('widget-format'));
     format.connect('changed', innerFormat =>
@@ -301,7 +295,7 @@ function toggleTextField(settings, toggle_field, text_field, title) {
     );
     text.set_icon_tooltip_markup(
         Gtk.EntryIconPosition.SECONDARY,
-        possibleForamts,
+        __('Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week'),
     );
 
     row.add_suffix(text);
