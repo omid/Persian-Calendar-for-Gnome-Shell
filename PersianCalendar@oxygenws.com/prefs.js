@@ -25,7 +25,7 @@ function fillPreferencesWindow(window) {
     });
 
     Gtk.Widget.set_default_direction(getTextDirection());
-    
+
     // Page Appearance
     const pageAppearance = new Adw.PreferencesPage({
         title: __('Appearance'),
