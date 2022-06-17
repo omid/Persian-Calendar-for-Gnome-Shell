@@ -19,10 +19,11 @@ function fillPreferencesWindow(window) {
     const settings = ExtensionUtils.getSettings();
 
     load_locale();
-
     window.connect('close-request', () => {
         unload_locale();
     });
+
+    Gtk.Widget.set_default_direction(getTextDirection());
 
     // Page Appearance
     const pageAppearance = new Adw.PreferencesPage({
