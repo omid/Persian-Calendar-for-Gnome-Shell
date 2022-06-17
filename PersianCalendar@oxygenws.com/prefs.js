@@ -133,7 +133,16 @@ function fillPreferencesWindow(window) {
     // Page Misc - language group
     const languageGroup = new Adw.PreferencesGroup();
     pageMisc.add(languageGroup);
+
     languageGroup.add(languageField(settings));
+
+    settings.connect('changed::language', () => {
+        window.close();
+        Gio.Subprocess.new(
+            ['gnome-extensions', 'prefs', 'PersianCalendar@oxygenws.com'],
+            Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
+        );
+    });
 
     window.add(pageMisc);
 }
