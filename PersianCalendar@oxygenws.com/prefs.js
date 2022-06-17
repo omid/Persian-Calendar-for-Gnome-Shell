@@ -145,7 +145,6 @@ function languageField(settings) {
     const item = new Gtk.ComboBoxText({valign: Gtk.Align.CENTER});
     item.append('fa_IR.UTF-8', 'فارسی');
     item.append('en_US.UTF-8', 'English');
-    item.set_direction(getTextDirection());
     item.set_active(settings.get_enum('language'));
     settings.bind('language', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 
