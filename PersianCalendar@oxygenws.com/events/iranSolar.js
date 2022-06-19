@@ -1,3 +1,5 @@
+'use strict';
+
 var iranSolar = class {
     constructor() {
         this.name = 'مناسبت‌های رسمی ایران';

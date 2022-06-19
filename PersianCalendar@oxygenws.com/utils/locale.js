@@ -1,3 +1,5 @@
+'use strict';
+
 const {Gtk} = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();

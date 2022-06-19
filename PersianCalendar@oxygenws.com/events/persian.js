@@ -1,3 +1,5 @@
+'use strict';
+
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
 const ExtensionUtils = imports.misc.extensionUtils;

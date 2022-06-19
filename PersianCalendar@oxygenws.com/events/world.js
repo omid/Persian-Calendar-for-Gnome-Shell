@@ -1,3 +1,5 @@
+'use strict';
+
 // copyright http://www.farhangiran.com
 var world = class {
     constructor() {

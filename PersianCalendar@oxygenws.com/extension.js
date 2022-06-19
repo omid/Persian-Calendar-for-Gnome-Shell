@@ -1,3 +1,5 @@
+'use strict';
+
 const {GObject, Clutter, St, Gio} = imports.gi;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;

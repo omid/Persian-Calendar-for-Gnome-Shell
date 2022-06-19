@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * https://github.com/SCR-IR/tarikh-npm
  */

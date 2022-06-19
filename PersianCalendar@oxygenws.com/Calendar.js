@@ -1,3 +1,5 @@
+'use strict';
+
 const {Clutter, St} = imports.gi;
 
 const ExtensionUtils = imports.misc.extensionUtils;

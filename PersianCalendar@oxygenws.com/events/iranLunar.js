@@ -1,3 +1,5 @@
+'use strict';
+
 var iranLunar = class {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';

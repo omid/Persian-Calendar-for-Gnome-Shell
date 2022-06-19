@@ -1,3 +1,5 @@
+'use strict';
+
 /*
  * Based on a code from http://farhadi.ir
  */
