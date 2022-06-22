@@ -21,11 +21,14 @@ function fillPreferencesWindow(window) {
     const settings = ExtensionUtils.getSettings();
 
     load_locale();
+
+    const default_dir = Gtk.Widget.get_default_direction();
+    Gtk.Widget.set_default_direction(getTextDirection());
+
     window.connect('close-request', () => {
         unload_locale();
+        Gtk.Widget.set_default_direction(default_dir);
     });
-
-    Gtk.Widget.set_default_direction(getTextDirection());
 
     // Page Appearance
     const pageAppearance = new Adw.PreferencesPage({
