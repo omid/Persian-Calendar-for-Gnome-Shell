@@ -17,11 +17,13 @@ install-local: _build
 clean:
 	rm -rf build/
 
+_version_bump: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 release: eslint _version_bump _build
 	gitg
 	git commit -v
-	git push
-	cd build && zip -qr ../"$(_UUID)$(shell jq '.version' $(_UUID)/metadata.json).zip" .
+	git tag $(_VERSION)
+	git push --tags
+	cd build && zip -qr ../"$(_UUID)$(_VERSION).zip" .
 	$(MAKE) clean
 
 eslint:
