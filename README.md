@@ -24,7 +24,7 @@ An extension for Gnome-Shell to show Persian date and calendar
 * I enable the extension, but it doesn't appear and when I refresh the page, it's disabled again! Why?!
    * If you don't have `gnome-tweaks`, first install it. Then open it and go to the “extensions” section. There is a button in the title bar of the window, make sure it's enabled.
    * If you cannot see the “extensions” section in the `gnome-tweaks` application, congratulation, you are using a more up-to-date version of Gnome, so in this case, please use the `gnome-extensions` application and make sure the button is enabled.
-* If none of the above works, you can install [Extension Manager](https://github.com/mjakeman/extension-manager) via Ubuntu Software or flatpack, then install and activate the extension through it. Extension Manager is a tool for managing GNOME Shell Extensions.
+* If none of the above works, you can install [Extension Manager](https://github.com/mjakeman/extension-manager#-installing), then install and activate the extension through it. Extension Manager is a tool for managing GNOME Shell Extensions.
 
 #### Links:
 * :octocat: https://github.com/omid/Persian-Calendar-for-Gnome-Shell
