@@ -444,7 +444,7 @@ const PersianCalendar = GObject.registerClass(
 
         _showNowruzNotification() {
             /* calculate exact hour/minute/second of the next new year.
-             it calculates with some small differences!*/
+             it calculates with some small differences! */
             let now = new Date();
             let pdate = PersianDate.gregorianToPersian(
                 now.getFullYear(),
