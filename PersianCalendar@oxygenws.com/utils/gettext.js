@@ -7,25 +7,25 @@ const Gio = imports.gi.Gio;
 let locale;
 
 function __(msgid) {
-    if (typeof locale[msgid] !== 'undefined') {
-        return locale[msgid][1];
-    } else {
+    if (typeof locale[msgid] === 'undefined') {
         return msgid;
+    } else {
+        return locale[msgid][1];
     }
 }
 
 function n__(msgid1, msgid2, n) {
     // This naive implementation may not be correct for all locales, but it's enough for now
     if (n === 1) {
-        if (typeof locale[msgid1] !== 'undefined') {
-            return locale[msgid1][1];
-        } else {
+        if (typeof locale[msgid1] === 'undefined') {
             return msgid1;
+        } else {
+            return locale[msgid1][1];
         }
-    } else if (typeof locale[msgid1] !== 'undefined') {
-        return locale[msgid1][2];
-    } else {
+    } else if (typeof locale[msgid1] === 'undefined') {
         return msgid2;
+    } else {
+        return locale[msgid1][2];
     }
 }
 
@@ -33,10 +33,10 @@ function p__(context, msgid) {
     // \u0004 is what po2json application put between context and msgid
     let index = `${context}\u0004${msgid}`;
 
-    if (typeof locale[index] !== 'undefined') {
-        return locale[index][1];
-    } else {
+    if (typeof locale[index] === 'undefined') {
         return msgid;
+    } else {
+        return locale[index][1];
     }
 }
 
