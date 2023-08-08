@@ -94,7 +94,7 @@ const PersianCalendar = GObject.registerClass(
             vbox.add_actor(this._calendar.actor);
             this._calendar.actor.add_style_class_name('pcalendar-font');
 
-            // /////////////////////////////
+            // //////////////////////////////
             // some codes for fonts
             // MainLoop.timeout_add(1000, () => {
             //     this._onFontChangeForIcon();
@@ -106,7 +106,7 @@ const PersianCalendar = GObject.registerClass(
             // });
             // Settings.connect('changed::font', this._onFontChangeForCalendar.bind(this));
             // Settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
-            // /////////////////////////////
+            // //////////////////////////////
 
             this._generateConverterPart();
 
@@ -156,7 +156,7 @@ const PersianCalendar = GObject.registerClass(
             this.menu.connect('open-state-changed', (menu, isOpen) => {
                 if (isOpen) {
                     let now = new Date();
-                    now = PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+                    now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
                     this._calendar.setDate(now);
                 }
             });
@@ -189,7 +189,7 @@ const PersianCalendar = GObject.registerClass(
             let _dayOfWeek = _date.getDay();
 
             // convert to Persian
-            _date = PersianDate.gregorianToPersian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
+            _date = PersianDate.fromGregorian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
 
             // if today is "today" just return, don't change anything!
             if (!force && this._today === _date.yearDays) {
@@ -374,18 +374,18 @@ const PersianCalendar = GObject.registerClass(
 
             switch (this._activeConverter) {
             case ConverterTypes.fromGregorian:
-                pDate = PersianDate.gregorianToPersian(year, month, day);
+                pDate = PersianDate.fromGregorian(year, month, day);
                 hDate = HijriDate.fromGregorian(year, month, day);
                 break;
 
             case ConverterTypes.fromPersian:
-                gDate = PersianDate.persianToGregorian(year, month, day);
+                gDate = PersianDate.toGregorian(year, month, day);
                 hDate = HijriDate.fromGregorian(gDate.year, gDate.month, gDate.day);
                 break;
 
             case ConverterTypes.fromHijri:
                 gDate = HijriDate.toGregorian(year, month, day);
-                pDate = PersianDate.gregorianToPersian(gDate.year, gDate.month, gDate.day);
+                pDate = PersianDate.fromGregorian(gDate.year, gDate.month, gDate.day);
                 break;
 
             default:
@@ -446,7 +446,7 @@ const PersianCalendar = GObject.registerClass(
             /* calculate exact hour/minute/second of the next new year.
              it calculates with some small differences! */
             let now = new Date();
-            let pdate = PersianDate.gregorianToPersian(
+            let pdate = PersianDate.fromGregorian(
                 now.getFullYear(),
                 now.getMonth() + 1,
                 now.getDate(),

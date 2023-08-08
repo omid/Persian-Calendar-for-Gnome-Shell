@@ -7,6 +7,12 @@ const {PersianDate, HijriDate} = Me.imports;
 const {persian, world, iranSolar, iranLunar, persianPersonage} = Me.imports.events;
 const str = Me.imports.utils.str;
 
+const calendarToIndex = {
+    gregorian: 0,
+    persian: 1,
+    hijri: 2,
+};
+
 var Events = class {
     constructor(schema) {
         this.schema = schema;
@@ -22,66 +28,94 @@ var Events = class {
             this._isHoliday = true;
         }
 
-        // store gregorian date of today
-        this._today[0] = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
-
-        // convert to Persian
-        let ptoday = PersianDate.gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
-        // store persian date of today
-        this._today[1] = [ptoday.year, ptoday.month, ptoday.day];
-        // store hijri date of today
-        today = HijriDate.fromGregorian(this._today[0][0], this._today[0][1], this._today[0][2]);
-        this._today[2] = [today.year, today.month, today.day];
+        let gtoday = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
+        let ptoday = PersianDate.fromGregorian(gtoday[0], gtoday[1], gtoday[2]);
+        let htoday = HijriDate.fromGregorian(gtoday[0], gtoday[1], gtoday[2]);
+        this._today = [
+            gtoday,
+            [ptoday.year, ptoday.month, ptoday.day],
+            [htoday.year, htoday.month, htoday.day],
+        ];
 
         // ///
+        const events = {
+            'event-iran-solar': () => new iranSolar.iranSolar(),
+            'event-iran-lunar': () => new iranLunar.iranLunar(),
+            'event-persian-personage': () => new persianPersonage.persianPersonage(ptoday.year),
+            'event-world': () => new world.world(),
+            'event-persian': () => new persian.persian(),
+        };
+
+        const holidays = {
+            'none': [],
+            'iran': ['event-iran-solar', 'event-iran-lunar'],
+        };
+
         let eventsList = [];
-        if (this.schema.get_boolean('event-persian')) {
-            eventsList.push(new persian.persian(ptoday.year));
-        }
+        let holidayList = [];
 
-        if (this.schema.get_boolean('event-world')) {
-            eventsList.push(new world.world());
-        }
+        for (let key in events) {
+            if (this.schema.get_string(key) !== 'none') {
+                let e = events[key]();
+                if (this.schema.get_string(key) === 'holidays-only') {
+                    this._filterHolidays(e);
+                }
+                eventsList.push(e);
+            }
 
-        if (this.schema.get_boolean('event-iran-solar')) {
-            eventsList.push(new iranSolar.iranSolar());
-        }
-
-        if (this.schema.get_boolean('event-iran-lunar')) {
-            eventsList.push(new iranLunar.iranLunar());
-        }
-
-        if (this.schema.get_boolean('event-persian-personage')) {
-            eventsList.push(new persianPersonage.persianPersonage());
+            if (holidays[this.schema.get_string('holidays-country')].includes(key)) {
+                let e = events[key]();
+                this._filterHolidays(e);
+                holidayList.push(e);
+            }
         }
         // ///
 
-        eventsList.forEach(this._checkEvent, this);
+        this._fillEvent(eventsList);
+        this._checkHoliday(holidayList);
+
         return [this._events, this._isHoliday];
     }
 
-    _checkEvent(el) {
-        let type = 0;
-
-        switch (el.type) {
-        case 'gregorian':
-            type = 0;
-            break;
-        case 'persian':
-            type = 1;
-            break;
-        case 'hijri':
-            type = 2;
-            break;
-        default:
-            // do nothing
+    _filterHolidays(events) {
+        for (let i = 0; i < events.events.length; i++) {
+            if (typeof events.events[i] !== 'undefined') {
+                for (let j = 0; j < events.events[i].length; j++) {
+                    if (typeof events.events[i][j] !== 'undefined') {
+                        for (let k = 0; k < events.events[i][j].length; k++) {
+                            if (typeof events.events[i][j][k] !== 'undefined' && !events.events[i][j][k][1]) {
+                                events.events[i][j].splice(k, 1);
+                            }
+                        }
+                    }
+                }
+            }
         }
+    }
 
-        // if event is available, set event
-        // and if it is holiday, set today as holiday!
-        if (el.events[this._today[type][1]][this._today[type][2]]) {
-            this._events += `\n⚫︎ ${str.wordWrap(el.events[this._today[type][1]][this._today[type][2]][0], 50)}`;
-            this._isHoliday = this._isHoliday || el.events[this._today[type][1]][this._today[type][2]][1];
+    _fillEvent(eventsList) {
+        for (let i = 0; i < eventsList.length; i++) {
+            let type = calendarToIndex[eventsList[i].type];
+
+            // if event is available, set event
+            if (eventsList[i].events[this._today[type][1]][this._today[type][2]]) {
+                for (let j = 0; j < eventsList[i].events[this._today[type][1]][this._today[type][2]].length; j++) {
+                    this._events += `\n⚫︎ ${str.wordWrap(eventsList[i].events[this._today[type][1]][this._today[type][2]][j][0], 50)}`;
+                }
+            }
+        }
+    }
+
+    _checkHoliday(eventsList) {
+        for (let i = 0; i < eventsList.length; i++) {
+            let type = calendarToIndex[eventsList[i].type];
+
+            // if it is holiday, set today as holiday!
+            if (eventsList[i].events[this._today[type][1]][this._today[type][2]]) {
+                for (let j = 0; j < eventsList[i].events[this._today[type][1]][this._today[type][2]].length; j++) {
+                    this._isHoliday = this._isHoliday || eventsList[i].events[this._today[type][1]][this._today[type][2]][j][1];
+                }
+            }
         }
     }
 };

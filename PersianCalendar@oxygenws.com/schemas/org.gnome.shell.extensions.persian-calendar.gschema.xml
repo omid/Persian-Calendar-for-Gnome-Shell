@@ -8,90 +8,89 @@
     <value nick="fa_IR.UTF-8" value="0"/>
     <value nick="en_US.UTF-8" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.persian-calendar.events">
+    <value nick="none" value="0"/>
+    <value nick="holidays-only" value="1"/>
+    <value nick="events" value="2"/>
+  </enum>
+  <enum id="org.gnome.shell.extensions.persian-calendar.holiday-countries">
+    <value nick="none" value="0"/>
+    <value nick="iran" value="1"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
     <key name="language" enum="org.gnome.shell.extensions.persian-calendar.languages">
       <default>'fa_IR.UTF-8'</default>
       <summary>Extension language</summary>
     </key>
+    <key name="holidays-country" enum="org.gnome.shell.extensions.persian-calendar.holiday-countries">
+      <default>'iran'</default>
+      <summary>Holidays Country</summary>
+    </key>
     <key name="hijri-display" type="b">
       <default>true</default>
       <summary>Display Hijri date below the calendar</summary>
-      <description>Set to true to display Hijri date.</description>
     </key>
     <key name="gregorian-display" type="b">
       <default>true</default>
       <summary>Display Gregorian date below the calendar</summary>
-      <description>Set to true to display Gregorian date.</description>
     </key>
     <key name="persian-display" type="b">
       <default>true</default>
       <summary>Display Persian date below the calendar</summary>
-      <description>Set to true to display Persian date.</description>
     </key>
     <key name="hijri-display-format" type="s">
       <default>'%D / %M / %Y'</default>
       <summary>Hijri date format</summary>
-      <description>Hijri date format</description>
     </key>
     <key name="gregorian-display-format" type="s">
       <default>'%D / %M / %Y'</default>
       <summary>Gregorian date format</summary>
-      <description>Gregorian date format</description>
     </key>
     <key name="persian-display-format" type="s">
       <default>'%D / %M / %Y'</default>
       <summary>Persian date format</summary>
-      <description>Persian date format</description>
     </key>
-    <key name="event-iran-lunar" type="b">
-      <default>true</default>
-      <summary>Display official Iranian lunar events</summary>
-      <description>Display official Iranian lunar events.</description>
-    </key>
-    <key name="event-iran-solar" type="b">
-      <default>true</default>
+    <!-- Events -->
+    <key name="event-iran-solar" enum="org.gnome.shell.extensions.persian-calendar.events">
+      <default>'events'</default>
       <summary>Display official Iranian solar events</summary>
-      <description>Display official Iranian solar events.</description>
     </key>
-    <key name="event-persian" type="b">
-      <default>true</default>
+    <key name="event-iran-lunar" enum="org.gnome.shell.extensions.persian-calendar.events">
+      <default>'events'</default>
+      <summary>Display official Iranian lunar events</summary>
+    </key>
+    <key name="event-persian" enum="org.gnome.shell.extensions.persian-calendar.events">
+      <default>'events'</default>
       <summary>Display old Persian events</summary>
-      <description>Display old Persian events.</description>
     </key>
-    <key name="event-persian-personage" type="b">
-      <default>true</default>
+    <key name="event-persian-personage" enum="org.gnome.shell.extensions.persian-calendar.events">
+      <default>'events'</default>
       <summary>Display Persian personage events</summary>
-      <description>Display Persian personage events.</description>
     </key>
-    <key name="event-world" type="b">
-      <default>true</default>
+    <key name="event-world" enum="org.gnome.shell.extensions.persian-calendar.events">
+      <default>'events'</default>
       <summary>Display official international events</summary>
-      <description>Display official international events.</description>
     </key>
+    <!-- Widgets -->
     <key name="widget-format" type="s">
       <default>'%d'</default>
       <summary>Widget date format</summary>
-      <description>Widget date format</description>
     </key>
     <key name="startup-notification" type="b">
       <default>true</default>
       <summary>Startup Notification</summary>
-      <description>Show notification on start up</description>
     </key>
     <key name="custom-color" type="b">
       <default>false</default>
       <summary>Use custom color</summary>
-      <description>Use custom color.</description>
     </key>
     <key name="color" type="s">
       <default>'#000000'</default>
       <summary>Custom color</summary>
-      <description>Custom color.</description>
     </key>
     <key name="nonwork-color" type="s">
       <default>'#f57f91'</default>
       <summary>Nonwork color</summary>
-      <description>Nonwork color.</description>
     </key>
     <key name="position" enum="org.gnome.shell.extensions.persian-calendar.positions">
       <default>'right'</default>
@@ -105,12 +104,10 @@
     <key name="custom-font" type="b">
       <default>false</default>
       <summary>Use custom font</summary>
-      <description>Use custom font.</description>
     </key>
     <key name="font" type="s">
       <default>''</default>
       <summary>Custom font</summary>
-      <description>Custom font.</description>
     </key>
     -->
   </schema>

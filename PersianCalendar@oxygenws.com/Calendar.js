@@ -38,7 +38,7 @@ var Calendar = class {
         this.schema = schema;
         // Start off with the current date
         this._selectedDate = new Date();
-        this._selectedDate = PersianDate.gregorianToPersian(
+        this._selectedDate = PersianDate.fromGregorian(
             this._selectedDate.getFullYear(),
             this._selectedDate.getMonth() + 1,
             this._selectedDate.getDate(),
@@ -242,7 +242,7 @@ var Calendar = class {
 
     _update() {
         let now = new Date();
-        now = PersianDate.gregorianToPersian(now.getFullYear(), now.getMonth() + 1, now.getDate());
+        now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
 
         let pattern;
         if (this._selectedDate.year === now.year) {
@@ -267,7 +267,7 @@ var Calendar = class {
 
         // Start at the beginning of the week before the start of the month
         let iter = this._selectedDate;
-        iter = PersianDate.persianToGregorian(iter.year, iter.month, 1);
+        iter = PersianDate.toGregorian(iter.year, iter.month, 1);
         iter = new Date(iter.year, iter.month - 1, iter.day);
         let daysToWeekStart = (7 + iter.getDay() - this._weekStart) % 7;
         iter.setDate(iter.getDate() - daysToWeekStart);
@@ -278,7 +278,7 @@ var Calendar = class {
 
         /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
         while (true) {
-            let p_iter = PersianDate.gregorianToPersian(
+            let p_iter = PersianDate.fromGregorian(
                 iter.getFullYear(),
                 iter.getMonth() + 1,
                 iter.getDate(),
@@ -339,7 +339,7 @@ var Calendar = class {
         }
 
         // find gregorian date
-        let g_selectedDate = PersianDate.persianToGregorian(
+        let g_selectedDate = PersianDate.toGregorian(
             this._selectedDate.year,
             this._selectedDate.month,
             this._selectedDate.day,

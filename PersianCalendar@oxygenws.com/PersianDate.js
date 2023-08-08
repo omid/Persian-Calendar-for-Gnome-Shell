@@ -7,7 +7,7 @@
 const g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 const p_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
 
-function persianToGregorian(py, pm, pd) {
+function toGregorian(py, pm, pd) {
     py = parseInt(py) - 979;
     pm = parseInt(pm) - 1;
     pd = parseInt(pd) - 1;
@@ -60,7 +60,7 @@ function persianToGregorian(py, pm, pd) {
     return {year: gy, month: i + 1, day: g_day_no + 1};
 }
 
-function gregorianToPersian(gy, gm, gd) {
+function fromGregorian(gy, gm, gd) {
     gy = parseInt(gy) - 1600;
     gm = parseInt(gm) - 1;
     gd = parseInt(gd) - 1;
