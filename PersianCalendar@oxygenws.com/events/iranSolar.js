@@ -1,6 +1,6 @@
 'use strict';
 
-var iranSolar = class {
+export class iranSolar {
     constructor() {
         this.name = 'مناسبت‌های رسمی ایران';
         this.type = 'persian';

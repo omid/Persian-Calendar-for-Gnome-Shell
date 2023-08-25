@@ -9,7 +9,7 @@
  * see https://www.farhang.gov.ir/ershad_content/media/image/2020/09/1004261_orig.pdf
 */
 
-var world = class {
+export class world {
     constructor() {
         this.name = 'مناسبت‌های جهانی';
         this.type = 'gregorian';

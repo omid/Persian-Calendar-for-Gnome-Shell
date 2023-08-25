@@ -2,7 +2,7 @@
 
 // copyright http://www.farhangiran.com
 
-var persianPersonage = class {
+export class persianPersonage {
     constructor() {
         this.name = 'شخصیت‌های ایرانی';
         this.type = 'persian';

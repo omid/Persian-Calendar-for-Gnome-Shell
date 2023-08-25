@@ -6,12 +6,12 @@
 
 const COUNTRY = 'IR';
 
-function fromGregorian(year, month, day) {
+export function fromGregorian(year, month, day) {
     [year, month, day] = _gregorianToHijri(parseInt(year), parseInt(month), parseInt(day));
     return {year, month, day};
 }
 
-function toGregorian(year, month, day) {
+export function toGregorian(year, month, day) {
     [year, month, day] = _hijriToGregorian(parseInt(year), parseInt(month), parseInt(day));
     return {year, month, day};
 }

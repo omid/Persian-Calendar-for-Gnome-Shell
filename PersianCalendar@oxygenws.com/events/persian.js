@@ -2,11 +2,9 @@
 
 // copyright پژوهش‌های ایرانی at http://ghiasabadi.com/
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const PersianDate = Me.imports.PersianDate;
+import * as PersianDate from '../PersianDate.js';
 
-var persian = class {
+export class persian {
     constructor(pyear) {
         this.name = 'مناسبت‌های ملی';
         this.type = 'persian';

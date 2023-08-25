@@ -1,29 +1,31 @@
 'use strict';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const {__} = Me.imports.utils.gettext;
-
-function transDigits(str) {
-    let enums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    let pnums = [__('0'), __('1'), __('2'), __('3'), __('4'), __('5'), __('6'), __('7'), __('8'), __('9')];
-
-    return replace(enums, pnums, str);
-}
-
-function replace(search, substitute, subject) {
-    let length = search.length;
-    subject = subject.toString();
-
-    for (let i = 0; i < length; i++) {
-        subject = subject.split(search[i]).join(substitute[i]);
+export class Str {
+    constructor(gettext) {
+        this._gettext = gettext;
     }
 
-    return subject;
-}
+    transDigits(str) {
+        let enums = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+        let pnums = [this._gettext.__('0'), this._gettext.__('1'), this._gettext.__('2'), this._gettext.__('3'), this._gettext.__('4'), this._gettext.__('5'), this._gettext.__('6'), this._gettext.__('7'), this._gettext.__('8'), this._gettext.__('9')];
 
-function wordWrap(str, maxWidth) {
-    return str.replace(
-        new RegExp(`(?![^\\n]{1,${maxWidth}}$)([^\\n]{1,${maxWidth}})\\s`, 'g'), '$1\n',
-    );
+        return this.replace(enums, pnums, str);
+    }
+
+    replace(search, substitute, subject) {
+        let length = search.length;
+        subject = subject.toString();
+
+        for (let i = 0; i < length; i++) {
+            subject = subject.split(search[i]).join(substitute[i]);
+        }
+
+        return subject;
+    }
+
+    wordWrap(str, maxWidth) {
+        return str.replace(
+            new RegExp(`(?![^\\n]{1,${maxWidth}}$)([^\\n]{1,${maxWidth}})\\s`, 'g'), '$1\n',
+        );
+    }
 }

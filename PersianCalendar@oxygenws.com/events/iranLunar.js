@@ -4,7 +4,7 @@
  * see https://www.farhang.gov.ir/ershad_content/media/image/2020/09/1004261_orig.pdf
  */
 
-var iranLunar = class {
+export class iranLunar {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';
         this.type = 'hijri';
