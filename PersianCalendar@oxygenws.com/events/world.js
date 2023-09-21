@@ -13,7 +13,7 @@ export class world {
     constructor() {
         this.name = 'مناسبت‌های جهانی';
         this.type = 'gregorian';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['جشن آغاز سال نو میلادی', false]];

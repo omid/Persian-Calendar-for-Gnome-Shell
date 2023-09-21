@@ -8,7 +8,7 @@ export class persian {
     constructor(pyear) {
         this.name = 'مناسبت‌های ملی';
         this.type = 'persian';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['جشن نوروز', false]];

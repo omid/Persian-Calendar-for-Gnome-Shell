@@ -6,7 +6,7 @@ export class persianPersonage {
     constructor() {
         this.name = 'شخصیت‌های ایرانی';
         this.type = 'persian';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][6] = [['زایش زرتشت', false]];

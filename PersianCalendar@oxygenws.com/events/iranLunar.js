@@ -8,7 +8,7 @@ export class iranLunar {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';
         this.type = 'hijri';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['آغاز سال جدید هجری قمری', false]];
