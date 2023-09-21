@@ -98,8 +98,8 @@ export class Calendar {
 
         this.actor.destroy_all_children();
 
-        // Top line of the calendar '<| year month |>'
-        this._topBox = new St.BoxLayout();
+        // Top line of the calendar '<< < year month > >>'
+        this._topBox = new St.BoxLayout({style_class: 'calendar-month-header'});
         this.actor.layout_manager.attach(this._topBox, 0, 0, 7, 1);
 
         let icon, nextYearButton, prevYearButton, nextMonthButton, prevMonthButton;
@@ -115,7 +115,7 @@ export class Calendar {
         icon.set_icon_size(16);
 
         this._monthLabel = new St.Label({
-            style_class: 'calendar-month-label pcalendar-month-label',
+            style_class: 'calendar-day calendar-day-heading pcalendar-month-label',
             x_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
@@ -132,23 +132,23 @@ export class Calendar {
         icon.set_icon_size(16);
 
         if (this._locale.isRtl()) {
-            this._topBox.add(nextYearButton);
-            this._topBox.add(nextMonthButton);
-            this._topBox.add(this._monthLabel);
-            this._topBox.add(prevMonthButton);
-            this._topBox.add(prevYearButton);
+            this._topBox.add_child(nextYearButton);
+            this._topBox.add_child(nextMonthButton);
+            this._topBox.add_child(this._monthLabel);
+            this._topBox.add_child(prevMonthButton);
+            this._topBox.add_child(prevYearButton);
         } else {
-            this._topBox.add(prevYearButton);
-            this._topBox.add(prevMonthButton);
-            this._topBox.add(this._monthLabel);
-            this._topBox.add(nextMonthButton);
-            this._topBox.add(nextYearButton);
+            this._topBox.add_child(prevYearButton);
+            this._topBox.add_child(prevMonthButton);
+            this._topBox.add_child(this._monthLabel);
+            this._topBox.add_child(nextMonthButton);
+            this._topBox.add_child(nextYearButton);
         }
 
         // Add weekday labels...
         for (let i = 0; i < 7; i++) {
             let label = new St.Label({
-                style_class: 'calendar-day-base calendar-day-heading pcalendar-weekday',
+                style_class: 'calendar-day calendar-day-heading pcalendar-weekday',
                 text: this.phrases.weekdayOne[i],
             });
             this._setFont(label);
@@ -291,24 +291,24 @@ export class Calendar {
             // find events and holidays
             events = this._events.getEvents(iter);
 
-            let styleClass = 'calendar-day-base calendar-day pcalendar-day';
+            let styleClass = 'calendar-day pcalendar-day';
             if (is_same_month) {
                 if (events[0]) {
                     styleClass += ' pcalendar-day-with-events ';
                 }
 
                 if (events[1]) {
-                    styleClass += ' calendar-nonwork-day pcalendar-nonwork-day ';
+                    styleClass += ' calendar-weekend pcalendar-weekend ';
                     button.set_style(`color:${this._schema.get_string('nonwork-color')}`);
                 } else {
-                    styleClass += ' calendar-work-day pcalendar-work-day ';
+                    styleClass += ' calendar-weekday pcalendar-weekday ';
                 }
             }
 
             if (this._sameDay(now, p_iter)) {
                 styleClass += ' calendar-today ';
             } else if (!is_same_month) {
-                styleClass += ' calendar-other-month-day pcalendar-other-month-day ';
+                styleClass += ' calendar-other-month pcalendar-other-month ';
             }
 
             if (this._sameDay(this._selectedDate, p_iter)) {
@@ -357,7 +357,7 @@ export class Calendar {
             let _datesBox_p = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
             let button = this.getPersianDateButton(this._selectedDate, g_selectedDate.getDay());
-            _datesBox_p.add(button);
+            _datesBox_p.add_child(button);
         }
 
         // add gregorian date
@@ -370,7 +370,7 @@ export class Calendar {
                 year: g_selectedDate.getFullYear(),
             };
             let button = this.getGregorianDateButton(gDate, g_selectedDate.getDay());
-            _datesBox_g.add(button);
+            _datesBox_g.add_child(button);
         }
 
         // add hijri date
@@ -378,7 +378,7 @@ export class Calendar {
             let _datesBox_h = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
             let button = this.getHijriDateButton(h_selectedDate, g_selectedDate.getDay());
-            _datesBox_h.add(button);
+            _datesBox_h.add_child(button);
         }
 
         // add event box for selected date
@@ -395,7 +395,7 @@ export class Calendar {
             });
             this._setFont(bottomLabel);
 
-            _eventBox.add(bottomLabel);
+            _eventBox.add_child(bottomLabel);
         }
     }
 

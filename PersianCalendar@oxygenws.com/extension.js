@@ -141,7 +141,7 @@ const PersianCalendar = GObject.registerClass(
             preferencesIcon.connect('clicked', () => {
                 this._openPreferences();
             });
-            actionButtons.actor.add(preferencesIcon);
+            actionButtons.actor.add_child(preferencesIcon);
 
             // Add Nowruz button
             icon = new St.Icon({
@@ -158,7 +158,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
             });
             nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));
-            actionButtons.actor.add(nowruzIcon);
+            actionButtons.actor.add_child(nowruzIcon);
 
             this.menu.connect('open-state-changed', (isOpen) => {
                 if (isOpen) {
@@ -301,16 +301,16 @@ const PersianCalendar = GObject.registerClass(
             fromHijri.TypeID = ConverterTypes.fromHijri;
 
             if (this._locale.isGnomeRtl()) {
-                middleBox.add(fromPersian);
-                middleBox.add(fromGregorian);
-                middleBox.add(fromHijri);
+                middleBox.add_child(fromPersian);
+                middleBox.add_child(fromGregorian);
+                middleBox.add_child(fromHijri);
             } else {
-                middleBox.add(fromHijri);
-                middleBox.add(fromGregorian);
-                middleBox.add(fromPersian);
+                middleBox.add_child(fromHijri);
+                middleBox.add_child(fromGregorian);
+                middleBox.add_child(fromPersian);
             }
 
-            this.converterVbox.add(middleBox);
+            this.converterVbox.add_child(middleBox);
 
             let converterHbox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
 
@@ -341,21 +341,21 @@ const PersianCalendar = GObject.registerClass(
             });
 
             if (this._locale.isGnomeRtl()) {
-                converterHbox.add(this.converterDay);
-                converterHbox.add(this.converterMonth);
-                converterHbox.add(this.converterYear);
+                converterHbox.add_child(this.converterDay);
+                converterHbox.add_child(this.converterMonth);
+                converterHbox.add_child(this.converterYear);
             } else {
-                converterHbox.add(this.converterYear);
-                converterHbox.add(this.converterMonth);
-                converterHbox.add(this.converterDay);
+                converterHbox.add_child(this.converterYear);
+                converterHbox.add_child(this.converterMonth);
+                converterHbox.add_child(this.converterDay);
             }
 
             this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
 
-            this.converterVbox.add(converterHbox);
+            this.converterVbox.add_child(converterHbox);
 
             this.convertedDatesVbox = new St.BoxLayout({vertical: true});
-            this.converterVbox.add(this.convertedDatesVbox);
+            this.converterVbox.add_child(this.convertedDatesVbox);
         }
 
         _onModifyConverter() {
@@ -411,19 +411,19 @@ const PersianCalendar = GObject.registerClass(
             // add persian date
             if (pDate) {
                 let button = this._calendar.getPersianDateButton(pDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
 
             // add gregorian date
             if (gDate) {
                 let button = this._calendar.getGregorianDateButton(gDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
 
             // add hijri date
             if (hDate) {
                 let button = this._calendar.getHijriDateButton(hDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
         }
 
@@ -496,7 +496,7 @@ const PersianCalendar = GObject.registerClass(
         notify(msg, details) {
             let source = new MessageTray.SystemNotificationSource();
             let messageTray = new MessageTray.MessageTray();
-            messageTray.add(source);
+            messageTray.add_child(source);
             let notification = new MessageTray.Notification(source, msg, details);
             notification.setTransient(true);
             source.showNotification(notification);
@@ -511,11 +511,7 @@ export default class PersianCalendarExtension extends Extension {
         this._indicator = new PersianCalendar(
             this._settings, 
             this._gettext, 
-            () => {
-                try {
-                    this.openPreferences()
-                } catch(e) { /* ignore */ }
-            }
+            () => this.openPreferences()
         );
 
         let positions = ['left', 'center', 'right'];
