@@ -1,19 +1,25 @@
 'use strict';
 
-const {GObject, Clutter, St, Gio} = imports.gi;
-const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
-const PopupMenu = imports.ui.popupMenu;
-const MainLoop = imports.mainloop;
-const MessageTray = imports.ui.messageTray;
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
+import GObject from 'gi://GObject';
+import Clutter from 'gi://Clutter';
+import St from 'gi://St';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
-const {PersianDate, HijriDate, Calendar, Events} = Me.imports;
-const {str, file} = Me.imports.utils;
-const {__, n__, load_locale, unload_locale} = Me.imports.utils.gettext;
-const {isGnomeRtl} = Me.imports.utils.locale;
+import { Events } from './Events.js';
+import * as PersianDate from './PersianDate.js';
+import * as HijriDate from './HijriDate.js';
+import { Calendar } from './Calendar.js';
+import * as file from './utils/file.js';
+import { GetText } from './utils/gettext.js';
+import { Str } from './utils/str.js';
+import { Locale } from './utils/locale.js';
 
 const ConverterTypes = {
     fromPersian: 0,
@@ -21,17 +27,18 @@ const ConverterTypes = {
     fromHijri: 2,
 };
 
-let _indicator,
-    _timer,
-    messageTray,
-    Settings;
-
 const PersianCalendar = GObject.registerClass(
     class PersianCalendar extends PanelMenu.Button {
-        _init() {
+        _init(settings, gettext, openPreferences) {
+            this._settings = settings;
+            this._gettext = gettext;
+            this._str = new Str(this._gettext);
+            this._locale = new Locale(this._gettext);
+            this._events = new Events(this._settings, this._str);
+            this._openPreferences = openPreferences;
+
             this.event_hooks = [];
             super._init(0.0);
-            messageTray = new MessageTray.MessageTray();
 
             this.label = new St.Label({
                 style_class: 'pcalendar-tray-font',
@@ -43,36 +50,36 @@ const PersianCalendar = GObject.registerClass(
             this.add_actor(this.label);
 
             // some codes for coloring label
-            if (Settings.get_boolean('custom-color')) {
-                this.label.set_style(`color:${Settings.get_string('color')}`);
+            if (this._settings.get_boolean('custom-color')) {
+                this.label.set_style(`color:${this._settings.get_string('color')}`);
             }
-            this.event_hooks.push(Settings.connect('changed::color', () => {
-                if (Settings.get_boolean('custom-color')) {
-                    this.label.set_style(`color:${Settings.get_string('color')}`);
+            this.event_hooks.push(this._settings.connect('changed::color', () => {
+                if (this._settings.get_boolean('custom-color')) {
+                    this.label.set_style(`color:${this._settings.get_string('color')}`);
                 }
             }));
 
-            this.event_hooks.push(Settings.connect('changed::custom-color', () => {
-                if (Settings.get_boolean('custom-color')) {
-                    this.label.set_style(`color:${Settings.get_string('color')}`);
+            this.event_hooks.push(this._settings.connect('changed::custom-color', () => {
+                if (this._settings.get_boolean('custom-color')) {
+                    this.label.set_style(`color:${this._settings.get_string('color')}`);
                 } else {
                     this.label.set_style('color:');
                 }
             }));
 
-            this.event_hooks.push(Settings.connect('changed::widget-format', () => this._updateDate(true, true)));
+            this.event_hooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
-            this.event_hooks.push(Settings.connect('changed::position', () => {
+            this.event_hooks.push(this._settings.connect('changed::position', () => {
                 disable();
                 enable();
             }));
 
-            this.event_hooks.push(Settings.connect('changed::language', () => {
+            this.event_hooks.push(this._settings.connect('changed::language', () => {
                 disable();
                 enable();
             }));
 
-            this.event_hooks.push(Settings.connect('changed::index', () => {
+            this.event_hooks.push(this._settings.connect('changed::index', () => {
                 disable();
                 enable();
             }));
@@ -90,22 +97,22 @@ const PersianCalendar = GObject.registerClass(
             this.menu.addMenuItem(calendar);
             this.menu._arrowAlignment = 0.5;
 
-            this._calendar = new Calendar.Calendar(Settings);
+            this._calendar = new Calendar(this._settings, this._str, this._gettext, this._locale, this._events);
             vbox.add_actor(this._calendar.actor);
             this._calendar.actor.add_style_class_name('pcalendar-font');
 
             // //////////////////////////////
             // some codes for fonts
-            // MainLoop.timeout_add(1000, () => {
+            // GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
             //     this._onFontChangeForIcon();
             // });
-            // Settings.connect('changed::font', this._onFontChangeForIcon.bind(this));
-            // Settings.connect('changed::custom-font', this._onFontChangeForIcon.bind(this));
-            // MainLoop.timeout_add(1000, () => {
+            // this._settings.connect('changed::font', this._onFontChangeForIcon.bind(this));
+            // this._settings.connect('changed::custom-font', this._onFontChangeForIcon.bind(this));
+            // GLib.timeout_add(GLib.PRIORITY_DEFAULT, 1000, () => {
             //     this._onFontChangeForCalendar();
             // });
-            // Settings.connect('changed::font', this._onFontChangeForCalendar.bind(this));
-            // Settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
+            // this._settings.connect('changed::font', this._onFontChangeForCalendar.bind(this));
+            // this._settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
             // //////////////////////////////
 
             this._generateConverterPart();
@@ -132,9 +139,9 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
             });
             preferencesIcon.connect('clicked', () => {
-                ExtensionUtils.openPrefs();
+                this._openPreferences();
             });
-            actionButtons.actor.add(preferencesIcon);
+            actionButtons.actor.add_child(preferencesIcon);
 
             // Add Nowruz button
             icon = new St.Icon({
@@ -150,10 +157,10 @@ const PersianCalendar = GObject.registerClass(
                 x_align: Clutter.ActorAlign.CENTER,
                 x_expand: true,
             });
-            nowruzIcon.connect('clicked', this._showNowruzNotification);
-            actionButtons.actor.add(nowruzIcon);
+            nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));
+            actionButtons.actor.add_child(nowruzIcon);
 
-            this.menu.connect('open-state-changed', (menu, isOpen) => {
+            this.menu.connect('open-state-changed', (isOpen) => {
                 if (isOpen) {
                     let now = new Date();
                     now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -165,10 +172,10 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _onFontChangeForIcon() {
-            // let font_desc = Pango.FontDescription.from_string(Settings.get_string('font'));
+            // let font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
             // font_desc = Pango.FontDescription.from_string(font_desc.get_family());
             //
-            // if (Settings.get_boolean('custom-font')) {
+            // if (this._settings.get_boolean('custom-font')) {
             //     this.label.clutter_text.set_font_description(font_desc);
             // } else {
             //     this.label.clutter_text.set_font_name(null);
@@ -176,7 +183,7 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _onFontChangeForCalendar() {
-            // let font_desc = Pango.FontDescription.from_string(Settings.get_string('font'));
+            // let font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
             // let pc = this._calendar.actor.get_pango_context();
             //
             // global.log("PersianCalendar@oxygenws.com22", font_desc.get_family());
@@ -201,8 +208,7 @@ const PersianCalendar = GObject.registerClass(
 
             // set indicator label and popupmenu
             // get events of today
-            let ev = new Events.Events(Settings);
-            let events = ev.getEvents(new Date());
+            let events = this._events.getEvents(new Date());
             events[0] = events[0] !== '' ? `\n${events[0]}` : '';
 
             // is holiday?
@@ -213,9 +219,9 @@ const PersianCalendar = GObject.registerClass(
             }
 
             this.label.set_text(
-                str.transDigits(
+                this._str.transDigits(
                     this._calendar.format(
-                        Settings.get_string('widget-format'),
+                        this._settings.get_string('widget-format'),
                         _date.day,
                         _date.month,
                         _date.year,
@@ -225,7 +231,7 @@ const PersianCalendar = GObject.registerClass(
                 ),
             );
 
-            _date = str.transDigits(this._calendar.format(
+            _date = this._str.transDigits(this._calendar.format(
                 '%d %MM %Y',
                 _date.day,
                 _date.month,
@@ -234,7 +240,7 @@ const PersianCalendar = GObject.registerClass(
                 'persian',
             ));
             if (!skip_notification) {
-                notify(_date, events[0]);
+                this.notify(_date, events[0]);
             }
 
             return true;
@@ -242,7 +248,7 @@ const PersianCalendar = GObject.registerClass(
 
         _generateConverterPart() {
             // Add date conversion button
-            let converterMenu = new PopupMenu.PopupSubMenuMenuItem(__('Date conversion'));
+            let converterMenu = new PopupMenu.PopupSubMenuMenuItem(this._gettext.__('Date conversion'));
             converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);
@@ -263,7 +269,7 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: __('from Persian'),
+                label: this._gettext.__('from Persian'),
                 accessible_name: 'fromPersian',
                 style_class: 'popup-menu-item button pcalendar-button fromPersian active',
             });
@@ -275,7 +281,7 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: __('from Gregorian'),
+                label: this._gettext.__('from Gregorian'),
                 accessible_name: 'fromGregorian',
                 style_class: 'popup-menu-item button pcalendar-button fromGregorian',
             });
@@ -287,30 +293,30 @@ const PersianCalendar = GObject.registerClass(
                 can_focus: true,
                 track_hover: true,
                 x_expand: true,
-                label: __('from Hijri'),
+                label: this._gettext.__('from Hijri'),
                 accessible_name: 'fromHijri',
                 style_class: 'popup-menu-item button pcalendar-button fromHijri',
             });
             fromHijri.connect('clicked', this._toggleConverter.bind(this));
             fromHijri.TypeID = ConverterTypes.fromHijri;
 
-            if (isGnomeRtl()) {
-                middleBox.add(fromPersian);
-                middleBox.add(fromGregorian);
-                middleBox.add(fromHijri);
+            if (this._locale.isGnomeRtl()) {
+                middleBox.add_child(fromPersian);
+                middleBox.add_child(fromGregorian);
+                middleBox.add_child(fromHijri);
             } else {
-                middleBox.add(fromHijri);
-                middleBox.add(fromGregorian);
-                middleBox.add(fromPersian);
+                middleBox.add_child(fromHijri);
+                middleBox.add_child(fromGregorian);
+                middleBox.add_child(fromPersian);
             }
 
-            this.converterVbox.add(middleBox);
+            this.converterVbox.add_child(middleBox);
 
             let converterHbox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
 
             this.converterYear = new St.Entry({
                 name: 'year',
-                hint_text: __('year'),
+                hint_text: this._gettext.__('year'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
@@ -319,7 +325,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterMonth = new St.Entry({
                 name: 'month',
-                hint_text: __('month'),
+                hint_text: this._gettext.__('month'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
@@ -328,28 +334,28 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterDay = new St.Entry({
                 name: 'day',
-                hint_text: __('day'),
+                hint_text: this._gettext.__('day'),
                 can_focus: true,
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
 
-            if (isGnomeRtl()) {
-                converterHbox.add(this.converterDay);
-                converterHbox.add(this.converterMonth);
-                converterHbox.add(this.converterYear);
+            if (this._locale.isGnomeRtl()) {
+                converterHbox.add_child(this.converterDay);
+                converterHbox.add_child(this.converterMonth);
+                converterHbox.add_child(this.converterYear);
             } else {
-                converterHbox.add(this.converterYear);
-                converterHbox.add(this.converterMonth);
-                converterHbox.add(this.converterDay);
+                converterHbox.add_child(this.converterYear);
+                converterHbox.add_child(this.converterMonth);
+                converterHbox.add_child(this.converterDay);
             }
 
             this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
 
-            this.converterVbox.add(converterHbox);
+            this.converterVbox.add_child(converterHbox);
 
             this.convertedDatesVbox = new St.BoxLayout({vertical: true});
-            this.converterVbox.add(this.convertedDatesVbox);
+            this.converterVbox.add_child(this.convertedDatesVbox);
         }
 
         _onModifyConverter() {
@@ -405,19 +411,19 @@ const PersianCalendar = GObject.registerClass(
             // add persian date
             if (pDate) {
                 let button = this._calendar.getPersianDateButton(pDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
 
             // add gregorian date
             if (gDate) {
                 let button = this._calendar.getGregorianDateButton(gDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
 
             // add hijri date
             if (hDate) {
                 let button = this._calendar.getHijriDateButton(hDate, dayOfWeek);
-                this.convertedDatesVbox.add(button);
+                this.convertedDatesVbox.add_child(button);
             }
         }
 
@@ -462,87 +468,94 @@ const PersianCalendar = GObject.registerClass(
 
             if (month_delta !== 0) {
                 if (day_delta === 1) {
-                    nowruz = n__(
+                    nowruz = this._gettext.n__(
                         '%d month and 1 day left to Nowruz %d',
                         '%d months and 1 day left to Nowruz %d',
                         month_delta,
                     ).format(month_delta, pdate.year + 1);
                 } else {
-                    nowruz = n__(
+                    nowruz = this._gettext.n__(
                         '%d month and %d days left to Nowruz %d',
                         '%d months and %d days left to Nowruz %d',
                         month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
-                notify(str.transDigits(nowruz));
+                this.notify(this._str.transDigits(nowruz));
             } else if (day_delta !== 0) {
-                nowruz = n__(
+                nowruz = this._gettext.n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
                     day_delta,
                 ).format(day_delta, pdate.year + 1);
-                notify(str.transDigits(nowruz));
+                this.notify(this._str.transDigits(nowruz));
             } else {
-                notify(__('Happy New Year'));
+                this.notify(this._gettext.__('Happy New Year'));
             }
+        }
+
+        notify(msg, details) {
+            let source = new MessageTray.SystemNotificationSource();
+            let messageTray = new MessageTray.MessageTray();
+            messageTray.add(source);
+            let notification = new MessageTray.Notification(source, msg, details);
+            notification.setTransient(true);
+            source.showNotification(notification);
         }
     });
 
-function notify(msg, details) {
-    let source = new MessageTray.SystemNotificationSource();
-    messageTray.add(source);
-    let notification = new MessageTray.Notification(source, msg, details);
-    notification.setTransient(true);
-    source.showNotification(notification);
-}
+export default class PersianCalendarExtension extends Extension {
+    enable() {
+        this._settings = this.getSettings();
+        
+        this._gettext = new GetText(this._settings, this.path);
+        this._indicator = new PersianCalendar(
+            this._settings, 
+            this._gettext, 
+            () => this.openPreferences()
+        );
 
-function init() {
-}
+        let positions = ['left', 'center', 'right'];
 
-function enable() {
-    Settings = ExtensionUtils.getSettings();
-    load_locale();
+        Main.panel.addToStatusArea(
+            'persian_calendar',
+            this._indicator,
+            this._settings.get_int('index'),
+            positions[this._settings.get_enum('position')],
+        );
+        this._indicator._updateDate(!this._settings.get_boolean('startup-notification'));
+        this._timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10000, this._indicator._updateDate.bind(this._indicator));
 
-    _indicator = new PersianCalendar();
-
-    let positions = ['left', 'center', 'right'];
-
-    Main.panel.addToStatusArea(
-        'persian_calendar',
-        _indicator,
-        Settings.get_int('index'),
-        positions[Settings.get_enum('position')],
-    );
-    _indicator._updateDate(!Settings.get_boolean('startup-notification'));
-    _timer = MainLoop.timeout_add(10000, _indicator._updateDate.bind(_indicator));
-
-    install_fonts();
-}
-
-function disable() {
-    _indicator.event_hooks.forEach(id => Settings.disconnect(id));
-    _indicator.destroy();
-    MainLoop.source_remove(_timer);
-    Settings = null;
-    unload_locale();
-
-    uninstall_fonts();
-}
-
-function install_fonts() {
-    let path = Me.dir.get_path();
-    let dst = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
-    if (!dst.query_exists(null)) {
-        let src = Gio.file_new_for_path(`${path}/fonts`);
-        file.copyDir(src, dst);
+        this.install_fonts();
     }
-}
 
-function uninstall_fonts() {
-    let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
-    let path = Me.dir.get_path();
-    let dir = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
-    if (dir.query_exists(null) && !isLocked) {
-        file.deleteDir(dir);
+    disable() {
+        this._indicator.event_hooks.forEach(id => this._settings.disconnect(id));
+        this._indicator.destroy();
+        GLib.source_remove(this._timer);
+        this._gettext.unload_locale();
+
+        this._indicator = null;
+        this._settings = null;
+        this._gettext = null;
+
+        this.uninstall_fonts();
+    }
+
+    install_fonts() {
+        let homePath = GLib.get_home_dir();
+        let dst = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
+        if (!dst.query_exists(null)) {
+            let src = Gio.file_new_for_path(`${this.path}/fonts`);
+            file.copyDir(src, dst);
+        }
+    }
+
+    uninstall_fonts() {
+        let homePath = GLib.get_home_dir();
+        let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
+        let dir = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
+        if (dir.query_exists(null) && !isLocked) {
+            file.deleteDir(dir);
+        }
     }
 }

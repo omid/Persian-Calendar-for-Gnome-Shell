@@ -9,11 +9,11 @@
  * see https://www.farhang.gov.ir/ershad_content/media/image/2020/09/1004261_orig.pdf
 */
 
-var world = class {
+export class world {
     constructor() {
         this.name = 'مناسبت‌های جهانی';
         this.type = 'gregorian';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['جشن آغاز سال نو میلادی', false]];

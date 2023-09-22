@@ -1,10 +1,10 @@
 'use strict';
 
-var iranSolar = class {
+export class iranSolar {
     constructor() {
         this.name = 'مناسبت‌های رسمی ایران';
         this.type = 'persian';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['عید نوروز', true]];

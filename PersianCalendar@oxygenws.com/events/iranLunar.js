@@ -4,11 +4,11 @@
  * see https://www.farhang.gov.ir/ershad_content/media/image/2020/09/1004261_orig.pdf
  */
 
-var iranLunar = class {
+export class iranLunar {
     constructor() {
         this.name = 'مناسبت‌های مذهبی ایران';
         this.type = 'hijri';
-        /* [month][day] = [title, isHoliday] */
+        /* [month][day] = [[title, isHoliday]] */
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][1] = [['آغاز سال جدید هجری قمری', false]];

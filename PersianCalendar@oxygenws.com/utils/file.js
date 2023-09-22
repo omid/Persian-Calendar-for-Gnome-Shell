@@ -2,9 +2,9 @@
 
 // Originally copied from https://github.com/shemgp/Gnome-Global-AppMenu/blob/master/gnomeGlobalAppMenu@lestcape/settings/spices.js
 
-const {Gio} = imports.gi;
+import Gio from 'gi://Gio';
 
-function deleteDir(dir) {
+export function deleteDir(dir) {
     let children = dir.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
     let info, child, type;
     while ((info = children.next_file(null)) !== null) {
@@ -19,7 +19,7 @@ function deleteDir(dir) {
     dir.delete(null);
 }
 
-function copyDir(fromDir, toDir) {
+export function copyDir(fromDir, toDir) {
     let children = fromDir.enumerate_children('standard::name,standard::type', Gio.FileQueryInfoFlags.NONE, null);
     let info, child, type;
     if (!toDir.query_exists(null)) {

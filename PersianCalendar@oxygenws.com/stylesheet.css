@@ -85,7 +85,7 @@
 /**/
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Thin.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Thin.ttf') format('truetype');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -93,7 +93,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-ExtraLight.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-ExtraLight.ttf') format('truetype');
     font-weight: 200;
     font-style: normal;
     font-display: swap;
@@ -101,7 +101,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Light.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -109,7 +109,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Regular.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -117,7 +117,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Medium.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -125,7 +125,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-SemiBold.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -133,7 +133,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Bold.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -141,7 +141,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-ExtraBold.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
     font-display: swap;
@@ -149,7 +149,7 @@
 
 @font-face {
     font-family: Vazirmatn;
-    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Black.ttf') format('ttf');
+    src: url('../../../fonts/pcalendarFonts/Vazirmatn-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
     font-display: swap;

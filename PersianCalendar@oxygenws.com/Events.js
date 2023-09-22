@@ -1,11 +1,12 @@
 'use strict';
 
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-
-const {PersianDate, HijriDate} = Me.imports;
-const {persian, world, iranSolar, iranLunar, persianPersonage} = Me.imports.events;
-const str = Me.imports.utils.str;
+import * as PersianDate from './PersianDate.js';
+import * as HijriDate from './HijriDate.js';
+import {iranLunar} from './events/iranLunar.js';
+import {persian} from './events/persian.js';
+import {world} from './events/world.js';
+import {iranSolar} from './events/iranSolar.js';
+import {persianPersonage} from './events/persianPersonage.js';
 
 const calendarToIndex = {
     gregorian: 0,
@@ -13,9 +14,10 @@ const calendarToIndex = {
     hijri: 2,
 };
 
-var Events = class {
-    constructor(schema) {
-        this.schema = schema;
+export class Events {
+    constructor(schema, str) {
+        this._schema = schema;
+        this._str = str;
     }
 
     getEvents(today) {
@@ -39,11 +41,11 @@ var Events = class {
 
         // ///
         const events = {
-            'event-iran-solar': () => new iranSolar.iranSolar(),
-            'event-iran-lunar': () => new iranLunar.iranLunar(),
-            'event-persian-personage': () => new persianPersonage.persianPersonage(ptoday.year),
-            'event-world': () => new world.world(),
-            'event-persian': () => new persian.persian(),
+            'event-iran-solar': () => new iranSolar(),
+            'event-iran-lunar': () => new iranLunar(),
+            'event-persian-personage': () => new persianPersonage(ptoday.year),
+            'event-world': () => new world(),
+            'event-persian': () => new persian(),
         };
 
         const holidays = {
@@ -55,15 +57,15 @@ var Events = class {
         let holidayList = [];
 
         for (let key in events) {
-            if (this.schema.get_string(key) !== 'none') {
+            if (this._schema.get_string(key) !== 'none') {
                 let e = events[key]();
-                if (this.schema.get_string(key) === 'holidays-only') {
+                if (this._schema.get_string(key) === 'holidays-only') {
                     this._filterHolidays(e);
                 }
                 eventsList.push(e);
             }
 
-            if (holidays[this.schema.get_string('holidays-country')].includes(key)) {
+            if (holidays[this._schema.get_string('holidays-country')].includes(key)) {
                 let e = events[key]();
                 this._filterHolidays(e);
                 holidayList.push(e);
@@ -100,7 +102,7 @@ var Events = class {
             // if event is available, set event
             if (eventsList[i].events[this._today[type][1]][this._today[type][2]]) {
                 for (let j = 0; j < eventsList[i].events[this._today[type][1]][this._today[type][2]].length; j++) {
-                    this._events += `\n⚫︎ ${str.wordWrap(eventsList[i].events[this._today[type][1]][this._today[type][2]][j][0], 50)}`;
+                    this._events += `\n⚫︎ ${this._str.wordWrap(eventsList[i].events[this._today[type][1]][this._today[type][2]][j][0], 50)}`;
                 }
             }
         }

@@ -7,7 +7,7 @@
 const g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 const p_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
 
-function toGregorian(py, pm, pd) {
+export function toGregorian(py, pm, pd) {
     py = parseInt(py) - 979;
     pm = parseInt(pm) - 1;
     pd = parseInt(pd) - 1;
@@ -60,7 +60,7 @@ function toGregorian(py, pm, pd) {
     return {year: gy, month: i + 1, day: g_day_no + 1};
 }
 
-function fromGregorian(gy, gm, gd) {
+export function fromGregorian(gy, gm, gd) {
     gy = parseInt(gy) - 1600;
     gm = parseInt(gm) - 1;
     gd = parseInt(gd) - 1;
@@ -99,6 +99,6 @@ function fromGregorian(gy, gm, gd) {
     return {year: py, month: i + 1, day: p_day_no + 1, yearDays: day_in_year};
 }
 
-function isLeap(py) {
+export function isLeap(py) {
     return ((((((py - (py > 0 ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
 }
