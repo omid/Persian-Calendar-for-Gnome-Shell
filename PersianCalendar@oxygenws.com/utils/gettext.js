@@ -37,14 +37,13 @@ export class GetText {
         }
     }
 
-    constructor(settings, dir) {
-        let path = dir.get_path();
-        console.log(settings);
+    constructor(settings, path) {
         let lang = settings.get_string('language');
         let locale_json_file = Gio.File.new_for_path(`${path}/locale/${lang}.json`);
         try {
             let [_, locale_json] = locale_json_file.load_contents(null);
-            this.locale = JSON.parse(imports.byteArray.toString(locale_json));
+            let decoder = new TextDecoder('utf-8');
+            this.locale = JSON.parse(decoder.decode(locale_json));
         } catch (e) {
             this.locale = {};
         }

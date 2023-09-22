@@ -1,6 +1,6 @@
 'use strict';
 
-import Gtk from 'gi://Gtk';
+import Clutter from 'gi://Clutter';
 
 export class Locale {
     constructor(gettext) {
@@ -12,7 +12,7 @@ export class Locale {
     }
 
     isGnomeRtl() {
-        return Gtk.get_locale_direction() === Gtk.TextDirection.RTL;
+        return Clutter.get_default_text_direction() === Clutter.TextDirection.RTL;
     }
 
     isRtl() {
@@ -25,17 +25,24 @@ export class Locale {
 
     getTextDirection() {
         if (this.isRtl()) {
-            return Gtk.TextDirection.RTL;
+            return Clutter.TextDirection.RTL;
         } else {
-            return Gtk.TextDirection.LTR;
+            return Clutter.TextDirection.LTR;
         }
     }
 
     getJustification() {
+        const JUSTIFICATION = {
+            LEFT: 0,
+            RIGHT: 1,
+            CENTER: 2,
+            FILL: 3,
+        };
+
         if (this.isRtl()) {
-            return Gtk.Justification.RIGHT;
+            return JUSTIFICATION.RIGHT;
         } else {
-            return Gtk.Justification.LEFT;
+            return JUSTIFICATION.LEFT;
         }
     }
 }

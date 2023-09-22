@@ -115,8 +115,9 @@ export class Calendar {
         icon.set_icon_size(16);
 
         this._monthLabel = new St.Label({
-            style_class: 'calendar-day calendar-day-heading pcalendar-month-label',
+            style_class: 'calendar-month-label pcalendar-month-label',
             x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
         this._setFont(this._monthLabel);

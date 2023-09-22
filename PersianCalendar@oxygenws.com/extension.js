@@ -32,8 +32,8 @@ const PersianCalendar = GObject.registerClass(
         _init(settings, gettext, openPreferences) {
             this._settings = settings;
             this._gettext = gettext;
-            this._str = new Str(this._gettext)
-            this._locale = new Locale(this._gettext)
+            this._str = new Str(this._gettext);
+            this._locale = new Locale(this._gettext);
             this._events = new Events(this._settings, this._str);
             this._openPreferences = openPreferences;
 
@@ -496,7 +496,7 @@ const PersianCalendar = GObject.registerClass(
         notify(msg, details) {
             let source = new MessageTray.SystemNotificationSource();
             let messageTray = new MessageTray.MessageTray();
-            messageTray.add_child(source);
+            messageTray.add(source);
             let notification = new MessageTray.Notification(source, msg, details);
             notification.setTransient(true);
             source.showNotification(notification);
@@ -507,7 +507,7 @@ export default class PersianCalendarExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
         
-        this._gettext = new GetText(this._settings, this.dir);
+        this._gettext = new GetText(this._settings, this.path);
         this._indicator = new PersianCalendar(
             this._settings, 
             this._gettext, 
@@ -533,24 +533,27 @@ export default class PersianCalendarExtension extends Extension {
         this._indicator.destroy();
         GLib.source_remove(this._timer);
         this._gettext.unload_locale();
+
         this._indicator = null;
+        this._settings = null;
+        this._gettext = null;
 
         this.uninstall_fonts();
     }
 
     install_fonts() {
-        let path = this.dir.get_path();
-        let dst = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
+        let homePath = GLib.get_home_dir();
+        let dst = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
         if (!dst.query_exists(null)) {
-            let src = Gio.file_new_for_path(`${path}/fonts`);
+            let src = Gio.file_new_for_path(`${this.path}/fonts`);
             file.copyDir(src, dst);
         }
     }
 
     uninstall_fonts() {
+        let homePath = GLib.get_home_dir();
         let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
-        let path = this.dir.get_path();
-        let dir = Gio.file_new_for_path(`${path}/../../../fonts/pcalendarFonts/`);
+        let dir = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
         if (dir.query_exists(null) && !isLocked) {
             file.deleteDir(dir);
         }

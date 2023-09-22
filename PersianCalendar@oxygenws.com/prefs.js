@@ -15,7 +15,7 @@ const ShellVersion = parseFloat(Config.PACKAGE_VERSION);
 export default class PersianCalendarPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         this._settings = this.getSettings();
-        this._gettext = new GetText(this._settings, this.dir);
+        this._gettext = new GetText(this._settings, this.path);
         this._locale = new Locale(this._gettext);
 
         const default_dir = Gtk.Widget.get_default_direction();
@@ -24,6 +24,9 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         window.connect('close-request', () => {
             this._gettext.unload_locale();
             Gtk.Widget.set_default_direction(default_dir);
+            this._settings = null;
+            this._gettext = null;
+            this._locale = null;
         });
 
         // Page Appearance
