@@ -506,11 +506,11 @@ const PersianCalendar = GObject.registerClass(
 export default class PersianCalendarExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-        
+
         this._gettext = new GetText(this._settings, this.path);
         this._indicator = new PersianCalendar(
-            this._settings, 
-            this._gettext, 
+            this._settings,
+            this._gettext,
             () => this.openPreferences()
         );
 
@@ -543,7 +543,7 @@ export default class PersianCalendarExtension extends Extension {
 
     install_fonts() {
         let homePath = GLib.get_home_dir();
-        let dst = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
+        let dst = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
         if (!dst.query_exists(null)) {
             let src = Gio.file_new_for_path(`${this.path}/fonts`);
             file.copyDir(src, dst);
@@ -553,7 +553,7 @@ export default class PersianCalendarExtension extends Extension {
     uninstall_fonts() {
         let homePath = GLib.get_home_dir();
         let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
-        let dir = Gio.file_new_for_path(`${homePath}/fonts/pcalendarFonts/`);
+        let dir = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
         if (dir.query_exists(null) && !isLocked) {
             file.deleteDir(dir);
         }
