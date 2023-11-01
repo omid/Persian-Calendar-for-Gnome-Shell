@@ -14,9 +14,9 @@ An extension for Gnome-Shell to show Persian date and calendar
 #### For developers:
 * Clone the repository
 * Go to the cloned directory
-* run ```make``` command in the terminal
+* run `make` command in the terminal
 * Restart Gnome-shell. (ALT+F2, r, Enter)
-* You may need to enable the extension via Gnome Extensions Application
+* You may need to enable the extension via GNOME `Extensions` application
 
 ### Troubleshooting:
 * I don't see the ON/OFF button, or it's disabled, but I see a blue message on top of the website, with a message like: “To control GNOME Shell extensions using this site you must install GNOME Shell integration that…”. What should I do?
@@ -26,7 +26,23 @@ An extension for Gnome-Shell to show Persian date and calendar
    * If you cannot see the “extensions” section in the `gnome-tweaks` application, congratulation, you are using a more up-to-date version of Gnome, so in this case, please use the `gnome-extensions` application and make sure the button is enabled.
 * If none of the above works, you can install [Extension Manager](https://github.com/mjakeman/extension-manager#-installing), then install and activate the Persian Calendar extension through it. Extension Manager is a tool for managing GNOME Shell Extensions.
 
-#### Links:
+### Date formatting:
+| Format Code | Meaning | Example Output |
+| ----------- | ------- | -------------- |
+| `%Y` | Year with century | `۱۴۰۲` |
+| `%y` | Year without century (zero-padded) | `۰۲` |
+| `%MM` | Month name | `آبان` |
+| `%mm` | Month name (short) | `آبا` |
+| `%M` | Month number (zero-padded) | `۰۸` |
+| `%m` | Month number | `۸` |
+| `%D` | Day of the month (zero-padded) | `۰۱` |
+| `%d` | Day of the month | `۱` |
+| `%WW` | Day of the week | `چهارشنبه` |
+| `%ww` | Day of the week (short) | `چهار` |
+| `%w` | Day of the week (very short) | `چ` |
+
+
+### Links:
 * :octocat: https://github.com/omid/Persian-Calendar-for-Gnome-Shell
 * :link: https://extensions.gnome.org/extension/240/
 * :yum: https://www.paypal.me/omidmr/
