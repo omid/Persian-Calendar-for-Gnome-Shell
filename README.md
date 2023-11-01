@@ -14,9 +14,9 @@ An extension for Gnome-Shell to show Persian date and calendar
 #### For developers:
 * Clone the repository
 * Go to the cloned directory
-* run ```make``` command in the terminal
+* run `make` command in the terminal
 * Restart Gnome-shell. (ALT+F2, r, Enter)
-* You may need to enable the extension via ```Gnome Extensions Application```
+* You may need to enable the extension via GNOME `Extensions` application
 
 ### Troubleshooting:
 * I don't see the ON/OFF button, or it's disabled, but I see a blue message on top of the website, with a message like: “To control GNOME Shell extensions using this site you must install GNOME Shell integration that…”. What should I do?
