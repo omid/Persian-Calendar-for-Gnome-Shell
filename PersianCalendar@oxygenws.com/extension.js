@@ -47,7 +47,7 @@ const PersianCalendar = GObject.registerClass(
             });
             this.hide();
 
-            this.add_actor(this.label);
+            this.add_child(this.label);
 
             // some codes for coloring label
             if (this._settings.get_boolean('custom-color')) {
@@ -86,8 +86,8 @@ const PersianCalendar = GObject.registerClass(
 
             this._today = '';
 
-            let vbox = new St.BoxLayout({vertical: true});
-            let calendar = new PopupMenu.PopupBaseMenuItem({
+            const vbox = new St.BoxLayout({vertical: true});
+            const calendar = new PopupMenu.PopupBaseMenuItem({
                 activate: false,
                 hover: false,
                 can_focus: false,
@@ -98,7 +98,7 @@ const PersianCalendar = GObject.registerClass(
             this.menu._arrowAlignment = 0.5;
 
             this._calendar = new Calendar(this._settings, this._str, this._gettext, this._locale, this._events);
-            vbox.add_actor(this._calendar.actor);
+            vbox.add_child(this._calendar.actor);
             this._calendar.actor.add_style_class_name('pcalendar-font');
 
             // //////////////////////////////
@@ -118,7 +118,7 @@ const PersianCalendar = GObject.registerClass(
             this._generateConverterPart();
 
             // action buttons
-            let actionButtons = new PopupMenu.PopupBaseMenuItem({
+            const actionButtons = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
@@ -130,7 +130,7 @@ const PersianCalendar = GObject.registerClass(
                 style_class: 'popup-menu-icon calendar-popup-menu-icon',
             });
 
-            let preferencesIcon = new St.Button({
+            const preferencesIcon = new St.Button({
                 child: icon,
                 style_class: 'button system-menu-action calendar-preferences-button',
                 reactive: true,
@@ -149,7 +149,7 @@ const PersianCalendar = GObject.registerClass(
                 style_class: 'popup-menu-icon calendar-popup-menu-icon',
             });
 
-            let nowruzIcon = new St.Button({
+            const nowruzIcon = new St.Button({
                 child: icon,
                 style_class: 'button system-menu-action calendar-preferences-button',
                 reactive: true,
@@ -172,7 +172,7 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _onFontChangeForIcon() {
-            // let font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
+            // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
             // font_desc = Pango.FontDescription.from_string(font_desc.get_family());
             //
             // if (this._settings.get_boolean('custom-font')) {
@@ -183,8 +183,8 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _onFontChangeForCalendar() {
-            // let font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
-            // let pc = this._calendar.actor.get_pango_context();
+            // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
+            // const pc = this._calendar.actor.get_pango_context();
             //
             // global.log("PersianCalendar@oxygenws.com22", font_desc.get_family());
             // pc.set_font_description(font_desc);
@@ -193,7 +193,7 @@ const PersianCalendar = GObject.registerClass(
 
         _updateDate(skip_notification, force) {
             let _date = new Date();
-            let _dayOfWeek = _date.getDay();
+            const _dayOfWeek = _date.getDay();
 
             // convert to Persian
             _date = PersianDate.fromGregorian(_date.getFullYear(), _date.getMonth() + 1, _date.getDate());
@@ -208,7 +208,7 @@ const PersianCalendar = GObject.registerClass(
 
             // set indicator label and popupmenu
             // get events of today
-            let events = this._events.getEvents(new Date());
+            const events = this._events.getEvents(new Date());
             events[0] = events[0] !== '' ? `\n${events[0]}` : '';
 
             // is holiday?
@@ -248,23 +248,23 @@ const PersianCalendar = GObject.registerClass(
 
         _generateConverterPart() {
             // Add date conversion button
-            let converterMenu = new PopupMenu.PopupSubMenuMenuItem(this._gettext.__('Date conversion'));
+            const converterMenu = new PopupMenu.PopupSubMenuMenuItem(this._gettext.__('Date conversion'));
             converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);
             this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
-            let converterSubMenu = new PopupMenu.PopupBaseMenuItem({
+            const converterSubMenu = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
             converterSubMenu.actor.add_child(this.converterVbox);
             converterMenu.menu.addMenuItem(converterSubMenu);
 
-            let middleBox = new St.BoxLayout({style_class: 'pcalendar-converter-box', x_expand: true});
+            const middleBox = new St.BoxLayout({style_class: 'pcalendar-converter-box', x_expand: true});
 
             this._activeConverter = ConverterTypes.fromPersian;
 
-            let fromPersian = new St.Button({
+            const fromPersian = new St.Button({
                 reactive: true,
                 can_focus: true,
                 track_hover: true,
@@ -276,7 +276,7 @@ const PersianCalendar = GObject.registerClass(
             fromPersian.connect('clicked', this._toggleConverter.bind(this));
             fromPersian.TypeID = ConverterTypes.fromPersian;
 
-            let fromGregorian = new St.Button({
+            const fromGregorian = new St.Button({
                 reactive: true,
                 can_focus: true,
                 track_hover: true,
@@ -288,7 +288,7 @@ const PersianCalendar = GObject.registerClass(
             fromGregorian.connect('clicked', this._toggleConverter.bind(this));
             fromGregorian.TypeID = ConverterTypes.fromGregorian;
 
-            let fromHijri = new St.Button({
+            const fromHijri = new St.Button({
                 reactive: true,
                 can_focus: true,
                 track_hover: true,
@@ -312,7 +312,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterVbox.add_child(middleBox);
 
-            let converterHbox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
+            const converterHbox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
 
             this.converterYear = new St.Entry({
                 name: 'year',
@@ -360,14 +360,14 @@ const PersianCalendar = GObject.registerClass(
 
         _onModifyConverter() {
             // erase old date
-            let convertedDatesChildren = this.convertedDatesVbox.get_children();
+            const convertedDatesChildren = this.convertedDatesVbox.get_children();
             for (let i = 0; i < convertedDatesChildren.length; i++) {
                 convertedDatesChildren[i].destroy();
             }
 
-            let year = this.converterYear.get_text();
-            let month = this.converterMonth.get_text();
-            let day = this.converterDay.get_text();
+            const year = this.converterYear.get_text();
+            const month = this.converterMonth.get_text();
+            const day = this.converterDay.get_text();
 
             // check if data is numerical and not empty
             if (isNaN(day) || isNaN(month) || isNaN(year) || year.length !== 4 || day < 1 || day > 31 || month < 1 || month > 12) {
@@ -410,19 +410,19 @@ const PersianCalendar = GObject.registerClass(
 
             // add persian date
             if (pDate) {
-                let button = this._calendar.getPersianDateButton(pDate, dayOfWeek);
+                const button = this._calendar.getPersianDateButton(pDate, dayOfWeek);
                 this.convertedDatesVbox.add_child(button);
             }
 
             // add gregorian date
             if (gDate) {
-                let button = this._calendar.getGregorianDateButton(gDate, dayOfWeek);
+                const button = this._calendar.getGregorianDateButton(gDate, dayOfWeek);
                 this.convertedDatesVbox.add_child(button);
             }
 
             // add hijri date
             if (hDate) {
-                let button = this._calendar.getHijriDateButton(hDate, dayOfWeek);
+                const button = this._calendar.getHijriDateButton(hDate, dayOfWeek);
                 this.convertedDatesVbox.add_child(button);
             }
         }
@@ -434,11 +434,11 @@ const PersianCalendar = GObject.registerClass(
             }
 
             // first remove active classes then highlight the clicked button
-            let tabBox = button.get_parent();
-            let tabBoxChildren = tabBox.get_children();
+            const tabBox = button.get_parent();
+            const tabBoxChildren = tabBox.get_children();
 
             for (let i = 0; i < tabBoxChildren.length; i++) {
-                let tabButton = tabBoxChildren[i];
+                const tabButton = tabBoxChildren[i];
                 tabButton.remove_style_class_name('active');
             }
 
@@ -451,14 +451,14 @@ const PersianCalendar = GObject.registerClass(
         _showNowruzNotification() {
             /* calculate exact hour/minute/second of the next new year.
              it calculates with some small differences! */
-            let now = new Date();
-            let pdate = PersianDate.fromGregorian(
+            const now = new Date();
+            const pdate = PersianDate.fromGregorian(
                 now.getFullYear(),
                 now.getMonth() + 1,
                 now.getDate(),
             );
 
-            let month_delta = 12 - pdate.month;
+            const month_delta = 12 - pdate.month;
             let day_delta, nowruz;
             if (month_delta >= 6) {
                 day_delta = 31 - pdate.day;
@@ -480,26 +480,38 @@ const PersianCalendar = GObject.registerClass(
                         month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
-                this.notify(this._str.transDigits(nowruz));
+                this.nowruz_notify(this._str.transDigits(nowruz));
             } else if (day_delta !== 0) {
                 nowruz = this._gettext.n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
                     day_delta,
                 ).format(day_delta, pdate.year + 1);
-                this.notify(this._str.transDigits(nowruz));
+                this.nowruz_notify(this._str.transDigits(nowruz));
             } else {
-                this.notify(this._gettext.__('Happy New Year'));
+                this.nowruz_notify(this._gettext.__('Happy New Year'));
             }
         }
 
-        notify(msg, details) {
-            let source = new MessageTray.SystemNotificationSource();
-            let messageTray = new MessageTray.MessageTray();
-            messageTray.add(source);
-            let notification = new MessageTray.Notification(source, msg, details);
-            notification.setTransient(true);
-            source.showNotification(notification);
+        nowruz_notify(title) {
+            this.notify(title, undefined, 'emblem-favorite-symbolic');
+        }
+
+        notify(title, body, iconName) {
+            const source = new MessageTray.getSystemSource();
+            const params = {
+                source,
+                title,
+                isTransient: true,
+            };
+            if (body) {
+                params.body = body;
+            }
+            const notification = new MessageTray.Notification(params);
+            if (iconName) {
+                notification.set({iconName});
+            }
+            source.addNotification(notification);
         }
     });
 
@@ -514,7 +526,7 @@ export default class PersianCalendarExtension extends Extension {
             () => this.openPreferences()
         );
 
-        let positions = ['left', 'center', 'right'];
+        const positions = ['left', 'center', 'right'];
 
         Main.panel.addToStatusArea(
             'persian_calendar',
@@ -542,18 +554,18 @@ export default class PersianCalendarExtension extends Extension {
     }
 
     install_fonts() {
-        let homePath = GLib.get_home_dir();
-        let dst = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
+        const homePath = GLib.get_home_dir();
+        const dst = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
         if (!dst.query_exists(null)) {
-            let src = Gio.file_new_for_path(`${this.path}/fonts`);
+            const src = Gio.file_new_for_path(`${this.path}/fonts`);
             file.copyDir(src, dst);
         }
     }
 
     uninstall_fonts() {
-        let homePath = GLib.get_home_dir();
-        let isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
-        let dir = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
+        const homePath = GLib.get_home_dir();
+        const isLocked = Main.sessionMode.currentMode === 'unlock-dialog';
+        const dir = Gio.file_new_for_path(`${homePath}/.local/share/fonts/pcalendarFonts/`);
         if (dir.query_exists(null) && !isLocked) {
             file.deleteDir(dir);
         }

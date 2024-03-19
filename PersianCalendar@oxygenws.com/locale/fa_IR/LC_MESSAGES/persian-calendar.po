@@ -496,7 +496,7 @@ msgstr "گزینه‌های ابزارک سینی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:48
 msgid "Startup notification"
-msgstr "راه‌اندازی آگاهی"
+msgstr "آگاهی در زمان راه‌اندازی"
 
 #: PersianCalendar@oxygenws.com/prefs.js:58
 #: PersianCalendar@oxygenws.com/prefs.js:64
