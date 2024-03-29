@@ -100,6 +100,10 @@
       <default>0</default>
       <summary>Indicator position in selected area</summary>
     </key>
+    <key name="calendar-font-size" type="i">
+      <default>10</default>
+      <summary>Size of Calendar</summary>
+    </key>
     <!--
     <key name="custom-font" type="b">
       <default>false</default>

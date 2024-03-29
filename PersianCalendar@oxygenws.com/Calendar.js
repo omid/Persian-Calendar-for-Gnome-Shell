@@ -273,6 +273,8 @@ export class Calendar {
         const daysToWeekStart = (7 + iter.getDay() - this._weekStart) % 7;
         iter.setDate(iter.getDate() - daysToWeekStart);
 
+
+        const fontSize = `font-size:${(this._schema.get_int('calendar-font-size') + 1) / 10}em;`;
         let row = 2;
         let events;
 
@@ -293,6 +295,8 @@ export class Calendar {
             events = this._events.getEvents(iter);
 
             let styleClass = 'calendar-day pcalendar-day';
+            let style = fontSize;
+
             if (is_same_month) {
                 if (events[0]) {
                     styleClass += ' pcalendar-day-with-events ';
@@ -300,14 +304,14 @@ export class Calendar {
 
                 if (events[1]) {
                     styleClass += ' calendar-weekend pcalendar-weekend ';
-                    button.set_style(`color:${this._schema.get_string('nonwork-color')}`);
+                    style += `color:${this._schema.get_string('nonwork-color')};`;
                 } else {
                     styleClass += ' calendar-weekday pcalendar-weekday ';
                 }
             }
 
             if (this._sameDay(now, p_iter)) {
-                styleClass += ' calendar-today ';
+                styleClass += ' calendar-today pcalendar-today ';
             } else if (!is_same_month) {
                 styleClass += ' calendar-other-month pcalendar-other-month ';
             }
@@ -317,6 +321,7 @@ export class Calendar {
             }
 
             button.style_class = styleClass;
+            button.set_style(style);
 
             this.actor.layout_manager.attach(
                 button,

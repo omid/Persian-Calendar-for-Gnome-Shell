@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
-import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
@@ -70,18 +70,18 @@ const PersianCalendar = GObject.registerClass(
             this.event_hooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
             this.event_hooks.push(this._settings.connect('changed::position', () => {
-                disable();
-                enable();
+                // disable();
+                // enable();
             }));
 
             this.event_hooks.push(this._settings.connect('changed::language', () => {
-                disable();
-                enable();
+                // disable();
+                // enable();
             }));
 
             this.event_hooks.push(this._settings.connect('changed::index', () => {
-                disable();
-                enable();
+                // disable();
+                // enable();
             }));
 
             this._today = '';

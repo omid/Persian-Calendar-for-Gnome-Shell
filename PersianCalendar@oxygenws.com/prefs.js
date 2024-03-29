@@ -50,13 +50,14 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         );
         indicatorGroup.add(this.customColorField());
         indicatorGroup.add(this.indicatorFormatField());
+        indicatorGroup.add(this.calendarSizeField());
 
         window.add(pageAppearance);
 
         // Page Events
         const pageEvents = new Adw.PreferencesPage({
             title: this._gettext.__('Events'),
-            icon_name: 'org.gnome.Calendar-symbolic',
+            icon_name: 'x-office-calendar-symbolic',
         });
 
         // Page Events - Events group
@@ -246,6 +247,25 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         return row;
     }
 
+    calendarSizeField() {
+        const row = new Adw.ActionRow({ title: this._gettext.__('Calendar Size') });
+
+        const index = new Gtk.SpinButton({ valign: Gtk.Align.CENTER });
+        let adjustment;
+        adjustment = new Gtk.Adjustment();
+        adjustment.set_lower(10);
+        adjustment.set_upper(50);
+        adjustment.set_step_increment(1);
+        index.set_adjustment(adjustment);
+        index.set_value(this._settings.get_int('calendar-font-size'));
+        index.set_direction(this._locale.getTextDirection());
+        this._settings.bind('calendar-font-size', index, 'value', Gio.SettingsBindFlags.DEFAULT);
+
+        row.add_suffix(index);
+
+        return row;
+    }
+
     indicatorFormatField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Format') });
 
@@ -350,7 +370,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         return row;
     }
-    
+
     possibleFormatting() {
         return this._gettext.__('Possible Formatting values:\n\n%Y: 4-digit year\n%y: 2-digit year\n%M: 2-digit month\n%m: 1 or 2-digit month\n%MM: Full month name\n%mm: Abbreviated month name\n%D: 2-digit day\n%d: 1 or 2-digit day\n%WW: Full day of week\n%ww: Abbreviated day of week\n%w: One-letter day of week');
     }
