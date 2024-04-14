@@ -29,13 +29,16 @@ const ConverterTypes = {
 
 const PersianCalendar = GObject.registerClass(
     class PersianCalendar extends PanelMenu.Button {
-        _init(settings, gettext, openPreferences) {
-            this._settings = settings;
-            this._gettext = gettext;
+        positions = ['left', 'center', 'right'];
+
+        _init(extension) {
+            this._extension = extension;
+            this._settings = extension._settings;
+            this._gettext = extension._gettext;
             this._str = new Str(this._gettext);
             this._locale = new Locale(this._gettext);
             this._events = new Events(this._settings, this._str);
-            this._openPreferences = openPreferences;
+            this._openPreferences = () => this._extension.openPreferences();
 
             this.event_hooks = [];
             super._init(0.0);
@@ -70,18 +73,15 @@ const PersianCalendar = GObject.registerClass(
             this.event_hooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
             this.event_hooks.push(this._settings.connect('changed::position', () => {
-                // disable();
-                // enable();
+                this.reload();
             }));
 
             this.event_hooks.push(this._settings.connect('changed::language', () => {
-                // disable();
-                // enable();
+                this.reload();
             }));
 
             this.event_hooks.push(this._settings.connect('changed::index', () => {
-                // disable();
-                // enable();
+                this.reload();
             }));
 
             this._today = '';
@@ -513,29 +513,54 @@ const PersianCalendar = GObject.registerClass(
             }
             source.addNotification(notification);
         }
+
+        reload() {
+            this.disable();
+            this.enable();
+        }
+
+        disable() {
+            let ext = this._extension;
+            ext._indicator.event_hooks.forEach(id => ext._settings.disconnect(id));
+            ext._indicator.destroy();
+            GLib.source_remove(ext._timer);
+            ext._gettext.unload_locale();
+
+            ext._indicator = null;
+            ext._settings = null;
+            ext._gettext = null;
+        }
+
+        enable() {
+            let ext = this._extension;
+            ext._settings = ext.getSettings();
+            ext._gettext = new GetText(ext._settings, ext.path);
+            ext._indicator = new PersianCalendar(ext);
+
+            Main.panel.addToStatusArea(
+                'persian_calendar',
+                ext._indicator,
+                ext._settings.get_int('index'),
+                this.positions[ext._settings.get_enum('position')],
+            );
+            ext._indicator._updateDate(true);
+        }
     });
 
 export default class PersianCalendarExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-
         this._gettext = new GetText(this._settings, this.path);
-        this._indicator = new PersianCalendar(
-            this._settings,
-            this._gettext,
-            () => this.openPreferences()
-        );
-
-        const positions = ['left', 'center', 'right'];
+        this._indicator = new PersianCalendar(this);
 
         Main.panel.addToStatusArea(
             'persian_calendar',
             this._indicator,
             this._settings.get_int('index'),
-            positions[this._settings.get_enum('position')],
+            this._indicator.positions[this._settings.get_enum('position')],
         );
         this._indicator._updateDate(!this._settings.get_boolean('startup-notification'));
-        this._timer = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 10000, this._indicator._updateDate.bind(this._indicator));
+        this._timer = GLib.timeout_add(GLib.PRIORITY_LOW, 10000, this._indicator._updateDate.bind(this._indicator));
 
         this.install_fonts();
     }
