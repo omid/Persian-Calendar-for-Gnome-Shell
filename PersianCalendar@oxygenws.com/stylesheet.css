@@ -1,6 +1,7 @@
 .pcalendar-calendar_container:hover {
     background: inherit;
 }
+
 .pcalendar-tray-font {
     font-family: Vazirmatn, sans-serif;
     font-weight: 500;
@@ -21,9 +22,10 @@
 
 .pcalendar-weekday, .pcalendar-day {
     font-size: 1.1em;
-    height: auto;
-    padding: 0.75em 0;
-    font-weight: 900;
+    height: 2.1em;
+    width: 2.1em;
+    padding: 0.1em;
+    font-weight: 200;
 }
 
 .pcalendar-date-label {

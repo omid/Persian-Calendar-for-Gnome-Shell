@@ -29,7 +29,13 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             this._locale = null;
         });
 
-        // Page Appearance
+        window.add(this.pageAppearance());
+        window.add(this.pageEvents());
+        window.add(this.pageHolidays());
+        window.add(this.pageMisc(window));
+    }
+
+    pageAppearance() {
         const pageAppearance = new Adw.PreferencesPage({
             title: this._gettext.__('Appearance'),
             icon_name: 'applications-graphics-symbolic',
@@ -39,7 +45,6 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         const indicatorGroup = new Adw.PreferencesGroup({
             title: this._gettext.__('Tray widget options'),
         });
-        pageAppearance.add(indicatorGroup);
 
         indicatorGroup.add(this.indicatorPositionField());
         indicatorGroup.add(
@@ -52,9 +57,18 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         indicatorGroup.add(this.indicatorFormatField());
         indicatorGroup.add(this.calendarSizeField());
 
-        window.add(pageAppearance);
+        pageAppearance.add(indicatorGroup);
 
-        // Page Events
+        // Page Appearance - Indicator group
+        const OthersGroup = new Adw.PreferencesGroup({
+        });
+        OthersGroup.add(this.customTodayBgColorField());
+        pageAppearance.add(OthersGroup);
+        
+        return pageAppearance;
+    }
+    
+    pageEvents() {
         const pageEvents = new Adw.PreferencesPage({
             title: this._gettext.__('Events'),
             icon_name: 'x-office-calendar-symbolic',
@@ -97,18 +111,17 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             ),
         );
         eventsGroup.add(this.comboBoxField(eventsOptions, 'event-world', this._gettext.__('International')));
-
-        window.add(pageEvents);
-
-        // Page Holidays
+        return pageEvents;
+    }
+    
+    pageHolidays() {
         const pageHolidays = new Adw.PreferencesPage({
             title: this._gettext.__('Holidays'),
             icon_name: 'emoji-nature-symbolic',
         });
 
         // Page Holidays - Holidays group
-        const holidaysGroup = new Adw.PreferencesGroup({
-        });
+        const holidaysGroup = new Adw.PreferencesGroup({});
 
         pageHolidays.add(holidaysGroup);
 
@@ -126,10 +139,10 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         );
 
         holidaysGroup.add(this.holidayColorField());
+        return pageHolidays;
+    }
 
-        window.add(pageHolidays);
-
-        // Page Misc
+    pageMisc(window) {
         const pageMisc = new Adw.PreferencesPage({
             title: this._gettext.__('Misc'),
             icon_name: 'preferences-other-symbolic',
@@ -168,7 +181,10 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         const languageGroup = new Adw.PreferencesGroup();
         pageMisc.add(languageGroup);
 
-        languageGroup.add(this.comboBoxField({ 'fa_IR.UTF-8': 'فارسی', 'en_US.UTF-8': 'English' }, 'language', this._gettext.__('Language')));
+        languageGroup.add(this.comboBoxField({
+            'fa_IR.UTF-8': 'فارسی',
+            'en_US.UTF-8': 'English'
+        }, 'language', this._gettext.__('Language')));
 
         this._settings.connect('changed::language', () => {
             window.close();
@@ -177,8 +193,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
                 Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE,
             );
         });
-
-        window.add(pageMisc);
+        return pageMisc;
     }
 
     // Custom Fields
@@ -314,6 +329,39 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         this._settings.bind(
             'custom-color',
+            toggle,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT,
+        );
+
+        row.add_suffix(toggle);
+        row.activatable_widget = toggle;
+
+        return row;
+    }
+    
+    customTodayBgColorField() {
+        const row = new Adw.ActionRow({ title: this._gettext.__('Use custom bg color for "today"') });
+
+        const color = new Gtk.ColorButton({
+            valign: Gtk.Align.CENTER,
+        });
+        row.add_suffix(color);
+
+        const colorArray = new Gdk.RGBA();
+        colorArray.parse(this._settings.get_string('today-bg-color'));
+        color.set_rgba(colorArray);
+        color.connect('color-set', innerColor =>
+            this._settings.set_string('today-bg-color', innerColor.get_rgba().to_string()),
+        );
+
+        const toggle = new Gtk.Switch({
+            active: this._settings.get_boolean('custom-today-bg-color'),
+            valign: Gtk.Align.CENTER,
+        });
+
+        this._settings.bind(
+            'custom-today-bg-color',
             toggle,
             'active',
             Gio.SettingsBindFlags.DEFAULT,

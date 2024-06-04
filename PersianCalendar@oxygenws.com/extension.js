@@ -61,7 +61,6 @@ const PersianCalendar = GObject.registerClass(
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
                 }
             }));
-
             this.event_hooks.push(this._settings.connect('changed::custom-color', () => {
                 if (this._settings.get_boolean('custom-color')) {
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
@@ -69,7 +68,8 @@ const PersianCalendar = GObject.registerClass(
                     this.label.set_style('color:');
                 }
             }));
-
+            
+            ///
             this.event_hooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
             this.event_hooks.push(this._settings.connect('changed::position', () => {

@@ -92,6 +92,14 @@
       <default>'#f57f91'</default>
       <summary>Nonwork color</summary>
     </key>
+    <key name="custom-today-bg-color" type="b">
+      <default>false</default>
+      <summary>Use custom today background color</summary>
+    </key>
+    <key name="today-bg-color" type="s">
+      <default>'#5d9de9'</default>
+      <summary>Today background color</summary>
+    </key>
     <key name="position" enum="org.gnome.shell.extensions.persian-calendar.positions">
       <default>'right'</default>
       <summary>Where to display calendar (left, center, right)</summary>

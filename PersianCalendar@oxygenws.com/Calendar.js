@@ -7,8 +7,8 @@ import * as PersianDate from './PersianDate.js';
 import * as HijriDate from './HijriDate.js';
 
 export class Calendar {
-    constructor(schema, str, gettext, locale, events) {
-        this._schema = schema;
+    constructor(settings, str, gettext, locale, events) {
+        this._settings = settings;
         this._str = str;
         this._gettext = gettext;
         this._locale = locale;
@@ -161,9 +161,9 @@ export class Calendar {
     }
 
     _setFont(el) {
-        // const font_desc = Pango.FontDescription.from_string(this._schema.get_string('font'));
+        // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
         //
-        // if (this._schema.get_boolean('custom-font')) {
+        // if (this._settings.get_boolean('custom-font')) {
         //     el.clutter_text.set_font_description(font_desc);
         // } else {
         //     el.clutter_text.set_font_name(null);
@@ -171,15 +171,15 @@ export class Calendar {
     }
 
     _modifyFont(el) {
-        // const font_desc = Pango.FontDescription.from_string(this._schema.get_string('font'));
+        // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
         //
-        // if (this._schema.get_boolean('custom-font')) {
+        // if (this._settings.get_boolean('custom-font')) {
         //     el.modify_font(font_desc);
         // } else {
         //     el.modify_font(null);
         // }
 
-        // cosnt font_desc = Pango.FontDescription.from_string(this._schema.get_string('font'));
+        // cosnt font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
         // const pc = el.get_pango_context();
         //
         // pc.set_font_description(font_desc);
@@ -274,7 +274,7 @@ export class Calendar {
         iter.setDate(iter.getDate() - daysToWeekStart);
 
 
-        const fontSize = `font-size:${(this._schema.get_int('calendar-font-size') + 1) / 10}em;`;
+        const fontSize = `font-size:${(this._settings.get_int('calendar-font-size') + 1) / 10}em;`;
         let row = 2;
         let events;
 
@@ -301,10 +301,11 @@ export class Calendar {
                 if (events[0]) {
                     styleClass += ' pcalendar-day-with-events ';
                 }
+                style += `font-weight:600;`;
 
                 if (events[1]) {
                     styleClass += ' calendar-weekend pcalendar-weekend ';
-                    style += `color:${this._schema.get_string('nonwork-color')};`;
+                    style += `color:${this._settings.get_string('nonwork-color')};`;
                 } else {
                     styleClass += ' calendar-weekday pcalendar-weekday ';
                 }
@@ -312,6 +313,9 @@ export class Calendar {
 
             if (this._sameDay(now, p_iter)) {
                 styleClass += ' calendar-today pcalendar-today ';
+                if (this._settings.get_boolean('custom-today-bg-color')) {
+                    style += `background-color:${this._settings.get_string('today-bg-color')};font-weight:900;`;
+                }
             } else if (!is_same_month) {
                 styleClass += ' calendar-other-month pcalendar-other-month ';
             }
@@ -359,7 +363,7 @@ export class Calendar {
         );
 
         // add persian date
-        if (this._schema.get_boolean('persian-display')) {
+        if (this._settings.get_boolean('persian-display')) {
             const _datesBox_p = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
             const button = this.getPersianDateButton(this._selectedDate, g_selectedDate.getDay());
@@ -367,7 +371,7 @@ export class Calendar {
         }
 
         // add gregorian date
-        if (this._schema.get_boolean('gregorian-display')) {
+        if (this._settings.get_boolean('gregorian-display')) {
             const _datesBox_g = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
             const gDate = {
@@ -380,7 +384,7 @@ export class Calendar {
         }
 
         // add hijri date
-        if (this._schema.get_boolean('hijri-display')) {
+        if (this._settings.get_boolean('hijri-display')) {
             const _datesBox_h = new St.BoxLayout();
             this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
             const button = this.getHijriDateButton(h_selectedDate, g_selectedDate.getDay());
@@ -426,7 +430,7 @@ export class Calendar {
     _getDateButton(date, dayOfWeek, calendar) {
         const button = new St.Button({
             label: this.format(
-                this._schema.get_string(`${calendar}-display-format`),
+                this._settings.get_string(`${calendar}-display-format`),
                 date.day,
                 date.month,
                 date.year,

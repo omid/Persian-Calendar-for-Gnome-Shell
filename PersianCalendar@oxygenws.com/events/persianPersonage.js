@@ -10,7 +10,7 @@ export class persianPersonage {
         this.events = [[], [], [], [], [], [], [], [], [], [], [], [], []];
 
         this.events[1][6] = [['زایش زرتشت', false]];
-        this.events[1][25] = [['بزرگ‌داشت عطار نیشابوری', false]];
+        this.events[1][25] = [['بزرگ‌داشت عطارنیشابوری', false]];
         this.events[2][1] = [['بزرگ‌داشت سعدی', false]];
         this.events[2][25] = [['بزرگ‌داشت فردوسی', false]];
         this.events[2][28] = [['بزرگ‌داشت خیام', false]];
@@ -26,6 +26,6 @@ export class persianPersonage {
         this.events[10][5] = [['بزرگ‌داشت رودکی', false]];
         this.events[10][20] = [['کشته شدن امیرکبیر', false]];
         this.events[11][1] = [['زادروز فردوسی', false]];
-        this.events[12][5] = [['بزرگ‌داشت خواجه نصیر‌الدین طوسی', false]];
+        this.events[12][5] = [['بزرگ‌داشت خواجه‌نصیر‌الدین‌طوسی', false]];
     }
 };
