@@ -131,7 +131,7 @@ msgstr "شنبه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:21
 msgid "Sunday"
-msgstr "یکشنبه"
+msgstr "یک‌شنبه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:21
 msgid "Monday"
@@ -147,7 +147,7 @@ msgstr "چهارشنبه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:21
 msgid "Thursday"
-msgstr "پنجشنبه"
+msgstr "پنج‌شنبه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:21
 msgid "Friday"
@@ -172,7 +172,7 @@ msgstr "آور"
 #: PersianCalendar@oxygenws.com/Calendar.js:24
 #: PersianCalendar@oxygenws.com/Calendar.js:25
 msgid "May"
-msgstr "می"
+msgstr "مه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:24
 msgid "Jun"
@@ -184,7 +184,7 @@ msgstr "ژوی"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:24
 msgid "Aug"
-msgstr "آگو"
+msgstr "اوت"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:24
 msgid "Sep"
@@ -228,7 +228,7 @@ msgstr "ژوئیه"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:25
 msgid "August"
-msgstr "آگوست"
+msgstr "اوت"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:25
 msgid "September"
@@ -346,19 +346,19 @@ msgstr "صفر"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:34
 msgid "R-a"
-msgstr "رب-۱"
+msgstr "رب۱"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:34
 msgid "R-s"
-msgstr "رب-۲"
+msgstr "رب۲"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:34
 msgid "J-a"
-msgstr "جم-۱"
+msgstr "جم۱"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:34
 msgid "J-s"
-msgstr "جم-۲"
+msgstr "جم۲"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:34
 msgid "Raj"
@@ -386,7 +386,7 @@ msgstr "ذیح"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:35
 msgid "Moharram"
-msgstr "محرّم"
+msgstr "محرم"
 
 #: PersianCalendar@oxygenws.com/Calendar.js:35
 msgid "Safar"
