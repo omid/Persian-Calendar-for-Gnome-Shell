@@ -299,9 +299,9 @@ export class Calendar {
 
             if (is_same_month) {
                 if (events[0]) {
-                    styleClass += ' pcalendar-day-with-events ';
+                    styleClass += ' calendar-day-with-events pcalendar-day-with-events ';
                 }
-                style += `font-weight:600;`;
+                style += `font-weight:400;`;
 
                 if (events[1]) {
                     styleClass += ' calendar-weekend pcalendar-weekend ';
@@ -429,14 +429,14 @@ export class Calendar {
 
     _getDateButton(date, dayOfWeek, calendar) {
         const button = new St.Button({
-            label: this.format(
+            label: this._str.transDigits(this.format(
                 this._settings.get_string(`${calendar}-display-format`),
                 date.day,
                 date.month,
                 date.year,
                 dayOfWeek,
                 calendar,
-            ),
+            )),
             style_class: 'calendar-day-base pcalendar-date-label',
             x_align: Clutter.ActorAlign.CENTER,
             x_expand: true,

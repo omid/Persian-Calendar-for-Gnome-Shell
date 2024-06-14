@@ -7,8 +7,12 @@
     font-weight: 500;
 }
 
+.pcalendar-tray-holiday-light-dark {
+    background-image: url("resource:///org/gnome/shell/theme/calendar-today.svg");
+}
+
 .pcalendar-tray-holiday {
-    text-decoration: underline;
+    background-size: contain;
     font-weight: 900;
 }
 

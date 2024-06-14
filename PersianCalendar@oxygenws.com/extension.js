@@ -68,7 +68,7 @@ const PersianCalendar = GObject.registerClass(
                     this.label.set_style('color:');
                 }
             }));
-            
+
             ///
             this.event_hooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
@@ -114,51 +114,17 @@ const PersianCalendar = GObject.registerClass(
             // this._settings.connect('changed::font', this._onFontChangeForCalendar.bind(this));
             // this._settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
             // //////////////////////////////
-
-            this._generateConverterPart();
+            
+            this._genConverterPart();
 
             // action buttons
-            const actionButtons = new PopupMenu.PopupBaseMenuItem({
+            this._actionButtonsPart = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
             });
-            this.menu.addMenuItem(actionButtons);
-
-            // Add preferences button
-            let icon = new St.Icon({
-                icon_name: 'emblem-system-symbolic',
-                style_class: 'popup-menu-icon calendar-popup-menu-icon',
-            });
-
-            const preferencesIcon = new St.Button({
-                child: icon,
-                style_class: 'button system-menu-action calendar-preferences-button',
-                reactive: true,
-                can_focus: true,
-                x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-            });
-            preferencesIcon.connect('clicked', () => {
-                this._openPreferences();
-            });
-            actionButtons.actor.add_child(preferencesIcon);
-
-            // Add Nowruz button
-            icon = new St.Icon({
-                icon_name: 'emblem-favorite-symbolic',
-                style_class: 'popup-menu-icon calendar-popup-menu-icon',
-            });
-
-            const nowruzIcon = new St.Button({
-                child: icon,
-                style_class: 'button system-menu-action calendar-preferences-button',
-                reactive: true,
-                can_focus: true,
-                x_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-            });
-            nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));
-            actionButtons.actor.add_child(nowruzIcon);
+            this.menu.addMenuItem(this._actionButtonsPart);
+            this._genActionButtonsPart();
+            this.event_hooks.push(Main.sessionMode.connect('updated', () => this._genActionButtonsPart()));
 
             this.menu.connect('open-state-changed', (isOpen) => {
                 if (isOpen) {
@@ -169,6 +135,47 @@ const PersianCalendar = GObject.registerClass(
             });
 
             this.show();
+        }
+
+        _genActionButtonsPart() {
+            this._actionButtonsPart.remove_all_children();
+            if (!Main.sessionMode.isLocked) {
+                // Add preferences button
+                let icon = new St.Icon({
+                    icon_name: 'emblem-system-symbolic',
+                    style_class: 'popup-menu-icon calendar-popup-menu-icon',
+                });
+
+                const preferencesIcon = new St.Button({
+                    child: icon,
+                    style_class: 'button system-menu-action calendar-preferences-button',
+                    reactive: true,
+                    can_focus: true,
+                    x_align: Clutter.ActorAlign.CENTER,
+                    x_expand: true,
+                });
+                preferencesIcon.connect('clicked', () => {
+                    this._openPreferences();
+                });
+                this._actionButtonsPart.actor.add_child(preferencesIcon);
+
+                // Add Nowruz button
+                icon = new St.Icon({
+                    icon_name: 'emblem-favorite-symbolic',
+                    style_class: 'popup-menu-icon calendar-popup-menu-icon',
+                });
+
+                const nowruzIcon = new St.Button({
+                    child: icon,
+                    style_class: 'button system-menu-action calendar-preferences-button',
+                    reactive: true,
+                    can_focus: true,
+                    x_align: Clutter.ActorAlign.CENTER,
+                    x_expand: true,
+                });
+                nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));
+                this._actionButtonsPart.actor.add_child(nowruzIcon);
+            }
         }
 
         _onFontChangeForIcon() {
@@ -214,8 +221,10 @@ const PersianCalendar = GObject.registerClass(
             // is holiday?
             if (events[1]) {
                 this.label.add_style_class_name('pcalendar-tray-holiday');
+                this.label.add_style_class_name('pcalendar-tray-holiday-light-dark');
             } else {
                 this.label.remove_style_class_name('pcalendar-tray-holiday');
+                this.label.remove_style_class_name('pcalendar-tray-holiday-light-dark');
             }
 
             this.label.set_text(
@@ -246,7 +255,7 @@ const PersianCalendar = GObject.registerClass(
             return true;
         }
 
-        _generateConverterPart() {
+        _genConverterPart() {
             // Add date conversion button
             const converterMenu = new PopupMenu.PopupSubMenuMenuItem(this._gettext.__('Date conversion'));
             converterMenu.actor.add_style_class_name('pcalendar-font');
@@ -480,20 +489,20 @@ const PersianCalendar = GObject.registerClass(
                         month_delta,
                     ).format(month_delta, day_delta, pdate.year + 1);
                 }
-                this.nowruz_notify(this._str.transDigits(nowruz));
+                this._nowruzNotify(this._str.transDigits(nowruz));
             } else if (day_delta !== 0) {
                 nowruz = this._gettext.n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
                     day_delta,
                 ).format(day_delta, pdate.year + 1);
-                this.nowruz_notify(this._str.transDigits(nowruz));
+                this._nowruzNotify(this._str.transDigits(nowruz));
             } else {
-                this.nowruz_notify(this._gettext.__('Happy New Year'));
+                this._nowruzNotify(this._gettext.__('Happy New Year'));
             }
         }
 
-        nowruz_notify(title) {
+        _nowruzNotify(title) {
             this.notify(title, undefined, 'emblem-favorite-symbolic');
         }
 

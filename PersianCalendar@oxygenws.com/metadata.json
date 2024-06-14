@@ -9,5 +9,10 @@
   ],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",
-  "version": 112
+  "session-modes": [
+    "user",
+    "unlock-dialog",
+    "gdm"
+  ],
+  "version": 113
 }
