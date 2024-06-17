@@ -40,7 +40,7 @@ const PersianCalendar = GObject.registerClass(
             this._events = new Events(this._settings, this._str);
             this._openPreferences = () => this._extension.openPreferences();
 
-            this.eventHooks = [];
+            this.settingsEventHooks = [];
             super._init(0.0);
 
             this.label = new St.Label({
@@ -56,12 +56,12 @@ const PersianCalendar = GObject.registerClass(
             if (this._settings.get_boolean('custom-color')) {
                 this.label.set_style(`color:${this._settings.get_string('color')}`);
             }
-            this.eventHooks.push(this._settings.connect('changed::color', () => {
+            this.settingsEventHooks.push(this._settings.connect('changed::color', () => {
                 if (this._settings.get_boolean('custom-color')) {
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
                 }
             }));
-            this.eventHooks.push(this._settings.connect('changed::custom-color', () => {
+            this.settingsEventHooks.push(this._settings.connect('changed::custom-color', () => {
                 if (this._settings.get_boolean('custom-color')) {
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
                 } else {
@@ -70,17 +70,17 @@ const PersianCalendar = GObject.registerClass(
             }));
 
             ///
-            this.eventHooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
+            this.settingsEventHooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
-            this.eventHooks.push(this._settings.connect('changed::position', () => {
+            this.settingsEventHooks.push(this._settings.connect('changed::position', () => {
                 this.reload();
             }));
 
-            this.eventHooks.push(this._settings.connect('changed::language', () => {
+            this.settingsEventHooks.push(this._settings.connect('changed::language', () => {
                 this.reload();
             }));
 
-            this.eventHooks.push(this._settings.connect('changed::index', () => {
+            this.settingsEventHooks.push(this._settings.connect('changed::index', () => {
                 this.reload();
             }));
 
@@ -125,7 +125,8 @@ const PersianCalendar = GObject.registerClass(
             this.menu.addMenuItem(this._actionButtonsPart);
             this._genActionButtonsPart();
             // uncomment this in case you want to have `unlock-dialog` session mode
-            // this.eventHooks.push(Main.sessionMode.connect('updated', () => this._genActionButtonsPart()));
+            // remember to remove it within the disable function
+            // Main.sessionMode.connect('updated', () => this._genActionButtonsPart());
 
             this.menu.connect('open-state-changed', (isOpen) => {
                 if (isOpen) {
@@ -531,7 +532,7 @@ const PersianCalendar = GObject.registerClass(
 
         disable() {
             let ext = this._extension;
-            ext._indicator.eventHooks.forEach(id => ext._settings.disconnect(id));
+            ext._indicator.settingsEventHooks.forEach(id => ext._settings.disconnect(id));
             ext._indicator.destroy();
             GLib.source_remove(ext._timer);
             ext._gettext.unload_locale();
@@ -576,7 +577,7 @@ export default class PersianCalendarExtension extends Extension {
     }
 
     disable() {
-        this._indicator.eventHooks.forEach(id => this._settings.disconnect(id));
+        this._indicator.settingsEventHooks.forEach(id => this._settings.disconnect(id));
         this._indicator.destroy();
         GLib.source_remove(this._timer);
         this._gettext.unload_locale();
