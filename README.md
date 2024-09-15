@@ -27,7 +27,7 @@ An extension for Gnome-Shell to show Persian date and calendar
 * If none of the above works, you can install [Extension Manager](https://github.com/mjakeman/extension-manager#-installing), then install and activate the Persian Calendar extension through it. Extension Manager is a tool for managing GNOME Shell Extensions.
 * The extension seems to work, but the settings window in extension manager reports the following message "Error: Requiring Clutter, version none: Typelib file for namespace '`Clutter'"
    * This error is a result of some clutter libraries no longer being bundled with your OS if you use Ubuntu, please open a terminal and execute 
-   * `$sudo apt install -y gir1.2-gtkclutter-1.0`
+   `$sudo apt install -y gir1.2-gtkclutter-1.0`
    * Or equivalent command for your distribution, and restart your windows manager or log out and log back in.
 
 ### Date formatting:
