@@ -28,76 +28,8 @@ An extension for Gnome-Shell to show Persian date and calendar
 * The extension seems to work, but the settings window in extension manager reports the following message "Error: Requiring Clutter, version none: Typelib file for namespace '`Clutter'"
    * This error is a result of some clutter libraries no longer being bundled with your OS if you use Ubuntu, please open a terminal and execute 
    * `$sudo apt install -y gir1.2-gtkclutter-1.0`
-   * Or equivalent for your distribution, and restart your windows manager or log out and log back in.
+   * Or equivalent command for your distribution, and restart your windows manager or log out and log back in.
 
-Home
-Questions
-Tags
-Users
-Companies
-Labs
-Jobs
-Discussions
-Recent Tags
-syntax-highlighting
-github
-linux
-mount
-bind
-Collectives
-
-    Communities for your favorite technologies. Explore all Collectives
-
-Teams
-
-Now available on Stack Overflow for Teams! AI features where you work: search, IDE, and chat.
-
-Monospaced Font w/out Syntax Highlighting in Github Flavored Markdown
-Asked 10 years, 11 months ago
-Modified 4 years ago
-Viewed 25k times
-13
-
-The title pretty much says it all: I'd like to write a paragraph in monospaced font using GFM, but without any programming language's syntax highlighting. I'd think it would be
-
-```txt
-
-or
-
-```text
-
-or maybe nothing:
-
-```
-
-But no luck. Is this even possible with GFM?
-
-    githubsyntax-highlightingplaintextmonospace
-
-Share
-Improve this question
-Follow
-edited Oct 22, 2013 at 12:55
-asked Oct 22, 2013 at 12:46
-Caleb P's user avatar
-Caleb P
-36111 gold badge22 silver badges1515 bronze badges
-
-    Better for either Web Apps (since it has nothing to do with coding) or direct to GitHub:Support – 
-    random
-    Commented Oct 28, 2013 at 2:51
-    This also doesn't work in gitter ... awful when trying to paste compiler messages. – 
-    Luciano
-    Commented Mar 6, 2018 at 10:32
-
-Add a comment
-Report this ad
-1 Answer
-Sorted by:
-10
-
-Try indenting with four spaces (i.e. a normal markdown code block) rather than using a fenced code block. This worked for me in GitLab. In GitHub just ``` worked.
- restart your windows manager.
 ### Date formatting:
 | Format Code | Meaning | Example Output |
 | ----------- | ------- | -------------- |
