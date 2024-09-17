@@ -268,7 +268,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         const index = new Gtk.SpinButton({ valign: Gtk.Align.CENTER });
         let adjustment;
         adjustment = new Gtk.Adjustment();
-        adjustment.set_lower(10);
+        adjustment.set_lower(1);
         adjustment.set_upper(50);
         adjustment.set_step_increment(1);
         index.set_adjustment(adjustment);
