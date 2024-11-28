@@ -19,16 +19,12 @@ An extension for Gnome-Shell to show Persian date and calendar
 * You may need to enable the extension via GNOME `Extensions` application
 
 ### Troubleshooting:
-* I don't see the ON/OFF button, or it's disabled, but I see a blue message on top of the website, with a message like: “To control GNOME Shell extensions using this site you must install GNOME Shell integration that…”. What should I do?
-   * In this case, you must install the `chrome-gnome-shell` package on your system. For example, on Ubuntu, you should run: `sudo apt install chrome-gnome-shell`
-* I enable the extension, but it doesn't appear and when I refresh the page, it's disabled again! Why?!
-   * If you don't have `gnome-tweaks`, first install it. Then open it and go to the “extensions” section. There is a button in the title bar of the window, make sure it's enabled.
-   * If you cannot see the “extensions” section in the `gnome-tweaks` application, congratulation, you are using a more up-to-date version of Gnome, so in this case, please use the `gnome-extensions` application and make sure the button is enabled.
-* If none of the above works, you can install [Extension Manager](https://github.com/mjakeman/extension-manager#-installing), then install and activate the Persian Calendar extension through it. Extension Manager is a tool for managing GNOME Shell Extensions.
-* The extension seems to work, but the settings window in extension manager reports the following message "Error: Requiring Clutter, version none: Typelib file for namespace '`Clutter'"
-   * This error is a result of some clutter libraries no longer being bundled with your OS if you use Ubuntu, please open a terminal and execute 
-   `$sudo apt install -y gir1.2-gtkclutter-1.0`
-   * Or equivalent command for your distribution, and restart your windows manager or log out and log back in.
+1. I don't see the ON/OFF button, or it's disabled, but I see a blue message on top of the website, with a message like: “To control GNOME Shell extensions using this site you must install GNOME Shell integration that…”. What should I do?
+   * In this case, you must install the `gnome-browser-connector` package on your system. For example, on Ubuntu, you should run: `apt install gnome-browser-connector`
+2. I enable the extension, but it doesn't appear and when I refresh the page, it's disabled again! Why?!
+   * Run `gnome-extensions` application and make sure extensions are enabled and the toggle in front of the extension is turned on also.
+3. The extension works, but the settings window reports the following message "Error: Requiring Clutter, version none: Typelib file for namespace '`Clutter'"
+   * This error is a result of some missing clutter libraries. You need to install clutter integration of GTK. A command like this `apt install -y gir1.2-gtkclutter-1.0` or `pacman -S clutter-gtk` may help.
 
 ### Date formatting:
 | Format Code | Meaning | Example Output |
@@ -45,10 +41,9 @@ An extension for Gnome-Shell to show Persian date and calendar
 | `%ww` | Day of the week (short) | `چهار` |
 | `%w` | Day of the week (very short) | `چ` |
 
+[Developed with :green_heart:](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/graphs/contributors)
 
 ### Links:
 * :octocat: https://github.com/omid/Persian-Calendar-for-Gnome-Shell
 * :link: https://extensions.gnome.org/extension/240/
 * :yum: https://www.paypal.me/omidmr/
-
-[Developed with :green_heart:](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/graphs/contributors)
