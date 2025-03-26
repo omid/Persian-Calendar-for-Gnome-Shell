@@ -144,7 +144,7 @@ const PersianCalendar = GObject.registerClass(
             if (!Main.sessionMode.isLocked) {
                 // Add preferences button
                 let icon = new St.Icon({
-                    icon_name: 'emblem-system-symbolic',
+                    icon_name: 'preferences-other-symbolic',
                     style_class: 'popup-menu-icon calendar-popup-menu-icon',
                 });
 
@@ -163,7 +163,7 @@ const PersianCalendar = GObject.registerClass(
 
                 // Add Nowruz button
                 icon = new St.Icon({
-                    icon_name: 'emblem-favorite-symbolic',
+                    icon_name: 'emote-love-symbolic',
                     style_class: 'popup-menu-icon calendar-popup-menu-icon',
                 });
 
@@ -505,7 +505,7 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _nowruzNotify(title) {
-            this.notify(title, undefined, 'emblem-favorite-symbolic');
+            this.notify(title, undefined, 'emote-love-symbolic');
         }
 
         notify(title, body, iconName) {
@@ -513,15 +513,19 @@ const PersianCalendar = GObject.registerClass(
             const params = {
                 source,
                 title,
+                iconName,
                 isTransient: true,
+                body: body ? body : null,
             };
-            if (body) {
-                params.body = body;
-            }
             const notification = new MessageTray.Notification(params);
-            if (iconName) {
-                notification.set({iconName});
-            }
+
+            notification.addAction(this._gettext.__('Please ⭐ the project'), () => {
+                Gio.AppInfo.launch_default_for_uri(this._extension.metadata.url, null);
+            });
+            notification.addAction(this._gettext.__('Please rate the project ❤️'), () => {
+                Gio.AppInfo.launch_default_for_uri("https://extensions.gnome.org/extension/240/persian-calendar/", null);
+            });
+
             source.addNotification(notification);
         }
 

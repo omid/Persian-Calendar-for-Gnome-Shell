@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 11:16+0200\n"
+"POT-Creation-Date: 2025-03-26 13:28+0100\n"
 "PO-Revision-Date: 2022-04-02 12:52+0430\n"
 "Last-Translator: eshagh <eshagh094@gmail.com>\n"
 "Language-Team: \n"
@@ -485,6 +485,14 @@ msgstr[1] "%d روز مانده به نوروز %d"
 #: PersianCalendar@oxygenws.com/extension.js:503
 msgid "Happy New Year"
 msgstr "سال نو مبارک"
+
+#: PersianCalendar@oxygenws.com/extension.js:522
+msgid "Please ⭐ the project"
+msgstr "لطفن به پروژه ⭐️ بدهید"
+
+#: PersianCalendar@oxygenws.com/extension.js:525
+msgid "Please rate the project ❤️"
+msgstr "لطفن به پروژه امتیاز دهید ❤️"
 
 #: PersianCalendar@oxygenws.com/prefs.js:40
 msgid "Appearance"
