@@ -86,7 +86,7 @@ const PersianCalendar = GObject.registerClass(
 
             this._today = '';
 
-            const vbox = new St.BoxLayout({vertical: true});
+            const vbox = new St.BoxLayout({ vertical: true });
             const calendar = new PopupMenu.PopupBaseMenuItem({
                 activate: false,
                 hover: false,
@@ -114,7 +114,7 @@ const PersianCalendar = GObject.registerClass(
             // this._settings.connect('changed::font', this._onFontChangeForCalendar.bind(this));
             // this._settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this));
             // //////////////////////////////
-            
+
             this._genConverterPart();
 
             // action buttons
@@ -263,7 +263,7 @@ const PersianCalendar = GObject.registerClass(
             converterMenu.actor.add_style_class_name('pcalendar-font');
 
             this.menu.addMenuItem(converterMenu);
-            this.converterVbox = new St.BoxLayout({style_class: 'pcalendar-font', vertical: true, x_expand: true});
+            this.converterVbox = new St.BoxLayout({ style_class: 'pcalendar-font', vertical: true, x_expand: true });
             const converterSubMenu = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
@@ -271,7 +271,7 @@ const PersianCalendar = GObject.registerClass(
             converterSubMenu.actor.add_child(this.converterVbox);
             converterMenu.menu.addMenuItem(converterSubMenu);
 
-            const middleBox = new St.BoxLayout({style_class: 'pcalendar-converter-box', x_expand: true});
+            const middleBox = new St.BoxLayout({ style_class: 'pcalendar-converter-box', x_expand: true });
 
             this._activeConverter = ConverterTypes.fromPersian;
 
@@ -323,7 +323,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterVbox.add_child(middleBox);
 
-            const converterHbox = new St.BoxLayout({style_class: 'pcalendar-converter-box'});
+            const converterHbox = new St.BoxLayout({ style_class: 'pcalendar-converter-box' });
 
             this.converterYear = new St.Entry({
                 name: 'year',
@@ -365,7 +365,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterVbox.add_child(converterHbox);
 
-            this.convertedDatesVbox = new St.BoxLayout({vertical: true});
+            this.convertedDatesVbox = new St.BoxLayout({ vertical: true });
             this.converterVbox.add_child(this.convertedDatesVbox);
         }
 
@@ -390,22 +390,22 @@ const PersianCalendar = GObject.registerClass(
                 pDate;
 
             switch (this._activeConverter) {
-            case ConverterTypes.fromGregorian:
-                pDate = PersianDate.fromGregorian(year, month, day);
-                hDate = HijriDate.fromGregorian(year, month, day);
-                break;
+                case ConverterTypes.fromGregorian:
+                    pDate = PersianDate.fromGregorian(year, month, day);
+                    hDate = HijriDate.fromGregorian(year, month, day);
+                    break;
 
-            case ConverterTypes.fromPersian:
-                gDate = PersianDate.toGregorian(year, month, day);
-                hDate = HijriDate.fromGregorian(gDate.year, gDate.month, gDate.day);
-                break;
+                case ConverterTypes.fromPersian:
+                    gDate = PersianDate.toGregorian(year, month, day);
+                    hDate = HijriDate.fromGregorian(gDate.year, gDate.month, gDate.day);
+                    break;
 
-            case ConverterTypes.fromHijri:
-                gDate = HijriDate.toGregorian(year, month, day);
-                pDate = PersianDate.fromGregorian(gDate.year, gDate.month, gDate.day);
-                break;
+                case ConverterTypes.fromHijri:
+                    gDate = HijriDate.toGregorian(year, month, day);
+                    pDate = PersianDate.fromGregorian(gDate.year, gDate.month, gDate.day);
+                    break;
 
-            default:
+                default:
                 // do nothing
             }
 
@@ -510,14 +510,14 @@ const PersianCalendar = GObject.registerClass(
 
         notify(title, body, iconName) {
             const source = new MessageTray.getSystemSource();
-            const params = {
+
+            const notification = new MessageTray.Notification({
                 source,
                 title,
                 iconName,
                 isTransient: true,
                 body: body ? body : null,
-            };
-            const notification = new MessageTray.Notification(params);
+            });
 
             notification.addAction(this._gettext.__('Please ⭐ the project'), () => {
                 Gio.AppInfo.launch_default_for_uri(this._extension.metadata.url, null);
