@@ -251,7 +251,7 @@ const PersianCalendar = GObject.registerClass(
                 'persian',
             ));
             if (!skip_notification) {
-                this.notify(_date, events[0]);
+                this.notify(_date, events[0], 'x-office-calendar-symbolic');
             }
 
             return true;
