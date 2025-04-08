@@ -514,7 +514,7 @@ const PersianCalendar = GObject.registerClass(
             const notification = new MessageTray.Notification({
                 source,
                 title,
-                iconName,
+                iconName: iconName ? iconName : null,
                 isTransient: true,
                 body: body ? body : null,
             });
