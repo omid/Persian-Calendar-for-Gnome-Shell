@@ -505,16 +505,15 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _nowruzNotify(title) {
-            this.notify(title, undefined, 'emote-love-symbolic');
+            this.notify("🎉🎉🎉   " + title + "   🎉🎉🎉");
         }
 
-        notify(title, body, iconName) {
+        notify(title, body) {
             const source = new MessageTray.getSystemSource();
 
             const notification = new MessageTray.Notification({
                 source,
                 title,
-                iconName: iconName ? iconName : 'x-office-calendar-symbolic',
                 isTransient: true,
                 body: body ? body : null,
             });
@@ -611,3 +610,4 @@ export default class PersianCalendarExtension extends Extension {
         }
     }
 }
+

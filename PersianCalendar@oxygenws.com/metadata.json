@@ -3,8 +3,8 @@
   "settings-schema": "org.gnome.shell.extensions.persian-calendar",
   "name": "Persian Calendar",
   "original-authors": "Omid Rad",
-  "shell-version": ["46", "47", "48"],
+  "shell-version": ["46", "47", "48", "49"],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",
-  "version": 119
+  "version": 120
 }

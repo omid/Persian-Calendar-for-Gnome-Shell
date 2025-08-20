@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-27 10:52+0100\n"
+"POT-Creation-Date: 2025-08-20 10:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -433,64 +433,64 @@ msgid "Zihajje"
 msgstr ""
 
 #. Add date conversion button
-#: PersianCalendar@oxygenws.com/extension.js:263
+#: PersianCalendar@oxygenws.com/extension.js:262
 msgid "Date conversion"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:326
+#: PersianCalendar@oxygenws.com/extension.js:283
 msgid "from Persian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:338
+#: PersianCalendar@oxygenws.com/extension.js:295
 msgid "from Gregorian"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:350
+#: PersianCalendar@oxygenws.com/extension.js:307
 msgid "from Hijri"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:373
+#: PersianCalendar@oxygenws.com/extension.js:330
 msgid "year"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:382
+#: PersianCalendar@oxygenws.com/extension.js:339
 msgid "month"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:391
+#: PersianCalendar@oxygenws.com/extension.js:348
 msgid "day"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:526
+#: PersianCalendar@oxygenws.com/extension.js:483
 #, javascript-format
 msgid "%d month and 1 day left to Nowruz %d"
 msgid_plural "%d months and 1 day left to Nowruz %d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: PersianCalendar@oxygenws.com/extension.js:532
+#: PersianCalendar@oxygenws.com/extension.js:489
 #, javascript-format
 msgid "%d month and %d days left to Nowruz %d"
 msgid_plural "%d months and %d days left to Nowruz %d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: PersianCalendar@oxygenws.com/extension.js:540
+#: PersianCalendar@oxygenws.com/extension.js:497
 #, javascript-format
 msgid "%d day left to Nowruz %d"
 msgid_plural "%d days left to Nowruz %d"
 msgstr[0] ""
 msgstr[1] ""
 
-#: PersianCalendar@oxygenws.com/extension.js:546
+#: PersianCalendar@oxygenws.com/extension.js:503
 msgid "Happy New Year"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:565
+#: PersianCalendar@oxygenws.com/extension.js:521
 msgid "Please ⭐ the project"
 msgstr ""
 
-#: PersianCalendar@oxygenws.com/extension.js:568
+#: PersianCalendar@oxygenws.com/extension.js:524
 msgid "Please rate the project ❤️"
 msgstr ""
 
