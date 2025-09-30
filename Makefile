@@ -18,7 +18,7 @@ clean:
 	rm -rf build/
 
 release: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
-release: _version_bump _build
+release: eslint _version_bump _build
 	gitg
 	git commit -v
 	git tag $(_VERSION)
