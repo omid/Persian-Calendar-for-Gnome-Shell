@@ -3,9 +3,16 @@ name: Bug Report
 about: Create a bug report.
 ---
 
-Your issue may already be reported! Please search on the [issue tracker](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/issues) before creating one.
+<!--
+Your issue may already be reported! Please search on the https://github.com/omid/Persian-Calendar-for-Gnome-Shell/issues before creating one.
 
 Please check the closed issues as well.
+
+- You can open an issue in Persian/Farsi or any other language also.
+- You don't need to fill all the sections below.
+- You can remove any of the sections you want.
+
+-->
 
 ## Expected Behavior
 
@@ -30,7 +37,6 @@ Please check the closed issues as well.
 1.
 2.
 3.
-4.
 
 ## Screenshots
 
