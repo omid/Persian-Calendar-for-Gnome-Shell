@@ -126,7 +126,7 @@ export class Calendar {
             style_class: 'calendar-month-label pcalendar-month-label',
             x_expand: true,
         });
-        this._setFont(this._monthLabel);
+        // this._setFont(this._monthLabel);
 
         icon = new St.Icon({ icon_name: this._locale.isRtl() ? 'go-next-symbolic' : 'go-previous-symbolic' });
         prevMonthButton = new St.Button({ style_class: style, child: icon });
@@ -158,7 +158,7 @@ export class Calendar {
                 style_class: 'calendar-day calendar-day-heading pcalendar-weekday',
                 text: this.phrases.weekdayOne[i],
             });
-            this._setFont(label);
+            // this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);
         }
 
@@ -289,7 +289,7 @@ export class Calendar {
             );
             const isSameMonth = pIter.month === this._selectedDate.month;
             const button = new St.Button({ label: this._str.transDigits(pIter.day) });
-            this._modifyFont(button);
+            // this._modifyFont(button);
 
             button.connect('clicked', () => this.setDate(pIter));
 
@@ -405,7 +405,7 @@ export class Calendar {
                 x_align: Gtk.ActorAlign.FILL,
                 x_expand: true,
             });
-            this._setFont(bottomLabel);
+            // this._setFont(bottomLabel);
 
             _eventBox.add_child(bottomLabel);
         }
