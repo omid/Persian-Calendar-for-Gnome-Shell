@@ -500,7 +500,7 @@ const PersianCalendar = GObject.registerClass(
         }
 
         _nowruzNotify(title) {
-            this.notify("🎉🎉🎉   " + title + "   🎉🎉🎉");
+            this.notify(`🎉🎉🎉   ${title}   🎉🎉🎉`);
         }
 
         notify(title, body) {
