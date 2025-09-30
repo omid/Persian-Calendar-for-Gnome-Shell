@@ -6,9 +6,9 @@ jobs:
   lints:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Install modules
-      run: npm install eslint
-    - name: Lint
-      run: |
-        ./node_modules/.bin/eslint PersianCalendar@oxygenws.com
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm install
+      - name: Lint
+        run: |
+          ./node_modules/.bin/eslint PersianCalendar@oxygenws.com

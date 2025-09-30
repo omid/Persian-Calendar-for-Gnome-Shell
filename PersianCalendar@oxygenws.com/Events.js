@@ -2,11 +2,11 @@
 
 import * as PersianDate from './PersianDate.js';
 import * as HijriDate from './HijriDate.js';
-import {iranLunar} from './events/iranLunar.js';
-import {persian} from './events/persian.js';
-import {world} from './events/world.js';
-import {iranSolar} from './events/iranSolar.js';
-import {persianPersonage} from './events/persianPersonage.js';
+import { iranLunar } from './events/iranLunar.js';
+import { persian } from './events/persian.js';
+import { world } from './events/world.js';
+import { iranSolar } from './events/iranSolar.js';
+import { persianPersonage } from './events/persianPersonage.js';
 
 const calendarToIndex = {
     gregorian: 0,
@@ -25,25 +25,24 @@ export class Events {
         this._isHoliday = false;
         this._today = [];
 
-        // if it is friday
+        // if it is Friday
         if (today.getDay() === 5) {
             this._isHoliday = true;
         }
 
-        let gtoday = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
-        let ptoday = PersianDate.fromGregorian(gtoday[0], gtoday[1], gtoday[2]);
-        let htoday = HijriDate.fromGregorian(gtoday[0], gtoday[1], gtoday[2]);
+        let gToday = [today.getFullYear(), today.getMonth() + 1, today.getDate()];
+        let pToday = PersianDate.fromGregorian(gToday[0], gToday[1], gToday[2]);
+        let hToday = HijriDate.fromGregorian(gToday[0], gToday[1], gToday[2]);
         this._today = [
-            gtoday,
-            [ptoday.year, ptoday.month, ptoday.day],
-            [htoday.year, htoday.month, htoday.day],
+            gToday,
+            [pToday.year, pToday.month, pToday.day],
+            [hToday.year, hToday.month, hToday.day],
         ];
 
-        // ///
         const events = {
             'event-iran-solar': () => new iranSolar(),
             'event-iran-lunar': () => new iranLunar(),
-            'event-persian-personage': () => new persianPersonage(ptoday.year),
+            'event-persian-personage': () => new persianPersonage(pToday.year),
             'event-world': () => new world(),
             'event-persian': () => new persian(),
         };
@@ -115,7 +114,7 @@ export class Events {
             // if it is holiday, set today as holiday!
             if (eventsList[i].events[this._today[type][1]][this._today[type][2]]) {
                 for (let j = 0; j < eventsList[i].events[this._today[type][1]][this._today[type][2]].length; j++) {
-                    this._isHoliday = this._isHoliday || eventsList[i].events[this._today[type][1]][this._today[type][2]][j][1];
+                    this._isHoliday ||= eventsList[i].events[this._today[type][1]][this._today[type][2]][j][1];
                 }
             }
         }

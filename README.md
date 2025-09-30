@@ -35,8 +35,6 @@ A GNOME Shell extension that displays Persian (Iranian/Jalali), Gregorian, and H
    - In this case, you must install the `gnome-browser-connector` package on your system. For example, on Ubuntu, you should run: `apt install gnome-browser-connector`
 2. I enable the extension, but it doesn't appear and when I refresh the page, it's disabled again! Why?!
    - Run `gnome-extensions` application and make sure extensions are enabled and the toggle in front of the extension is turned on also.
-3. The extension works, but the settings window reports the following message "Error: Requiring Clutter, version none: Typelib file for namespace '`Clutter'"
-   - This error is a result of some missing clutter libraries. You need to install clutter integration of GTK. A command like this `apt install -y gir1.2-gtkclutter-1.0` or `pacman -S clutter-gtk` may help.
 
 ## Date formatting
 

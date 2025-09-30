@@ -1,34 +1,34 @@
 'use strict';
 
-import Clutter from 'gi://Clutter';
+const Gtk = imports.gi.Gtk;
 
 export class Locale {
     constructor(gettext) {
         this._gettext = gettext;
     }
-    
+
     isCalendarRtl() {
         return this._gettext.__('__DIRECTION') === 'rtl';
     }
 
     isGnomeRtl() {
-        return Clutter.get_default_text_direction() === Clutter.TextDirection.RTL;
+        return Gtk.Widget.get_default_direction() === Gtk.TextDirection.RTL;
     }
 
     isRtl() {
-        const gnome_is_rtl = this.isGnomeRtl();
-        const calendar_is_rtl = this.isCalendarRtl();
+        const isGnomeRtl = this.isGnomeRtl();
+        const isCalendarRtl = this.isCalendarRtl();
 
         // XOR
-        return (gnome_is_rtl || calendar_is_rtl) && !(gnome_is_rtl && calendar_is_rtl);
+        return (isGnomeRtl || isCalendarRtl) && !(isGnomeRtl && isCalendarRtl);
     }
 
     getTextDirection() {
         if (this.isRtl()) {
-            return Clutter.TextDirection.RTL;
-        } else {
-            return Clutter.TextDirection.LTR;
+            return Gtk.TextDirection.RTL;
         }
+
+        return Gtk.TextDirection.LTR;
     }
 
     getJustification() {
@@ -41,8 +41,8 @@ export class Locale {
 
         if (this.isRtl()) {
             return JUSTIFICATION.RIGHT;
-        } else {
-            return JUSTIFICATION.LEFT;
         }
+
+        return JUSTIFICATION.LEFT;
     }
 }

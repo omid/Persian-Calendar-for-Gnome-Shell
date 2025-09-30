@@ -1,7 +1,8 @@
 'use strict';
 
-import Clutter from 'gi://Clutter';
-import St from 'gi://St';
+const St = imports.gi.St;
+const Gtk = imports.gi.Gtk;
+const Gdk = imports.gi.Gdk;
 
 import * as PersianDate from './PersianDate.js';
 import * as HijriDate from './HijriDate.js';
@@ -44,12 +45,19 @@ export class Calendar {
             this._selectedDate.getDate(),
         );
 
-        this.actor = new St.Widget({
-            style_class: 'calendar',
-            layout_manager: new Clutter.GridLayout(),
-            reactive: true,
+        this.actor = new Gtk.Grid({
+            column_homogeneous: false,
+            row_homogeneous: false,
+            column_spacing: 6,
+            row_spacing: 6,
         });
+        this.actor.add_css_class('calendar');
 
+        const click = new Gtk.GestureClick();
+        click.connect('pressed', (_gesture, nPress, x, y) => {
+            log(`Grid pressed at ${x}, ${y}`);
+        });
+        this.actor.add_controller(click);
         this.actor.connect('scroll-event', this._onScroll.bind(this));
 
         this._buildHeader();
@@ -67,9 +75,9 @@ export class Calendar {
     // Sets the calendar to show a specific date
     format(format, day, month, year, dow, calendar) {
         // change dow to Persian style!
-        dow += 1;
-        if (dow > 6) {
-            dow = 0;
+        let pdow = dow + 1;
+        if (pdow > 6) {
+            pdow = 0;
         }
 
         const find = ['%Y', '%y', '%MM', '%mm', '%M', '%m', '%D', '%d', '%WW', '%ww', '%w'];
@@ -82,9 +90,9 @@ export class Calendar {
             month,
             `0${day}`.slice(-2),
             day,
-            this.phrases.weekdayLong[dow],
-            this.phrases.weekdayShort[dow],
-            this.phrases.weekdayOne[dow],
+            this.phrases.weekdayLong[pdow],
+            this.phrases.weekdayShort[pdow],
+            this.phrases.weekdayOne[pdow],
         ];
         return this._str.replace(find, replace, format);
     }
@@ -99,36 +107,34 @@ export class Calendar {
         this.actor.destroy_all_children();
 
         // Top line of the calendar '<< < year month > >>'
-        this._topBox = new St.BoxLayout({style_class: 'calendar-month-header'});
+        this._topBox = new St.BoxLayout({ style_class: 'calendar-month-header' });
         this.actor.layout_manager.attach(this._topBox, 0, 0, 7, 1);
 
         let icon, nextYearButton, prevYearButton, nextMonthButton, prevMonthButton;
         const style = 'pager-button';
-        icon = new St.Icon({icon_name: this._locale.isRtl() ? 'go-first-symbolic' : 'go-last-symbolic'});
-        nextYearButton = new St.Button({style_class: style, child: icon});
+        icon = new St.Icon({ icon_name: this._locale.isRtl() ? 'go-first-symbolic' : 'go-last-symbolic' });
+        nextYearButton = new St.Button({ style_class: style, child: icon });
         nextYearButton.connect('clicked', this._onNextYearButtonClicked.bind(this));
         icon.set_icon_size(16);
 
-        icon = new St.Icon({icon_name: this._locale.isRtl() ? 'go-previous-symbolic' : 'go-next-symbolic'});
-        nextMonthButton = new St.Button({style_class: style, child: icon});
+        icon = new St.Icon({ icon_name: this._locale.isRtl() ? 'go-previous-symbolic' : 'go-next-symbolic' });
+        nextMonthButton = new St.Button({ style_class: style, child: icon });
         nextMonthButton.connect('clicked', this._onNextMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
 
         this._monthLabel = new St.Label({
             style_class: 'calendar-month-label pcalendar-month-label',
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
         this._setFont(this._monthLabel);
 
-        icon = new St.Icon({icon_name: this._locale.isRtl() ? 'go-next-symbolic' : 'go-previous-symbolic'});
-        prevMonthButton = new St.Button({style_class: style, child: icon});
+        icon = new St.Icon({ icon_name: this._locale.isRtl() ? 'go-next-symbolic' : 'go-previous-symbolic' });
+        prevMonthButton = new St.Button({ style_class: style, child: icon });
         prevMonthButton.connect('clicked', this._onPrevMonthButtonClicked.bind(this));
         icon.set_icon_size(16);
 
-        icon = new St.Icon({icon_name: this._locale.isRtl() ? 'go-last-symbolic' : 'go-first-symbolic'});
-        prevYearButton = new St.Button({style_class: style, child: icon});
+        icon = new St.Icon({ icon_name: this._locale.isRtl() ? 'go-last-symbolic' : 'go-first-symbolic' });
+        prevYearButton = new St.Button({ style_class: style, child: icon });
         prevYearButton.connect('clicked', this._onPrevYearButtonClicked.bind(this));
         icon.set_icon_size(16);
 
@@ -160,43 +166,39 @@ export class Calendar {
         this._firstDayIndex = this.actor.get_children().length;
     }
 
-    _setFont(el) {
-        // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
-        //
-        // if (this._settings.get_boolean('custom-font')) {
-        //     el.clutter_text.set_font_description(font_desc);
-        // } else {
-        //     el.clutter_text.set_font_name(null);
-        // }
-    }
+    // _setFont(el) {
+    //     const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
+    //     if (this._settings.get_boolean('custom-font')) {
+    //         el.clutter_text.set_font_description(font_desc);
+    //     } else {
+    //         el.clutter_text.set_font_name(null);
+    //     }
+    // }
 
-    _modifyFont(el) {
-        // const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
-        //
-        // if (this._settings.get_boolean('custom-font')) {
-        //     el.modify_font(font_desc);
-        // } else {
-        //     el.modify_font(null);
-        // }
-
-        // cosnt font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
-        // const pc = el.get_pango_context();
-        //
-        // pc.set_font_description(font_desc);
-        // pc.changed();
-    }
+    // _modifyFont(el) {
+    //     const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
+    //     if (this._settings.get_boolean('custom-font')) {
+    //         el.modify_font(font_desc);
+    //     } else {
+    //         el.modify_font(null);
+    //     }
+    //     const font_desc = Pango.FontDescription.from_string(this._settings.get_string('font'));
+    //     const pc = el.get_pango_context();
+    //     pc.set_font_description(font_desc);
+    //     pc.changed();
+    // }
 
     _onScroll(actor, event) {
         switch (event.get_scroll_direction()) {
-        case Clutter.ScrollDirection.UP:
-        case Clutter.ScrollDirection.RIGHT:
-            this._onNextMonthButtonClicked();
-            break;
-        case Clutter.ScrollDirection.DOWN:
-        case Clutter.ScrollDirection.LEFT:
-            this._onPrevMonthButtonClicked();
-            break;
-        default:
+            case Gdk.ScrollDirection.UP:
+            case Gdk.ScrollDirection.RIGHT:
+                this._onNextMonthButtonClicked();
+                break;
+            case Gdk.ScrollDirection.DOWN:
+            case Gdk.ScrollDirection.LEFT:
+                this._onPrevMonthButtonClicked();
+                break;
+            default:
             // do nothing
         }
     }
@@ -251,6 +253,7 @@ export class Calendar {
         } else {
             pattern = '%MM %Y';
         }
+
         this._monthLabel.text = this._str.transDigits(this.format(
             pattern,
             this._selectedDate.day,
@@ -278,18 +281,17 @@ export class Calendar {
         let row = 2;
         let events;
 
-        /* eslint no-constant-condition: ["error", { "checkLoops": false }] */
         while (true) {
-            const p_iter = PersianDate.fromGregorian(
+            const pIter = PersianDate.fromGregorian(
                 iter.getFullYear(),
                 iter.getMonth() + 1,
                 iter.getDate(),
             );
-            const is_same_month = p_iter.month === this._selectedDate.month;
-            const button = new St.Button({label: this._str.transDigits(p_iter.day)});
+            const isSameMonth = pIter.month === this._selectedDate.month;
+            const button = new St.Button({ label: this._str.transDigits(pIter.day) });
             this._modifyFont(button);
 
-            button.connect('clicked', () => this.setDate(p_iter));
+            button.connect('clicked', () => this.setDate(pIter));
 
             // find events and holidays
             events = this._events.getEvents(iter);
@@ -297,11 +299,11 @@ export class Calendar {
             let styleClass = 'calendar-day pcalendar-day';
             let style = fontSize;
 
-            if (is_same_month) {
+            if (isSameMonth) {
                 if (events[0]) {
                     styleClass += ' calendar-day-with-events pcalendar-day-with-events ';
                 }
-                style += `font-weight:400;`;
+                style += 'font-weight:400;';
 
                 if (events[1]) {
                     styleClass += ' calendar-weekend pcalendar-weekend ';
@@ -311,16 +313,16 @@ export class Calendar {
                 }
             }
 
-            if (this._sameDay(now, p_iter)) {
+            if (this._sameDay(now, pIter)) {
                 styleClass += ' calendar-today pcalendar-today ';
                 if (this._settings.get_boolean('custom-today-bg-color')) {
                     style += `background-color:${this._settings.get_string('today-bg-color')};font-weight:900;`;
                 }
-            } else if (!is_same_month) {
+            } else if (!isSameMonth) {
                 styleClass += ' calendar-other-month pcalendar-other-month ';
             }
 
-            if (this._sameDay(this._selectedDate, p_iter)) {
+            if (this._sameDay(this._selectedDate, pIter)) {
                 button.add_style_pseudo_class('active');
             }
 
@@ -339,7 +341,7 @@ export class Calendar {
 
             if (iter.getDay() === this._weekStart) {
                 // We stop on the first "first day of the week" after the month we are displaying
-                if (p_iter.month > this._selectedDate.month || p_iter.year > this._selectedDate.year) {
+                if (pIter.month > this._selectedDate.month || pIter.year > this._selectedDate.year) {
                     break;
                 }
 
@@ -348,51 +350,51 @@ export class Calendar {
         }
 
         // find gregorian date
-        let g_selectedDate = PersianDate.toGregorian(
+        let gSelectedDate = PersianDate.toGregorian(
             this._selectedDate.year,
             this._selectedDate.month,
             this._selectedDate.day,
         );
-        g_selectedDate = new Date(g_selectedDate.year, g_selectedDate.month - 1, g_selectedDate.day);
+        gSelectedDate = new Date(gSelectedDate.year, gSelectedDate.month - 1, gSelectedDate.day);
 
         // find hijri date of today
-        const h_selectedDate = HijriDate.fromGregorian(
-            g_selectedDate.getFullYear(),
-            g_selectedDate.getMonth() + 1,
-            g_selectedDate.getDate(),
+        const hSelectedDate = HijriDate.fromGregorian(
+            gSelectedDate.getFullYear(),
+            gSelectedDate.getMonth() + 1,
+            gSelectedDate.getDate(),
         );
 
         // add persian date
         if (this._settings.get_boolean('persian-display')) {
-            const _datesBox_p = new St.BoxLayout();
-            this.actor.layout_manager.attach(_datesBox_p, 0, ++row, 7, 1);
-            const button = this.getPersianDateButton(this._selectedDate, g_selectedDate.getDay());
-            _datesBox_p.add_child(button);
+            const _datesBoxP = new St.BoxLayout();
+            this.actor.layout_manager.attach(_datesBoxP, 0, ++row, 7, 1);
+            const button = this.getPersianDateButton(this._selectedDate, gSelectedDate.getDay());
+            _datesBoxP.add_child(button);
         }
 
         // add gregorian date
         if (this._settings.get_boolean('gregorian-display')) {
-            const _datesBox_g = new St.BoxLayout();
-            this.actor.layout_manager.attach(_datesBox_g, 0, ++row, 7, 1);
+            const _datesBoxG = new St.BoxLayout();
+            this.actor.layout_manager.attach(_datesBoxG, 0, ++row, 7, 1);
             const gDate = {
-                day: g_selectedDate.getDate(),
-                month: g_selectedDate.getMonth() + 1,
-                year: g_selectedDate.getFullYear(),
+                day: gSelectedDate.getDate(),
+                month: gSelectedDate.getMonth() + 1,
+                year: gSelectedDate.getFullYear(),
             };
-            const button = this.getGregorianDateButton(gDate, g_selectedDate.getDay());
-            _datesBox_g.add_child(button);
+            const button = this.getGregorianDateButton(gDate, gSelectedDate.getDay());
+            _datesBoxG.add_child(button);
         }
 
         // add hijri date
         if (this._settings.get_boolean('hijri-display')) {
-            const _datesBox_h = new St.BoxLayout();
-            this.actor.layout_manager.attach(_datesBox_h, 0, ++row, 7, 1);
-            const button = this.getHijriDateButton(h_selectedDate, g_selectedDate.getDay());
-            _datesBox_h.add_child(button);
+            const _datesBoxH = new St.BoxLayout();
+            this.actor.layout_manager.attach(_datesBoxH, 0, ++row, 7, 1);
+            const button = this.getHijriDateButton(hSelectedDate, gSelectedDate.getDay());
+            _datesBoxH.add_child(button);
         }
 
         // add event box for selected date
-        events = this._events.getEvents(g_selectedDate);
+        events = this._events.getEvents(gSelectedDate);
 
         if (events[0]) {
             const _eventBox = new St.BoxLayout();
@@ -400,7 +402,7 @@ export class Calendar {
             const bottomLabel = new St.Label({
                 text: this._str.transDigits(events[0]),
                 style_class: 'pcalendar-event-label',
-                x_align: Clutter.ActorAlign.FILL,
+                x_align: Gtk.ActorAlign.FILL,
                 x_expand: true,
             });
             this._setFont(bottomLabel);
@@ -438,7 +440,6 @@ export class Calendar {
                 calendar,
             )),
             style_class: 'calendar-day-base pcalendar-date-label',
-            x_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
         });
         button.connect('clicked', () => St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, button.label));

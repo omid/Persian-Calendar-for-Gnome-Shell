@@ -72,59 +72,60 @@ export class persian {
     }
 
     addSpecificEvents(pyear) {
-        let first_saturday_of_year,
-            first_wednesday_of_year,
-            last_day_of_year,
-            last_wednesday_of_year;
+        let firstSatOfYear,
+            firstWedOfYear,
+            lastDayOfYear,
+            lastWedOfYear;
 
         // find first saturday of the year
         // and
         // find first wednesday of the year
         for (let i = 1; i <= 7; i++) {
-            let p_ts = PersianDate.toGregorian(pyear, 1, i);
+            let pTs = PersianDate.toGregorian(pyear, 1, i);
             // do not remove this 5 :D
-            p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day, 5);
-            if (p_ts.getDay() === 3) {
-                first_wednesday_of_year = PersianDate.fromGregorian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
+            pTs = new Date(pTs.year, pTs.month - 1, pTs.day, 5);
+            if (pTs.getDay() === 3) {
+                firstWedOfYear = PersianDate.fromGregorian(pTs.getFullYear(), pTs.getMonth() + 1, pTs.getDate()).day;
             }
-            if (p_ts.getDay() === 6) {
-                first_saturday_of_year = PersianDate.fromGregorian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
+
+            if (pTs.getDay() === 6) {
+                firstSatOfYear = PersianDate.fromGregorian(pTs.getFullYear(), pTs.getMonth() + 1, pTs.getDate()).day;
             }
         }
 
         // find last day of the year
         let leap = PersianDate.isLeap(pyear);
 
-        if (!last_day_of_year) {
-            last_day_of_year = 29 + leap;
+        if (!lastDayOfYear) {
+            lastDayOfYear = 29 + leap;
         }
 
         // find last wednesday of the year
         for (let i = 0; i < 7; i++) {
-            let p_ts = PersianDate.toGregorian(pyear, 12, 29 + leap - i);
+            let pTs = PersianDate.toGregorian(pyear, 12, 29 + leap - i);
 
-            p_ts = new Date(p_ts.year, p_ts.month - 1, p_ts.day);
-            if (p_ts.getDay() === 3) {
-                last_wednesday_of_year = PersianDate.fromGregorian(p_ts.getFullYear(), p_ts.getMonth() + 1, p_ts.getDate()).day;
+            pTs = new Date(pTs.year, pTs.month - 1, pTs.day);
+            if (pTs.getDay() === 3) {
+                lastWedOfYear = PersianDate.fromGregorian(pTs.getFullYear(), pTs.getMonth() + 1, pTs.getDate()).day;
                 break;
             }
         }
 
-        this.events[1][first_saturday_of_year] = this.events[1][first_saturday_of_year] || [];
-        this.events[1][first_wednesday_of_year] = this.events[1][first_wednesday_of_year] || [];
-        this.events[12][last_day_of_year] = this.events[12][last_day_of_year] || [];
-        this.events[12][last_wednesday_of_year - 1] = this.events[12][last_wednesday_of_year - 1] || [];
-        this.events[12][last_wednesday_of_year] = this.events[12][last_wednesday_of_year] || [];
+        this.events[1][firstSatOfYear] ||= [];
+        this.events[1][firstWedOfYear] ||= [];
+        this.events[12][lastDayOfYear] ||= [];
+        this.events[12][lastWedOfYear - 1] ||= [];
+        this.events[12][lastWedOfYear] ||= [];
 
-        this.events[1][first_saturday_of_year].push(['جشن نخستین شنبه سال', false]);
-        this.events[1][first_wednesday_of_year].push(['جشن نخستین چهارشنبه سال', false]);
-        this.events[12][last_day_of_year].push(
+        this.events[1][firstSatOfYear].push(['جشن نخستین شنبه سال', false]);
+        this.events[1][firstWedOfYear].push(['جشن نخستین چهارشنبه سال', false]);
+        this.events[12][lastDayOfYear].push(
             ['گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان', false],
             ['زادروز زرتشت', false],
             ['جشن اوشیدر (نجات بخش ایرانی) در دریاچه هامون و کوه خواجه', false],
             ['آتش افروزی بر بام‌ها در استقبال از نوروز', false],
         );
-        this.events[12][last_wednesday_of_year - 1].push(['چارشنبه سوری، جشن شب چهارشنبه آخر', false]);
-        this.events[12][last_wednesday_of_year].push(['چارشنبه آخر', false]);
+        this.events[12][lastWedOfYear - 1].push(['چارشنبه سوری، جشن شب چهارشنبه آخر', false]);
+        this.events[12][lastWedOfYear].push(['چارشنبه آخر', false]);
     }
 };

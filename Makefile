@@ -24,9 +24,12 @@ release: _version_bump _build
 	git tag $(_VERSION)
 	git push
 	git push --tags
+	$(MAKE) zip
+
+zip: _build
 	cd build && zip -qr ../"$(_UUID)$(_VERSION).zip" .
 	$(MAKE) clean
-
+	
 eslint:
 	eslint --fix PersianCalendar@oxygenws.com
 

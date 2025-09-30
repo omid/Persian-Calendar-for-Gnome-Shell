@@ -4,101 +4,114 @@
  * Based on a code from http://farhadi.ir
  */
 
-const g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-const p_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+const gDaysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const pDaysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
 
+/**
+ * @param {integer} py
+ * @param {integer} pm
+ * @param {integer} pd
+ */
 export function toGregorian(py, pm, pd) {
-    py = parseInt(py) - 979;
-    pm = parseInt(pm) - 1;
-    pd = parseInt(pd) - 1;
+    const y = parseInt(py) - 979;
+    const m = parseInt(pm) - 1;
+    const d = parseInt(pd) - 1;
 
-    let p_day_no = 365 * py + parseInt(py / 33) * 8 + parseInt((py % 33 + 3) / 4);
-    for (let i = 0; i < pm; i++) {
-        p_day_no += p_days_in_month[i];
+    let pDayNo = 365 * y + parseInt(y / 33) * 8 + parseInt((y % 33 + 3) / 4);
+    for (let i = 0; i < m; i++) {
+        pDayNo += pDaysInMonth[i];
     }
 
-    p_day_no += pd;
+    pDayNo += d;
 
-    let g_day_no = p_day_no + 79;
+    let gDayNo = pDayNo + 79;
 
-    let gy = 1600 + 400 * parseInt(g_day_no / 146097);
+    let gy = 1600 + 400 * parseInt(gDayNo / 146097);
     /* 146097 = 365*400 + 400/4 - 400/100 + 400/400 */
-    g_day_no %= 146097;
+    gDayNo %= 146097;
 
     let leap = true;
     /* 36525 = 365*100 + 100/4 */
-    if (g_day_no >= 36525) {
-        g_day_no--;
-        gy += 100 * parseInt(g_day_no / 36524);
+    if (gDayNo >= 36525) {
+        gDayNo--;
+        gy += 100 * parseInt(gDayNo / 36524);
         /* 36524 = 365*100 + 100/4 - 100/100 */
-        g_day_no %= 36524;
+        gDayNo %= 36524;
 
-        if (g_day_no >= 365) {
-            g_day_no++;
+        if (gDayNo >= 365) {
+            gDayNo++;
         } else {
             leap = false;
         }
     }
 
-    gy += 4 * parseInt(g_day_no / 1461);
+    gy += 4 * parseInt(gDayNo / 1461);
     /* 1461 = 365*4 + 4/4 */
-    g_day_no %= 1461;
+    gDayNo %= 1461;
 
-    if (g_day_no >= 366) {
+    if (gDayNo >= 366) {
         leap = false;
 
-        g_day_no--;
-        gy += parseInt(g_day_no / 365);
-        g_day_no %= 365;
+        gDayNo--;
+        gy += parseInt(gDayNo / 365);
+        gDayNo %= 365;
     }
 
     let i = 0;
-    for (; g_day_no >= g_days_in_month[i] + (i === 1 && leap); i++) {
-        g_day_no -= g_days_in_month[i] + (i === 1 && leap);
+    for (; gDayNo >= gDaysInMonth[i] + (i === 1 && leap); i++) {
+        gDayNo -= gDaysInMonth[i] + (i === 1 && leap);
     }
 
-    return {year: gy, month: i + 1, day: g_day_no + 1};
+    return { year: gy, month: i + 1, day: gDayNo + 1 };
 }
 
+/**
+ * @param {integer} gy
+ * @param {integer} gm
+ * @param {integer} gd
+ */
 export function fromGregorian(gy, gm, gd) {
-    gy = parseInt(gy) - 1600;
-    gm = parseInt(gm) - 1;
-    gd = parseInt(gd) - 1;
+    const y = parseInt(gy) - 1600;
+    const m = parseInt(gm) - 1;
+    const d = parseInt(gd) - 1;
 
-    let g_day_no = 365 * gy + parseInt((gy + 3) / 4) - parseInt((gy + 99) / 100) + parseInt((gy + 399) / 400);
+    let gDayNo = 365 * y + parseInt((y + 3) / 4) - parseInt((y + 99) / 100) + parseInt((y + 399) / 400);
 
-    for (let i = 0; i < gm; ++i) {
-        g_day_no += g_days_in_month[i];
+    for (let i = 0; i < m; ++i) {
+        gDayNo += gDaysInMonth[i];
     }
 
     /* leap and after Feb */
-    if (gm > 1 && ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0))) {
-        ++g_day_no;
+    if (m > 1 && ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0))) {
+        ++gDayNo;
     }
 
-    g_day_no += gd;
+    gDayNo += d;
 
-    let p_day_no = g_day_no - 79;
-    let p_np = parseInt(p_day_no / 12053);
-    p_day_no %= 12053;
+    let pDayNo = gDayNo - 79;
+    let pNp = parseInt(pDayNo / 12053);
+    pDayNo %= 12053;
 
-    let py = 979 + 33 * p_np + 4 * parseInt(p_day_no / 1461);
-    p_day_no %= 1461;
+    let py = 979 + 33 * pNp + 4 * parseInt(pDayNo / 1461);
+    pDayNo %= 1461;
 
-    if (p_day_no >= 366) {
-        py += parseInt((p_day_no - 1) / 365);
-        p_day_no = (p_day_no - 1) % 365;
+    if (pDayNo >= 366) {
+        py += parseInt((pDayNo - 1) / 365);
+        pDayNo = (pDayNo - 1) % 365;
     }
 
-    let day_in_year = p_day_no + 1;
+    let dayInYear = pDayNo + 1;
     let i = 0;
-    for (; i < 11 && p_day_no >= p_days_in_month[i]; ++i) {
-        p_day_no -= p_days_in_month[i];
+    for (; i < 11 && pDayNo >= pDaysInMonth[i]; ++i) {
+        pDayNo -= pDaysInMonth[i];
     }
 
-    return {year: py, month: i + 1, day: p_day_no + 1, yearDays: day_in_year};
+    return { year: py, month: i + 1, day: pDayNo + 1, yearDays: dayInYear };
 }
 
+/**
+ * @param {integer} py
+ */
 export function isLeap(py) {
     return ((((((py - (py > 0 ? 474 : 473)) % 2820) + 474) + 38) * 682) % 2816) < 682;
 }

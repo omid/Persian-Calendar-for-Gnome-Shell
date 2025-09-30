@@ -14,13 +14,13 @@ export class Str {
 
     replace(search, substitute, subject) {
         let length = search.length;
-        subject = subject.toString();
+        let subjectStr = subject.toString();
 
         for (let i = 0; i < length; i++) {
-            subject = subject.split(search[i]).join(substitute[i]);
+            subjectStr = subjectStr.split(search[i]).join(substitute[i]);
         }
 
-        return subject;
+        return subjectStr;
     }
 
     wordWrap(str, maxWidth) {

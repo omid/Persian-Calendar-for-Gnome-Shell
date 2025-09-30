@@ -4,3 +4,5 @@ build
 **/gschemas.compiled
 PersianCalendar@oxygenws.com/locale/**/LC_MESSAGES/*~
 PersianCalendar@oxygenws.com/locale/**/LC_MESSAGES/*.mo
+node_modules/
+*.lock

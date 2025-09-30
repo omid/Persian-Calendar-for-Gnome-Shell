@@ -1,10 +1,10 @@
 {
-  "description": "🗓️ Displays Persian (Iranian/Jalali) calendar in the top panel\n\nIt offers:\n1. Displays the Persian/Iranian/Jalali calendar\n2. Holiday indicator\n3. Day change notifications\n4. Converts dates between the Persian, Gregorian, and Hijri (lunar) calendars\n5. Event listings:\n5.1. Official solar events\n5.2. Official lunar events\n5.3. Official international events\n5.4. Traditional Persian events\n5.5. Notable Persian figures\n\nPlease “rate” 💓 the project here and give it a 🌟 on GitHub.\nIf you encounter any issues or have suggestions, feel free to open an issue there on GitHub!\n\nKeywords: فارسی / جلالی / تقویم / ایران / ایرانی / Iran / Iranian / Jalali / Persian / Calendar",
+  "description": "🗓️ Displays Persian (Iranian/Jalali) calendar in the top panel\n\nIt offers:\n1. Displays the Persian/Iranian/Jalali calendar\n2. Holiday indicator\n3. Day change notifications\n4. Converts dates between the Persian, Gregorian, and Hijri (lunar) calendars\n5. Event listings:\n5.1. Official solar events\n5.2. Official lunar events\n5.3. Official international events\n5.4. Traditional Persian events\n5.5. Notable Persian figures\n\nPlease “rate” 💓 the project here and give it a 🌟 on GitHub.\nIf you encounter any issues or have suggestions, feel free to open an issue there on GitHub!\n\nKeywords: فارسی / جلالی / تقویم / ایران / ایرانی / گاهشمار / گاه‌شمار / گاهشماری / گاه‌شماری / شمسی / خورشیدی / قمری / میلادی / هجری / Iran / Iranian / Jalali / Persian / Calendar",
   "settings-schema": "org.gnome.shell.extensions.persian-calendar",
   "name": "Persian Calendar",
   "original-authors": "Omid Rad",
-  "shell-version": ["46", "47", "48", "49"],
+  "shell-version": ["48", "49"],
   "url": "https://github.com/omid/Persian-Calendar-for-Gnome-Shell",
   "uuid": "PersianCalendar@oxygenws.com",
-  "version": 120
+  "version": 121
 }

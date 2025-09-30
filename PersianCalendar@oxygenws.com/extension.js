@@ -6,11 +6,10 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
-import GObject from 'gi://GObject';
-import Clutter from 'gi://Clutter';
-import St from 'gi://St';
-import Gio from 'gi://Gio';
-import GLib from 'gi://GLib';
+const GObject = imports.gi.GObject;
+const GLib = imports.gi.GLib;
+const St = imports.gi.St;
+const Gio = imports.gi.Gio;
 
 import { Events } from './Events.js';
 import * as PersianDate from './PersianDate.js';
@@ -27,10 +26,10 @@ const ConverterTypes = {
     fromHijri: 2,
 };
 
+const positions = ['left', 'center', 'right'];
+
 const PersianCalendar = GObject.registerClass(
     class PersianCalendar extends PanelMenu.Button {
-        positions = ['left', 'center', 'right'];
-
         _init(extension) {
             this._extension = extension;
             this._settings = extension._settings;
@@ -46,7 +45,6 @@ const PersianCalendar = GObject.registerClass(
             this.label = new St.Label({
                 style_class: 'pcalendar-tray-font',
                 y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
             });
             this.hide();
 
@@ -69,7 +67,6 @@ const PersianCalendar = GObject.registerClass(
                 }
             }));
 
-            ///
             this.settingsEventHooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
 
             this.settingsEventHooks.push(this._settings.connect('changed::position', () => {
@@ -128,7 +125,7 @@ const PersianCalendar = GObject.registerClass(
             // remember to remove it within the disable function
             // Main.sessionMode.connect('updated', () => this._genActionButtonsPart());
 
-            this.menu.connect('open-state-changed', (isOpen) => {
+            this.menu.connect('open-state-changed', isOpen => {
                 if (isOpen) {
                     let now = new Date();
                     now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -153,7 +150,6 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'button system-menu-action calendar-preferences-button',
                     reactive: true,
                     can_focus: true,
-                    x_align: Clutter.ActorAlign.CENTER,
                     x_expand: true,
                 });
                 preferencesIcon.connect('clicked', () => {
@@ -172,7 +168,6 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'button system-menu-action calendar-preferences-button',
                     reactive: true,
                     can_focus: true,
-                    x_align: Clutter.ActorAlign.CENTER,
                     x_expand: true,
                 });
                 nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));
@@ -200,7 +195,7 @@ const PersianCalendar = GObject.registerClass(
             // pc.changed();
         }
 
-        _updateDate(skip_notification, force) {
+        _updateDate(skipNotification, force) {
             let _date = new Date();
             const _dayOfWeek = _date.getDay();
 
@@ -250,7 +245,7 @@ const PersianCalendar = GObject.registerClass(
                 _dayOfWeek,
                 'persian',
             ));
-            if (!skip_notification) {
+            if (!skipNotification) {
                 this.notify(_date, events[0]);
             }
 
@@ -469,35 +464,35 @@ const PersianCalendar = GObject.registerClass(
                 now.getDate(),
             );
 
-            const month_delta = 12 - pdate.month;
-            let day_delta, nowruz;
-            if (month_delta >= 6) {
-                day_delta = 31 - pdate.day;
+            const monthDelta = 12 - pdate.month;
+            let dayDelta, nowruz;
+            if (monthDelta >= 6) {
+                dayDelta = 31 - pdate.day;
             } else {
-                day_delta = 30 - pdate.day;
+                dayDelta = 30 - pdate.day;
             }
 
-            if (month_delta !== 0) {
-                if (day_delta === 1) {
+            if (monthDelta !== 0) {
+                if (dayDelta === 1) {
                     nowruz = this._gettext.n__(
                         '%d month and 1 day left to Nowruz %d',
                         '%d months and 1 day left to Nowruz %d',
-                        month_delta,
-                    ).format(month_delta, pdate.year + 1);
+                        monthDelta,
+                    ).format(monthDelta, pdate.year + 1);
                 } else {
                     nowruz = this._gettext.n__(
                         '%d month and %d days left to Nowruz %d',
                         '%d months and %d days left to Nowruz %d',
-                        month_delta,
-                    ).format(month_delta, day_delta, pdate.year + 1);
+                        monthDelta,
+                    ).format(monthDelta, dayDelta, pdate.year + 1);
                 }
                 this._nowruzNotify(this._str.transDigits(nowruz));
-            } else if (day_delta !== 0) {
+            } else if (dayDelta !== 0) {
                 nowruz = this._gettext.n__(
                     '%d day left to Nowruz %d',
                     '%d days left to Nowruz %d',
-                    day_delta,
-                ).format(day_delta, pdate.year + 1);
+                    dayDelta,
+                ).format(dayDelta, pdate.year + 1);
                 this._nowruzNotify(this._str.transDigits(nowruz));
             } else {
                 this._nowruzNotify(this._gettext.__('Happy New Year'));
@@ -522,7 +517,7 @@ const PersianCalendar = GObject.registerClass(
                 Gio.AppInfo.launch_default_for_uri(this._extension.metadata.url, null);
             });
             notification.addAction(this._gettext.__('Please rate the project ❤️'), () => {
-                Gio.AppInfo.launch_default_for_uri("https://extensions.gnome.org/extension/240/persian-calendar/", null);
+                Gio.AppInfo.launch_default_for_uri('https://extensions.gnome.org/extension/240/persian-calendar/', null);
             });
 
             source.addNotification(notification);
@@ -555,7 +550,7 @@ const PersianCalendar = GObject.registerClass(
                 'persian_calendar',
                 ext._indicator,
                 ext._settings.get_int('index'),
-                this.positions[ext._settings.get_enum('position')],
+                positions[ext._settings.get_enum('position')],
             );
             ext._indicator._updateDate(true);
         }
@@ -571,7 +566,7 @@ export default class PersianCalendarExtension extends Extension {
             'persian_calendar',
             this._indicator,
             this._settings.get_int('index'),
-            this._indicator.positions[this._settings.get_enum('position')],
+            positions[this._settings.get_enum('position')],
         );
         this._indicator._updateDate(!this._settings.get_boolean('startup-notification'));
         this._timer = GLib.timeout_add(GLib.PRIORITY_LOW, 10000, this._indicator._updateDate.bind(this._indicator));
