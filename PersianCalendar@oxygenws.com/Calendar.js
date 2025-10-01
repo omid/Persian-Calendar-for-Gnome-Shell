@@ -1,8 +1,7 @@
 'use strict';
 
-const St = imports.gi.St;
-const Gtk = imports.gi.Gtk;
-const Gdk = imports.gi.Gdk;
+import Clutter from 'gi://Clutter';
+import St from 'gi://St';
 
 import * as PersianDate from './PersianDate.js';
 import * as HijriDate from './HijriDate.js';
@@ -45,19 +44,11 @@ export class Calendar {
             this._selectedDate.getDate(),
         );
 
-        this.actor = new Gtk.Grid({
-            column_homogeneous: false,
-            row_homogeneous: false,
-            column_spacing: 6,
-            row_spacing: 6,
+        this.actor = new St.Widget({
+            style_class: 'calendar',
+            layout_manager: new Clutter.GridLayout(),
+            reactive: true,
         });
-        this.actor.add_css_class('calendar');
-
-        const click = new Gtk.GestureClick();
-        click.connect('pressed', (_gesture, nPress, x, y) => {
-            log(`Grid pressed at ${x}, ${y}`);
-        });
-        this.actor.add_controller(click);
         this.actor.connect('scroll-event', this._onScroll.bind(this));
 
         this._buildHeader();
@@ -190,12 +181,12 @@ export class Calendar {
 
     _onScroll(actor, event) {
         switch (event.get_scroll_direction()) {
-            case Gdk.ScrollDirection.UP:
-            case Gdk.ScrollDirection.RIGHT:
+            case Clutter.ScrollDirection.UP:
+            case Clutter.ScrollDirection.RIGHT:
                 this._onNextMonthButtonClicked();
                 break;
-            case Gdk.ScrollDirection.DOWN:
-            case Gdk.ScrollDirection.LEFT:
+            case Clutter.ScrollDirection.DOWN:
+            case Clutter.ScrollDirection.LEFT:
                 this._onPrevMonthButtonClicked();
                 break;
             default:
@@ -402,7 +393,7 @@ export class Calendar {
             const bottomLabel = new St.Label({
                 text: this._str.transDigits(events[0]),
                 style_class: 'pcalendar-event-label',
-                x_align: Gtk.ActorAlign.FILL,
+                x_align: Clutter.ActorAlign.FILL,
                 x_expand: true,
             });
             // this._setFont(bottomLabel);

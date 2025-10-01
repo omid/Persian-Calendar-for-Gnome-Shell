@@ -6,10 +6,11 @@ import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import * as MessageTray from 'resource:///org/gnome/shell/ui/messageTray.js';
 
-const GObject = imports.gi.GObject;
-const GLib = imports.gi.GLib;
-const St = imports.gi.St;
-const Gio = imports.gi.Gio;
+import GObject from 'gi://GObject';
+import St from 'gi://St';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import Clutter from 'gi://Clutter';
 
 import { Events } from './Events.js';
 import * as PersianDate from './PersianDate.js';
@@ -35,7 +36,7 @@ const PersianCalendar = GObject.registerClass(
             this._settings = extension._settings;
             this._gettext = extension._gettext;
             this._str = new Str(this._gettext);
-            this._locale = new Locale(this._gettext);
+            this._locale = new Locale(this._gettext, Clutter.get_default_text_direction());
             this._events = new Events(this._settings, this._str);
             this._openPreferences = () => this._extension.openPreferences();
 
@@ -150,6 +151,7 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'button system-menu-action calendar-preferences-button',
                     reactive: true,
                     can_focus: true,
+                    x_align: Clutter.ActorAlign.CENTER,
                     x_expand: true,
                 });
                 preferencesIcon.connect('clicked', () => {
@@ -168,6 +170,7 @@ const PersianCalendar = GObject.registerClass(
                     style_class: 'button system-menu-action calendar-preferences-button',
                     reactive: true,
                     can_focus: true,
+                    x_align: Clutter.ActorAlign.CENTER,
                     x_expand: true,
                 });
                 nowruzIcon.connect('clicked', this._showNowruzNotification.bind(this));

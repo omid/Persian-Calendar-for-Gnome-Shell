@@ -26,8 +26,9 @@ release: eslint _version_bump _build
 	git push --tags
 	$(MAKE) zip
 
-zip: _build
-	cd build && zip -qr ../"$(_UUID)$(_VERSION).zip" .
+zip: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
+zip: eslint _build
+	cd build && zip -qr ../"$(_UUID).$(_VERSION).zip" .
 	$(MAKE) clean
 	
 eslint:

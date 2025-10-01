@@ -2,7 +2,7 @@
 
 // Originally copied from https://github.com/shemgp/Gnome-Global-AppMenu/blob/master/gnomeGlobalAppMenu@lestcape/settings/spices.js
 
-const Gio = imports.gi.Gio;
+import Gio from 'gi://Gio';
 
 /**
  * @param {string} dir

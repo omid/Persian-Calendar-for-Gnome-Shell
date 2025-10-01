@@ -1,18 +1,19 @@
 'use strict';
 
-const Gtk = imports.gi.Gtk;
+const Direction = Object.freeze({
+    NONE: 0,
+    LTR: 1,
+    RTL: 2,
+});
 
 export class Locale {
-    constructor(gettext) {
+    constructor(gettext, defaultDirection) {
         this._gettext = gettext;
-    }
-
-    isCalendarRtl() {
-        return this._gettext.__('__DIRECTION') === 'rtl';
+        this._defaultDirection = defaultDirection;
     }
 
     isGnomeRtl() {
-        return Gtk.Widget.get_default_direction() === Gtk.TextDirection.RTL;
+        return this._defaultDirection === Direction.RTL;
     }
 
     isRtl() {
@@ -23,26 +24,15 @@ export class Locale {
         return (isGnomeRtl || isCalendarRtl) && !(isGnomeRtl && isCalendarRtl);
     }
 
-    getTextDirection() {
-        if (this.isRtl()) {
-            return Gtk.TextDirection.RTL;
-        }
-
-        return Gtk.TextDirection.LTR;
+    isCalendarRtl() {
+        return this._gettext.__('__DIRECTION') === 'rtl';
     }
 
-    getJustification() {
-        const JUSTIFICATION = {
-            LEFT: 0,
-            RIGHT: 1,
-            CENTER: 2,
-            FILL: 3,
-        };
-
+    getTextDirection() {
         if (this.isRtl()) {
-            return JUSTIFICATION.RIGHT;
+            return Direction.RTL;
         }
 
-        return JUSTIFICATION.LEFT;
+        return Direction.LTR;
     }
 }

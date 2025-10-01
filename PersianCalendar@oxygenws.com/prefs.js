@@ -1,11 +1,10 @@
 'use strict';
 
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-
-const Gtk = imports.gi.Gtk;
-const Gdk = imports.gi.Gdk;
-const Adw = imports.gi.Adw;
-const Gio = imports.gi.Gio;
+import Adw from 'gi://Adw';
+import Gdk from 'gi://Gdk';
+import Gtk from 'gi://Gtk';
+import Gio from 'gi://Gio';
 
 import { GetText } from './utils/gettext.js';
 import { Locale } from './utils/locale.js';
@@ -14,7 +13,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         this._settings = this.getSettings();
         this._gettext = new GetText(this._settings, this.path);
-        this._locale = new Locale(this._gettext);
+        this._locale = new Locale(this._gettext, Gtk.Widget.get_default_direction());
 
         const defaultDir = Gtk.Widget.get_default_direction();
         Gtk.Widget.set_default_direction(this._locale.getTextDirection());
@@ -198,11 +197,10 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     comboBoxField(options, field, title, subtitle = null) {
         const row = new Adw.ActionRow({ title, subtitle });
 
-        const item = new Gtk.ComboBoxText();
+        const item = new Gtk.ComboBoxText({ valign: Gtk.Align.CENTER });
         for (const [key, value] of Object.entries(options)) {
             item.append(key, value);
         }
-
         item.set_active(this._settings.get_enum(field));
         this._settings.bind(field, item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 
@@ -215,7 +213,9 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     holidayColorField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Holidays and weekends color') });
 
-        let color = new Gtk.ColorButton();
+        let color = new Gtk.ColorButton({
+            valign: Gtk.Align.CENTER,
+        });
 
         let colorArray = new Gdk.RGBA();
         colorArray.parse(this._settings.get_string('nonwork-color'));
@@ -233,7 +233,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     indicatorPositionField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Position') });
 
-        const item = new Gtk.ComboBoxText();
+        const item = new Gtk.ComboBoxText({ valign: Gtk.Align.CENTER });
         item.append('left', this._locale.isGnomeRtl() ? this._gettext.__('Right') : this._gettext.__('Left'));
         item.append('center', this._gettext.__('Center'));
         item.append('right', this._locale.isGnomeRtl() ? this._gettext.__('Left') : this._gettext.__('Right'));
@@ -241,7 +241,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
         item.set_direction(this._locale.getTextDirection());
         this._settings.bind('position', item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
 
-        const index = new Gtk.SpinButton();
+        const index = new Gtk.SpinButton({ valign: Gtk.Align.CENTER });
         let adjustment;
         adjustment = new Gtk.Adjustment();
         adjustment.set_lower(-99);
@@ -262,7 +262,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     calendarSizeField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Calendar Size') });
 
-        const index = new Gtk.SpinButton();
+        const index = new Gtk.SpinButton({ valign: Gtk.Align.CENTER });
         let adjustment;
         adjustment = new Gtk.Adjustment();
         adjustment.set_lower(1);
@@ -283,6 +283,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         const format = new Gtk.Entry({
             width_request: 130,
+            valign: Gtk.Align.CENTER,
         });
         format.set_icon_from_icon_name(
             Gtk.EntryIconPosition.SECONDARY,
@@ -306,7 +307,9 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     customColorField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Use custom color') });
 
-        const color = new Gtk.ColorButton();
+        const color = new Gtk.ColorButton({
+            valign: Gtk.Align.CENTER,
+        });
         row.add_suffix(color);
 
         const colorArray = new Gdk.RGBA();
@@ -318,6 +321,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         const toggle = new Gtk.Switch({
             active: this._settings.get_boolean('custom-color'),
+            valign: Gtk.Align.CENTER,
         });
 
         this._settings.bind(
@@ -336,7 +340,9 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
     customTodayBgColorField() {
         const row = new Adw.ActionRow({ title: this._gettext.__('Use custom bg color for "today"') });
 
-        const color = new Gtk.ColorButton();
+        const color = new Gtk.ColorButton({
+            valign: Gtk.Align.CENTER,
+        });
         row.add_suffix(color);
 
         const colorArray = new Gdk.RGBA();
@@ -348,6 +354,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         const toggle = new Gtk.Switch({
             active: this._settings.get_boolean('custom-today-bg-color'),
+            valign: Gtk.Align.CENTER,
         });
 
         this._settings.bind(
@@ -368,6 +375,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         const toggle = new Gtk.Switch({
             active: this._settings.get_boolean(field),
+            valign: Gtk.Align.CENTER,
         });
 
         this._settings.bind(field, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
@@ -383,10 +391,11 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
         const toggle = new Gtk.Switch({
             active: this._settings.get_boolean(toggleField),
+            valign: Gtk.Align.CENTER,
         });
         this._settings.bind(toggleField, toggle, 'active', Gio.SettingsBindFlags.DEFAULT);
 
-        let text = new Gtk.Entry({ width_request: 130 });
+        let text = new Gtk.Entry({ width_request: 130, valign: Gtk.Align.CENTER });
         text.set_text(this._settings.get_string(textField));
         text.connect('changed', innerFormat =>
             this._settings.set_string(textField, innerFormat.text),

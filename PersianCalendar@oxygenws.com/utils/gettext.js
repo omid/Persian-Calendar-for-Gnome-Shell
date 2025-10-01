@@ -1,6 +1,6 @@
 'use strict';
 
-const Gio = imports.gi.Gio;
+import Gio from 'gi://Gio';
 
 export class GetText {
     __(msgid) {
