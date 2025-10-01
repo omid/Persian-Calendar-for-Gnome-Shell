@@ -8,6 +8,8 @@ Your issue may already be reported! Please search on the https://github.com/omid
 
 Please check the closed issues as well.
 
+Have you read the troubleshooting section of the README file?
+
 - You can open an issue in Persian/Farsi or any other language also.
 - You don't need to fill all the sections below.
 - You can remove any of the sections you want.

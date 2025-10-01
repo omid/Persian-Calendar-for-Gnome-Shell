@@ -17,7 +17,7 @@ A GNOME Shell extension that displays Persian (Iranian/Jalali), Gregorian, and H
 
 ### Recommended way
 
-- Go to the official Gnome Shell Extensions website: https://extensions.gnome.org/extension/240/
+- Go to the (official GNOME Shell Extensions website)[https://extensions.gnome.org/extension/240/persian-calendar/).
 - Click on the “ON/OFF” button on the top-right of the page.
 - If you don't see the extension, go to the [troubleshooting section](README.md#troubleshooting).
 
@@ -26,7 +26,7 @@ A GNOME Shell extension that displays Persian (Iranian/Jalali), Gregorian, and H
 - Clone the repository
 - Go to the cloned directory
 - run `make` command in the terminal
-- Restart Gnome-shell. (ALT+F2, r, Enter)
+- Restart GNOME Shell. (ALT+F2, r, Enter OR logout/login)
 - You may need to enable the extension via GNOME `Extensions` application
 
 ## Troubleshooting
