@@ -46,6 +46,7 @@ const PersianCalendar = GObject.registerClass(
             this.label = new St.Label({
                 style_class: 'pcalendar-tray-font',
                 y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
             });
             this.hide();
 
