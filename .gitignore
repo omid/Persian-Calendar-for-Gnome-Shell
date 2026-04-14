@@ -1,5 +1,7 @@
 *.zip
 .idea
+.vscode
+.venv
 build
 **/gschemas.compiled
 PersianCalendar@oxygenws.com/locale/**/LC_MESSAGES/*~

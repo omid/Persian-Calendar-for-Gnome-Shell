@@ -40,7 +40,7 @@ const PersianCalendar = GObject.registerClass(
             this._events = new Events(this._settings, this._str);
             this._openPreferences = () => this._extension.openPreferences();
 
-            this.settingsEventHooks = [];
+            this._hooks = [];
             super._init(0.0);
 
             this.label = new St.Label({
@@ -56,32 +56,32 @@ const PersianCalendar = GObject.registerClass(
             if (this._settings.get_boolean('custom-color')) {
                 this.label.set_style(`color:${this._settings.get_string('color')}`);
             }
-            this.settingsEventHooks.push(this._settings.connect('changed::color', () => {
+            this._hooks.push([this._settings, this._settings.connect('changed::color', () => {
                 if (this._settings.get_boolean('custom-color')) {
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
                 }
-            }));
-            this.settingsEventHooks.push(this._settings.connect('changed::custom-color', () => {
+            })]);
+            this._hooks.push([this._settings, this._settings.connect('changed::custom-color', () => {
                 if (this._settings.get_boolean('custom-color')) {
                     this.label.set_style(`color:${this._settings.get_string('color')}`);
                 } else {
                     this.label.set_style('color:');
                 }
-            }));
+            })]);
 
-            this.settingsEventHooks.push(this._settings.connect('changed::widget-format', () => this._updateDate(true, true)));
+            this._hooks.push([this._settings, this._settings.connect('changed::widget-format', () => this._updateDate(true, true))]);
 
-            this.settingsEventHooks.push(this._settings.connect('changed::position', () => {
+            this._hooks.push([this._settings, this._settings.connect('changed::position', () => {
                 this.reload();
-            }));
+            })]);
 
-            this.settingsEventHooks.push(this._settings.connect('changed::language', () => {
+            this._hooks.push([this._settings, this._settings.connect('changed::language', () => {
                 this.reload();
-            }));
+            })]);
 
-            this.settingsEventHooks.push(this._settings.connect('changed::index', () => {
+            this._hooks.push([this._settings, this._settings.connect('changed::index', () => {
                 this.reload();
-            }));
+            })]);
 
             this._today = '';
 
@@ -127,13 +127,13 @@ const PersianCalendar = GObject.registerClass(
             // remember to remove it within the disable function
             // Main.sessionMode.connect('updated', () => this._genActionButtonsPart());
 
-            this.menu.connect('open-state-changed', isOpen => {
+            this._hooks([this.menu, this.menu.connect('open-state-changed', isOpen => {
                 if (isOpen) {
                     let now = new Date();
                     now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
                     this._calendar.setDate(now);
                 }
-            });
+            })]);
 
             this.show();
         }
@@ -331,7 +331,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
+            this._hooks([this.converterYear.clutter_text, this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterMonth = new St.Entry({
                 name: 'month',
@@ -340,7 +340,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
+            this._hooks([this.converterMonth.clutter_text, this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterDay = new St.Entry({
                 name: 'day',
@@ -360,7 +360,7 @@ const PersianCalendar = GObject.registerClass(
                 converterHbox.add_child(this.converterDay);
             }
 
-            this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this));
+            this._hooks([this.converterDay.clutter_text, this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterVbox.add_child(converterHbox);
 
@@ -534,7 +534,7 @@ const PersianCalendar = GObject.registerClass(
 
         disable() {
             let ext = this._extension;
-            ext._indicator.settingsEventHooks.forEach(id => ext._settings.disconnect(id));
+            ext._indicator._hooks.forEach((ref, id) => ref.disconnect(id));
             ext._indicator.destroy();
             GLib.source_remove(ext._timer);
             ext._gettext.unload_locale();

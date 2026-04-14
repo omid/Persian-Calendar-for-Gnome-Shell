@@ -18,7 +18,7 @@ clean:
 	rm -rf build/
 
 release: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
-release: eslint _version_bump _build
+release: eslint shexli _version_bump
 	gitg
 	git commit -v
 	git tag $(_VERSION)
@@ -27,7 +27,7 @@ release: eslint _version_bump _build
 	$(MAKE) zip
 
 zip: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
-zip: eslint _build
+zip: _build
 	cd build && zip -qr ../"$(_UUID).$(_VERSION).zip" .
 	$(MAKE) clean
 	
@@ -51,7 +51,12 @@ _build: clean update-translation
         rm -rf $$dir; \
 	done
 	find build -type f -iname '*.pot' -delete
-	glib-compile-schemas build/schemas/
+#	glib-compile-schemas build/schemas/ # No need to release it anymore https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
+
+shexli: zip
+	uv venv --allow-existing
+	uv pip install shexli
+	uv run shexli *.zip
 
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
