@@ -127,7 +127,7 @@ const PersianCalendar = GObject.registerClass(
             // remember to remove it within the disable function
             // Main.sessionMode.connect('updated', () => this._genActionButtonsPart());
 
-            this._hooks([this.menu, this.menu.connect('open-state-changed', isOpen => {
+            this._hooks.push([this.menu, this.menu.connect('open-state-changed', isOpen => {
                 if (isOpen) {
                     let now = new Date();
                     now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
@@ -331,7 +331,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this._hooks([this.converterYear.clutter_text, this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this._hooks.push([this.converterYear.clutter_text, this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterMonth = new St.Entry({
                 name: 'month',
@@ -340,7 +340,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this._hooks([this.converterMonth.clutter_text, this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this._hooks.push([this.converterMonth.clutter_text, this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterDay = new St.Entry({
                 name: 'day',
@@ -360,7 +360,7 @@ const PersianCalendar = GObject.registerClass(
                 converterHbox.add_child(this.converterDay);
             }
 
-            this._hooks([this.converterDay.clutter_text, this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this._hooks.push([this.converterDay.clutter_text, this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
 
             this.converterVbox.add_child(converterHbox);
 
