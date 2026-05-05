@@ -40,7 +40,7 @@ export class GetText {
         let lang = settings.get_string('language');
         let localeJsonFile = Gio.File.new_for_path(`${path}/locale/${lang}.json`);
         try {
-            let [_, localeJson] = localeJsonFile.load_contents_async(null);
+            let [_, localeJson] = localeJsonFile.load_contents(null);
             let decoder = new TextDecoder('utf-8');
             this.locale = JSON.parse(decoder.decode(localeJson));
         } catch {
