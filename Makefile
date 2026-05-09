@@ -51,7 +51,7 @@ _build: clean update-translation
         rm -rf $$dir; \
 	done
 	find build -type f -iname '*.pot' -delete
-#	glib-compile-schemas build/schemas/ # No need to release it anymore https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
+	glib-compile-schemas build/schemas/ # No need to release it anymore https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
 
 shexli: zip
 	uv venv --allow-existing

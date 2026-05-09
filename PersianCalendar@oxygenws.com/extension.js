@@ -30,7 +30,7 @@ const ConverterTypes = {
 const positions = ['left', 'center', 'right'];
 
 const PersianCalendar = GObject.registerClass(
-    class PersianCalendar extends PanelMenu.Button {
+    class PersianCalendarButton extends PanelMenu.Button {
         _init(extension) {
             this._extension = extension;
             this._settings = extension._settings;
