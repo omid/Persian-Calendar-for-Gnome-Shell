@@ -44,6 +44,12 @@ const PersianCalendar = GObject.registerClass(
             this._hooks = [];
             super._init(0.0);
 
+            this.icon = new St.Icon({
+                style_class: 'pcalendar-tray-icon',
+                visible: false,
+                y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
             this.label = new St.Label({
                 style_class: 'pcalendar-tray-font',
                 y_expand: true,
@@ -51,7 +57,15 @@ const PersianCalendar = GObject.registerClass(
             });
             this.hide();
 
-            this.add_child(this.label);
+            const box = new St.BoxLayout({ style_class: 'pcalendar-tray-box' });
+            if (this._locale.isCalendarRtl()) {
+                box.add_child(this.label);
+                box.add_child(this.icon);
+            } else {
+                box.add_child(this.icon);
+                box.add_child(this.label);
+            }
+            this.add_child(box);
 
             // some codes for coloring and font of the label
             this._onFontChangeForIcon();
@@ -61,6 +75,7 @@ const PersianCalendar = GObject.registerClass(
             this._hooks.push([this._settings, this._settings.connect('changed::custom-font', this._onFontChangeForIcon.bind(this))]);
 
             this._hooks.push([this._settings, this._settings.connect('changed::widget-format', () => this._updateDate(true, true))]);
+            this._hooks.push([this._settings, this._settings.connect('changed::holiday-indicator', () => this._updateDate(true, true))]);
 
             this._hooks.push([this._settings, this._settings.connect('changed::position', () => {
                 this.reload();
@@ -173,7 +188,12 @@ const PersianCalendar = GObject.registerClass(
         _onFontChangeForIcon() {
             let style = this._fontStyle();
             if (this._settings.get_boolean('custom-color')) {
-                style += `color:${this._settings.get_string('color')};`;
+                const color = `color:${this._settings.get_string('color')};`;
+                style += color;
+                // the symbolic icon is recolored by the css `color`, to follow the label color
+                this.icon.set_style(color);
+            } else {
+                this.icon.set_style(null);
             }
             this.label.set_style(style);
         }
@@ -206,12 +226,22 @@ const PersianCalendar = GObject.registerClass(
             events[0] = events[0] !== '' ? `\n${events[0]}` : '';
 
             // is holiday?
-            if (events[1]) {
+            const holidayIndicator = this._settings.get_string('holiday-indicator');
+            if (events[1] && holidayIndicator === 'underline') {
                 this.label.add_style_class_name('pcalendar-tray-holiday');
                 this.label.add_style_class_name('pcalendar-tray-holiday-light-dark');
             } else {
                 this.label.remove_style_class_name('pcalendar-tray-holiday');
                 this.label.remove_style_class_name('pcalendar-tray-holiday-light-dark');
+            }
+
+            if (holidayIndicator === 'icon') {
+                this.icon.gicon = Gio.icon_new_for_string(
+                    `${this._extension.path}/icons/calendar-${events[1] ? 'filled' : 'outline'}-symbolic.svg`,
+                );
+                this.icon.show();
+            } else {
+                this.icon.hide();
             }
 
             this.label.set_text(

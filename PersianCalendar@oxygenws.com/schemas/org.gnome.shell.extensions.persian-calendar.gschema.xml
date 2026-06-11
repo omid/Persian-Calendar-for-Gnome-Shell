@@ -17,6 +17,11 @@
     <value nick="none" value="0"/>
     <value nick="iran" value="1"/>
   </enum>
+  <enum id="org.gnome.shell.extensions.persian-calendar.holiday-indicators">
+    <value nick="underline" value="0"/>
+    <value nick="icon" value="1"/>
+    <value nick="none" value="2"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
     <key name="language" enum="org.gnome.shell.extensions.persian-calendar.languages">
       <default>'fa_IR.UTF-8'</default>
@@ -79,6 +84,10 @@
     <key name="startup-notification" type="b">
       <default>true</default>
       <summary>Startup Notification</summary>
+    </key>
+    <key name="holiday-indicator" enum="org.gnome.shell.extensions.persian-calendar.holiday-indicators">
+      <default>'underline'</default>
+      <summary>How to mark holidays on the tray widget (underline, icon, none)</summary>
     </key>
     <key name="custom-color" type="b">
       <default>false</default>

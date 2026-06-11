@@ -50,6 +50,17 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
                 this._gettext.__('Startup notification'),
             ),
         );
+        indicatorGroup.add(
+            this.comboBoxField(
+                {
+                    'underline': this._gettext.__('Underline'),
+                    'icon': this._gettext.__('Icon'),
+                    'none': this._gettext.__('None'),
+                },
+                'holiday-indicator',
+                this._gettext.__('Holiday indicator'),
+            ),
+        );
         indicatorGroup.add(this.customColorField());
         indicatorGroup.add(this.customFontField());
         indicatorGroup.add(this.indicatorFormatField());
@@ -196,17 +207,18 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
 
     // Custom Fields
     comboBoxField(options, field, title, subtitle = null) {
-        const row = new Adw.ActionRow({ title, subtitle });
+        const keys = Object.keys(options);
+        const row = new Adw.ComboRow({
+            title,
+            subtitle,
+            model: Gtk.StringList.new(Object.values(options)),
+            selected: keys.indexOf(this._settings.get_string(field)),
+        });
 
-        const item = new Gtk.ComboBoxText({ valign: Gtk.Align.CENTER });
-        for (const [key, value] of Object.entries(options)) {
-            item.append(key, value);
-        }
-        item.set_active(this._settings.get_enum(field));
-        this._settings.bind(field, item, 'active-id', Gio.SettingsBindFlags.DEFAULT);
-
-        row.add_suffix(item);
-        row.activatable_widget = item;
+        row.connect('notify::selected', () => this._settings.set_string(field, keys[row.selected]));
+        this._settings.connect(`changed::${field}`, () => {
+            row.selected = keys.indexOf(this._settings.get_string(field));
+        });
 
         return row;
     }
