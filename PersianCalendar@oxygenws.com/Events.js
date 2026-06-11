@@ -18,12 +18,14 @@ export class Events {
     constructor(schema, str) {
         this._schema = schema;
         this._str = str;
+        this._signature = null;
+        this._eventsList = [];
+        this._holidayList = [];
     }
 
     getEvents(today) {
         this._events = '';
         this._isHoliday = false;
-        this._today = [];
 
         // if it is Friday
         if (today.getDay() === 5) {
@@ -39,10 +41,22 @@ export class Events {
             [hToday.year, hToday.month, hToday.day],
         ];
 
+        this._refreshLists(pToday.year);
+
+        this._fillEvent(this._eventsList);
+        this._checkHoliday(this._holidayList);
+
+        return [this._events, this._isHoliday];
+    }
+
+    /* Building the event tables is expensive and getEvents() is called for
+     every visible day, so the lists are cached and only rebuilt when the
+     relevant settings (or the Persian year) change */
+    _refreshLists(pYear) {
         const events = {
             'event-iran-solar': () => new iranSolar(),
             'event-iran-lunar': () => new iranLunar(),
-            'event-persian-personage': () => new persianPersonage(pToday.year),
+            'event-persian-personage': () => new persianPersonage(pYear),
             'event-world': () => new world(),
             'event-persian': () => new persian(),
         };
@@ -52,30 +66,36 @@ export class Events {
             'iran': ['event-iran-solar', 'event-iran-lunar'],
         };
 
-        let eventsList = [];
-        let holidayList = [];
+        const country = this._schema.get_string('holidays-country');
+        const modes = {};
+        for (let key in events) {
+            modes[key] = this._schema.get_string(key);
+        }
+
+        const signature = JSON.stringify([modes, country, pYear]);
+        if (signature === this._signature) {
+            return;
+        }
+        this._signature = signature;
+
+        this._eventsList = [];
+        this._holidayList = [];
 
         for (let key in events) {
-            if (this._schema.get_string(key) !== 'none') {
+            if (modes[key] !== 'none') {
                 let e = events[key]();
-                if (this._schema.get_string(key) === 'holidays-only') {
+                if (modes[key] === 'holidays-only') {
                     this._filterHolidays(e);
                 }
-                eventsList.push(e);
+                this._eventsList.push(e);
             }
 
-            if (holidays[this._schema.get_string('holidays-country')].includes(key)) {
+            if (holidays[country].includes(key)) {
                 let e = events[key]();
                 this._filterHolidays(e);
-                holidayList.push(e);
+                this._holidayList.push(e);
             }
         }
-        // ///
-
-        this._fillEvent(eventsList);
-        this._checkHoliday(holidayList);
-
-        return [this._events, this._isHoliday];
     }
 
     _filterHolidays(events) {
@@ -83,7 +103,7 @@ export class Events {
             if (typeof events.events[i] !== 'undefined') {
                 for (let j = 0; j < events.events[i].length; j++) {
                     if (typeof events.events[i][j] !== 'undefined') {
-                        for (let k = 0; k < events.events[i][j].length; k++) {
+                        for (let k = events.events[i][j].length - 1; k >= 0; k--) {
                             if (typeof events.events[i][j][k] !== 'undefined' && !events.events[i][j][k][1]) {
                                 events.events[i][j].splice(k, 1);
                             }

@@ -39,8 +39,7 @@ export function copyDir(fromDir, toDir) {
         if (type === Gio.FileType.REGULAR) {
             child.copy(toDir.get_child(child.get_basename()), 0, null, null);
         } else if (type === Gio.FileType.DIRECTORY) {
-            child.make_directory_with_parents(null);
-            copyDir(child);
+            copyDir(child, toDir.get_child(child.get_basename()));
         }
     }
 }

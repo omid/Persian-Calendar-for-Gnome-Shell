@@ -411,9 +411,9 @@ const PersianCalendar = GObject.registerClass(
             // calc day of week
             let dayOfWeek;
             if (gDate) {
-                dayOfWeek = new Date(gDate.year, gDate.month, gDate.day);
+                dayOfWeek = new Date(gDate.year, gDate.month - 1, gDate.day);
             } else {
-                dayOfWeek = new Date(year, month, day);
+                dayOfWeek = new Date(year, month - 1, day);
             }
 
             dayOfWeek = dayOfWeek.getDay();
@@ -508,7 +508,7 @@ const PersianCalendar = GObject.registerClass(
         }
 
         notify(title, body) {
-            const source = new MessageTray.getSystemSource();
+            const source = MessageTray.getSystemSource();
 
             const notification = new MessageTray.Notification({
                 source,
@@ -528,40 +528,27 @@ const PersianCalendar = GObject.registerClass(
         }
 
         reload() {
-            this.disable();
-            this.enable();
-        }
-
-        disable() {
-            let ext = this._extension;
-            ext._indicator._hooks.forEach((ref, id) => ref.disconnect(id));
-            ext._indicator.destroy();
-            GLib.source_remove(ext._timer);
-            ext._gettext.unload_locale();
-
-            ext._indicator = null;
-            ext._settings = null;
-            ext._gettext = null;
-        }
-
-        enable() {
-            let ext = this._extension;
-            ext._settings = ext.getSettings();
-            ext._gettext = new GetText(ext._settings, ext.path);
-            ext._indicator = new PersianCalendar(ext);
-
-            Main.panel.addToStatusArea(
-                'persian_calendar',
-                ext._indicator,
-                ext._settings.get_int('index'),
-                positions[ext._settings.get_enum('position')],
-            );
-            ext._indicator._updateDate(true);
+            this._extension.reload();
         }
     });
 
 export default class PersianCalendarExtension extends Extension {
     enable() {
+        this._create(false);
+        this.install_fonts();
+    }
+
+    disable() {
+        this._destroy();
+        this.uninstall_fonts();
+    }
+
+    reload() {
+        this._destroy();
+        this._create(true);
+    }
+
+    _create(skipNotification) {
         this._settings = this.getSettings();
         this._gettext = new GetText(this._settings, this.path);
         this._indicator = new PersianCalendar(this);
@@ -572,14 +559,12 @@ export default class PersianCalendarExtension extends Extension {
             this._settings.get_int('index'),
             positions[this._settings.get_enum('position')],
         );
-        this._indicator._updateDate(!this._settings.get_boolean('startup-notification'));
+        this._indicator._updateDate(skipNotification || !this._settings.get_boolean('startup-notification'));
         this._timer = GLib.timeout_add(GLib.PRIORITY_LOW, 10000, this._indicator._updateDate.bind(this._indicator));
-
-        this.install_fonts();
     }
 
-    disable() {
-        this._indicator.settingsEventHooks.forEach(id => this._settings.disconnect(id));
+    _destroy() {
+        this._indicator._hooks.forEach(([obj, id]) => obj.disconnect(id));
         this._indicator.destroy();
         GLib.source_remove(this._timer);
         this._gettext.unload_locale();
@@ -587,8 +572,7 @@ export default class PersianCalendarExtension extends Extension {
         this._indicator = null;
         this._settings = null;
         this._gettext = null;
-
-        this.uninstall_fonts();
+        this._timer = null;
     }
 
     install_fonts() {
