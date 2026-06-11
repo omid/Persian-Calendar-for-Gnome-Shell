@@ -51,6 +51,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             ),
         );
         indicatorGroup.add(this.customColorField());
+        indicatorGroup.add(this.customFontField());
         indicatorGroup.add(this.indicatorFormatField());
         indicatorGroup.add(this.calendarSizeField());
 
@@ -331,6 +332,39 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             Gio.SettingsBindFlags.DEFAULT,
         );
 
+        row.add_suffix(toggle);
+        row.activatable_widget = toggle;
+
+        return row;
+    }
+
+    customFontField() {
+        const row = new Adw.ActionRow({ title: this._gettext.__('Use custom font') });
+
+        const font = new Gtk.FontButton({
+            valign: Gtk.Align.CENTER,
+        });
+        font.set_level(Gtk.FontChooserLevel.FAMILY);
+        if (this._settings.get_string('font')) {
+            font.set_font(this._settings.get_string('font'));
+        }
+        font.connect('font-set', innerFont =>
+            this._settings.set_string('font', innerFont.get_font()),
+        );
+
+        const toggle = new Gtk.Switch({
+            active: this._settings.get_boolean('custom-font'),
+            valign: Gtk.Align.CENTER,
+        });
+
+        this._settings.bind(
+            'custom-font',
+            toggle,
+            'active',
+            Gio.SettingsBindFlags.DEFAULT,
+        );
+
+        row.add_suffix(font);
         row.add_suffix(toggle);
         row.activatable_widget = toggle;
 

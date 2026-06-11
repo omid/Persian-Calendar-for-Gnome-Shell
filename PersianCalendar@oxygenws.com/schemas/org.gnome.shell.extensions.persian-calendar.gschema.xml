@@ -112,7 +112,6 @@
       <default>10</default>
       <summary>Size of Calendar</summary>
     </key>
-    <!--
     <key name="custom-font" type="b">
       <default>false</default>
       <summary>Use custom font</summary>
@@ -121,6 +120,5 @@
       <default>''</default>
       <summary>Custom font</summary>
     </key>
-    -->
   </schema>
 </schemalist>
