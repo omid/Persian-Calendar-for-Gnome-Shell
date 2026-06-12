@@ -13,7 +13,7 @@ A GNOME Shell extension that displays Persian (Iranian/Jalali), Gregorian, and H
 - RTL language support
 - Accessibility features
 
-<p align="center"><video src="https://github.com/omid/Persian-Calendar-for-Gnome-Shell/blob/master/assets/screencast.mp4?raw=true" controls></video></p>
+![Screencast](https://github.com/omid/Persian-Calendar-for-Gnome-Shell/blob/master/assets/screencast.webp?raw=true)
 
 ## Installation
 
