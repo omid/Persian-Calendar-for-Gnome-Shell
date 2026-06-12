@@ -547,6 +547,28 @@ const PersianCalendar = GObject.registerClass(
         reload() {
             this._extension.reload();
         }
+
+        destroy() {
+            this._hooks.forEach(([obj, id]) => obj.disconnect(id));
+            this._hooks = [];
+
+            this.convertedDatesVbox.destroy();
+            this.convertedDatesVbox = null;
+            this.converterDay.destroy();
+            this.converterDay = null;
+            this.converterMonth.destroy();
+            this.converterMonth = null;
+            this.converterYear.destroy();
+            this.converterYear = null;
+            this.converterVbox.destroy();
+            this.converterVbox = null;
+            this._converterMenu.destroy();
+            this._converterMenu = null;
+            this._actionButtonsPart.destroy();
+            this._actionButtonsPart = null;
+
+            super.destroy();
+        }
     });
 
 export default class PersianCalendarExtension extends Extension {
@@ -581,7 +603,6 @@ export default class PersianCalendarExtension extends Extension {
     }
 
     _destroy() {
-        this._indicator._hooks.forEach(([obj, id]) => obj.disconnect(id));
         this._indicator.destroy();
         GLib.source_remove(this._timer);
         this._gettext.unload_locale();
