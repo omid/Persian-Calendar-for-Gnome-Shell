@@ -41,7 +41,6 @@ const PersianCalendar = GObject.registerClass(
             this._events = new Events(this._settings, this._str);
             this._openPreferences = () => this._extension.openPreferences();
 
-            this._hooks = [];
             super._init(0.0);
 
             this.icon = new St.Icon({
@@ -69,25 +68,17 @@ const PersianCalendar = GObject.registerClass(
 
             // some codes for coloring and font of the label
             this._onFontChangeForIcon();
-            this._hooks.push([this._settings, this._settings.connect('changed::color', this._onFontChangeForIcon.bind(this))]);
-            this._hooks.push([this._settings, this._settings.connect('changed::custom-color', this._onFontChangeForIcon.bind(this))]);
-            this._hooks.push([this._settings, this._settings.connect('changed::font', this._onFontChangeForIcon.bind(this))]);
-            this._hooks.push([this._settings, this._settings.connect('changed::custom-font', this._onFontChangeForIcon.bind(this))]);
-
-            this._hooks.push([this._settings, this._settings.connect('changed::widget-format', () => this._updateDate(true, true))]);
-            this._hooks.push([this._settings, this._settings.connect('changed::holiday-indicator', () => this._updateDate(true, true))]);
-
-            this._hooks.push([this._settings, this._settings.connect('changed::position', () => {
-                this.reload();
-            })]);
-
-            this._hooks.push([this._settings, this._settings.connect('changed::language', () => {
-                this.reload();
-            })]);
-
-            this._hooks.push([this._settings, this._settings.connect('changed::index', () => {
-                this.reload();
-            })]);
+            this._settings.connectObject(
+                'changed::color', this._onFontChangeForIcon.bind(this),
+                'changed::custom-color', this._onFontChangeForIcon.bind(this),
+                'changed::font', this._onFontChangeForIcon.bind(this),
+                'changed::custom-font', this._onFontChangeForIcon.bind(this),
+                'changed::widget-format', () => this._updateDate(true, true),
+                'changed::holiday-indicator', () => this._updateDate(true, true),
+                'changed::position', () => this.reload(),
+                'changed::language', () => this.reload(),
+                'changed::index', () => this.reload(),
+                this);
 
             this._today = '';
 
@@ -110,8 +101,10 @@ const PersianCalendar = GObject.registerClass(
 
             // some codes for fonts
             this._onFontChangeForCalendar();
-            this._hooks.push([this._settings, this._settings.connect('changed::font', this._onFontChangeForCalendar.bind(this))]);
-            this._hooks.push([this._settings, this._settings.connect('changed::custom-font', this._onFontChangeForCalendar.bind(this))]);
+            this._settings.connectObject(
+                'changed::font', this._onFontChangeForCalendar.bind(this),
+                'changed::custom-font', this._onFontChangeForCalendar.bind(this),
+                this);
 
             // action buttons
             this._actionButtonsPart = new PopupMenu.PopupBaseMenuItem({
@@ -124,13 +117,13 @@ const PersianCalendar = GObject.registerClass(
             // remember to remove it within the disable function
             // Main.sessionMode.connect('updated', () => this._genActionButtonsPart());
 
-            this._hooks.push([this.menu, this.menu.connect('open-state-changed', isOpen => {
+            this.menu.connectObject('open-state-changed', (menu, isOpen) => {
                 if (isOpen) {
                     let now = new Date();
                     now = PersianDate.fromGregorian(now.getFullYear(), now.getMonth() + 1, now.getDate());
                     this._calendar.setDate(now);
                 }
-            })]);
+            }, this);
 
             this.show();
         }
@@ -348,7 +341,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this._hooks.push([this.converterYear.clutter_text, this.converterYear.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this.converterYear.clutter_text.connectObject('text-changed', this._onModifyConverter.bind(this), this);
 
             this.converterMonth = new St.Entry({
                 name: 'month',
@@ -357,7 +350,7 @@ const PersianCalendar = GObject.registerClass(
                 x_expand: true,
                 style_class: 'pcalendar-converter-entry',
             });
-            this._hooks.push([this.converterMonth.clutter_text, this.converterMonth.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this.converterMonth.clutter_text.connectObject('text-changed', this._onModifyConverter.bind(this), this);
 
             this.converterDay = new St.Entry({
                 name: 'day',
@@ -377,7 +370,7 @@ const PersianCalendar = GObject.registerClass(
                 converterHbox.add_child(this.converterDay);
             }
 
-            this._hooks.push([this.converterDay.clutter_text, this.converterDay.clutter_text.connect('text-changed', this._onModifyConverter.bind(this))]);
+            this.converterDay.clutter_text.connectObject('text-changed', this._onModifyConverter.bind(this), this);
 
             this.converterVbox.add_child(converterHbox);
 
@@ -549,8 +542,8 @@ const PersianCalendar = GObject.registerClass(
         }
 
         destroy() {
-            this._hooks.forEach(([obj, id]) => obj.disconnect(id));
-            this._hooks = [];
+            this._settings.disconnectObject(this);
+            this.menu.disconnectObject(this);
 
             this.convertedDatesVbox.destroy();
             this.convertedDatesVbox = null;
@@ -573,7 +566,7 @@ const PersianCalendar = GObject.registerClass(
 
 export default class PersianCalendarExtension extends Extension {
     enable() {
-        this._create(false);
+        this._create(false).catch(console.error);
         this.install_fonts();
     }
 
@@ -584,12 +577,20 @@ export default class PersianCalendarExtension extends Extension {
 
     reload() {
         this._destroy();
-        this._create(true);
+        this._create(true).catch(console.error);
     }
 
-    _create(skipNotification) {
+    async _create(skipNotification) {
         this._settings = this.getSettings();
         this._gettext = new GetText(this._settings, this.path);
+
+        const gettext = this._gettext;
+        await gettext.init();
+        if (this._gettext !== gettext) {
+            // The extension was disabled or reloaded while the locale was loading
+            return;
+        }
+
         this._indicator = new PersianCalendar(this);
 
         Main.panel.addToStatusArea(
@@ -603,8 +604,10 @@ export default class PersianCalendarExtension extends Extension {
     }
 
     _destroy() {
-        this._indicator.destroy();
-        GLib.source_remove(this._timer);
+        this._indicator?.destroy();
+        if (this._timer) {
+            GLib.source_remove(this._timer);
+        }
         this._gettext.unload_locale();
 
         this._indicator = null;

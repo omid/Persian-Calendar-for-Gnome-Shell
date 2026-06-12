@@ -10,9 +10,10 @@ import { GetText } from './utils/gettext.js';
 import { Locale } from './utils/locale.js';
 
 export default class PersianCalendarPreferences extends ExtensionPreferences {
-    fillPreferencesWindow(window) {
+    async fillPreferencesWindow(window) {
         this._settings = this.getSettings();
         this._gettext = new GetText(this._settings, this.path);
+        await this._gettext.init();
         this._locale = new Locale(this._gettext, Gtk.Widget.get_default_direction());
 
         const defaultDir = Gtk.Widget.get_default_direction();

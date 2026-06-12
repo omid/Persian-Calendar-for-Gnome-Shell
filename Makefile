@@ -9,6 +9,8 @@ else
 endif
 
 install-local: _build
+	# Only needed for manual installs, the extension manager compiles schemas itself https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
+	glib-compile-schemas build/schemas/
 	rm -rf $(_INSTALL_BASE)/$(_UUID)
 	mkdir -p $(_INSTALL_BASE)/$(_UUID)
 	cp -r ./build/* $(_INSTALL_BASE)/$(_UUID)/
@@ -28,7 +30,12 @@ release: eslint shexli _version_bump
 
 zip: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 zip: _build
-	cd build && zip -qr ../"$(_UUID).$(_VERSION).zip" .
+	# Pass everything except the files gnome-extensions pack includes by itself as --extra-source
+	gnome-extensions pack --force --out-dir=. \
+		$$(cd build && ls | grep -vE '^(extension\.js|prefs\.js|metadata\.json|stylesheet\.css|schemas)$$' | sed 's/^/--extra-source=/') \
+		--schema=schemas/org.gnome.shell.extensions.persian-calendar.gschema.xml \
+		build
+	mv "$(_UUID).shell-extension.zip" "$(_UUID).$(_VERSION).zip"
 	$(MAKE) clean
 	
 eslint:
@@ -51,7 +58,6 @@ _build: clean update-translation
         rm -rf $$dir; \
 	done
 	find build -type f -iname '*.pot' -delete
-	glib-compile-schemas build/schemas/ # No need to release it anymore https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
 
 shexli: zip
 	uv venv --allow-existing

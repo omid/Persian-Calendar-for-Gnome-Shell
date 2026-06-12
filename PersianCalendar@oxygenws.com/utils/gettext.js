@@ -2,6 +2,8 @@
 
 import Gio from 'gi://Gio';
 
+Gio._promisify(Gio.File.prototype, 'load_contents_async', 'load_contents_finish');
+
 export class GetText {
     __(msgid) {
         if (typeof this.locale[msgid] === 'undefined') {
@@ -37,10 +39,15 @@ export class GetText {
     }
 
     constructor(settings, path) {
-        let lang = settings.get_string('language');
-        let localeJsonFile = Gio.File.new_for_path(`${path}/locale/${lang}.json`);
+        this.locale = {};
+        this._lang = settings.get_string('language');
+        this._path = path;
+    }
+
+    async init() {
+        let localeJsonFile = Gio.File.new_for_path(`${this._path}/locale/${this._lang}.json`);
         try {
-            let [_, localeJson] = localeJsonFile.load_contents(null);
+            let [localeJson] = await localeJsonFile.load_contents_async(null);
             let decoder = new TextDecoder('utf-8');
             this.locale = JSON.parse(decoder.decode(localeJson));
         } catch {
