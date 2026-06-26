@@ -35,7 +35,7 @@ export class Calendar {
                         monthLong: [this._gettext.__('Moharram'), this._gettext.__('Safar'), this._gettext.__('Rabi-ol-avval'), this._gettext.__('Rabi-ol-sani'), this._gettext.__('Jamadi-ol-avval'), this._gettext.__('Jamadi-ol-sani'), this._gettext.__('Rajab'), this._gettext.__('Shaban'), this._gettext.__('Ramazan'), this._gettext.__('Shaval'), this._gettext.__('Zighade'), this._gettext.__('Zihajje')],
                     },
             };
-        this._weekStart = 6;
+        this._weekStart = this._settings.get_enum('week-start');
         // Start off with the current date
         this._selectedDate = new Date();
         this._selectedDate = PersianDate.fromGregorian(
@@ -144,10 +144,12 @@ export class Calendar {
         }
 
         // Add weekday labels...
+        // weekdayOne is indexed Saturday-first; map each column to the weekday
+        // sitting in it for the configured first day of the week
         for (let i = 0; i < 7; i++) {
             const label = new St.Label({
                 style_class: 'calendar-day calendar-day-heading pcalendar-weekday',
-                text: this.phrases.weekdayOne[i],
+                text: this.phrases.weekdayOne[(this._weekStart + i + 1) % 7],
             });
             // this._setFont(label);
             this.actor.layout_manager.attach(label, Math.abs(this._colPosition - i), 1, 1, 1);

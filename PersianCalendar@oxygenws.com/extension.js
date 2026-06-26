@@ -78,6 +78,7 @@ const PersianCalendar = GObject.registerClass(
                 'changed::position', () => this.reload(),
                 'changed::language', () => this.reload(),
                 'changed::index', () => this.reload(),
+                'changed::week-start', () => this.reload(),
                 this);
 
             this._today = '';

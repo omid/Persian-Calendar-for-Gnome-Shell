@@ -22,6 +22,16 @@
     <value nick="icon" value="1"/>
     <value nick="none" value="2"/>
   </enum>
+  <!-- values match JavaScript Date.getDay() (0 = Sunday … 6 = Saturday) -->
+  <enum id="org.gnome.shell.extensions.persian-calendar.week-starts">
+    <value nick="sunday" value="0"/>
+    <value nick="monday" value="1"/>
+    <value nick="tuesday" value="2"/>
+    <value nick="wednesday" value="3"/>
+    <value nick="thursday" value="4"/>
+    <value nick="friday" value="5"/>
+    <value nick="saturday" value="6"/>
+  </enum>
   <schema id="org.gnome.shell.extensions.persian-calendar" path="/org/gnome/shell/extensions/persian-calendar/">
     <key name="language" enum="org.gnome.shell.extensions.persian-calendar.languages">
       <default>'fa_IR.UTF-8'</default>
@@ -30,6 +40,15 @@
     <key name="holidays-country" enum="org.gnome.shell.extensions.persian-calendar.holiday-countries">
       <default>'iran'</default>
       <summary>Holidays Country</summary>
+    </key>
+    <key name="weekend-days" type="ai">
+      <default>[5]</default>
+      <summary>Weekend days</summary>
+      <description>Days of the week to mark as weekend (0 = Sunday … 6 = Saturday)</description>
+    </key>
+    <key name="week-start" enum="org.gnome.shell.extensions.persian-calendar.week-starts">
+      <default>'saturday'</default>
+      <summary>First day of the week</summary>
     </key>
     <key name="hijri-display" type="b">
       <default>true</default>

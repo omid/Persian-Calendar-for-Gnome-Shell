@@ -5,6 +5,7 @@ import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gtk from 'gi://Gtk';
 import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
 
 import { GetText } from './utils/gettext.js';
 import { Locale } from './utils/locale.js';
@@ -63,17 +64,39 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             ),
         );
         indicatorGroup.add(this.customColorField());
-        indicatorGroup.add(this.customFontField());
         indicatorGroup.add(this.indicatorFormatField());
-        indicatorGroup.add(this.calendarSizeField());
 
         pageAppearance.add(indicatorGroup);
 
-        // Page Appearance - Indicator group
-        const OthersGroup = new Adw.PreferencesGroup({
+        // Page Appearance - Calendar group
+        const calendarGroup = new Adw.PreferencesGroup({
+            title: this._gettext.__('Calendar settings'),
         });
-        OthersGroup.add(this.customTodayBgColorField());
-        pageAppearance.add(OthersGroup);
+
+        calendarGroup.add(this.calendarSizeField());
+        calendarGroup.add(
+            this.comboBoxField(
+                {
+                    'saturday': this._gettext.__('Saturday'),
+                    'sunday': this._gettext.__('Sunday'),
+                    'monday': this._gettext.__('Monday'),
+                    'tuesday': this._gettext.__('Tuesday'),
+                    'wednesday': this._gettext.__('Wednesday'),
+                    'thursday': this._gettext.__('Thursday'),
+                    'friday': this._gettext.__('Friday'),
+                },
+                'week-start',
+                this._gettext.__('First day of week'),
+            ),
+        );
+        calendarGroup.add(this.customTodayBgColorField());
+
+        pageAppearance.add(calendarGroup);
+
+        // Page Appearance - untitled group
+        const othersGroup = new Adw.PreferencesGroup();
+        othersGroup.add(this.customFontField());
+        pageAppearance.add(othersGroup);
 
         return pageAppearance;
     }
@@ -148,6 +171,7 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             ),
         );
 
+        holidaysGroup.add(this.weekendDaysField());
         holidaysGroup.add(this.holidayColorField());
         return pageHolidays;
     }
@@ -221,6 +245,47 @@ export default class PersianCalendarPreferences extends ExtensionPreferences {
             row.selected = keys.indexOf(this._settings.get_string(field));
         });
 
+        return row;
+    }
+
+    weekendDaysField() {
+        const row = new Adw.ActionRow({ title: this._gettext.__('Weekend days') });
+
+        const box = new Gtk.Box({ valign: Gtk.Align.CENTER });
+        box.add_css_class('linked');
+        box.set_direction(this._locale.getTextDirection());
+
+        // [getDay() value, short label], ordered to start on Saturday
+        const weekdays = [
+            [6, this._gettext.__('Sat')],
+            [0, this._gettext.__('Sun')],
+            [1, this._gettext.__('Mon')],
+            [2, this._gettext.__('Tue')],
+            [3, this._gettext.__('Wed')],
+            [4, this._gettext.__('Thu')],
+            [5, this._gettext.__('Fri')],
+        ];
+
+        for (const [day, label] of weekdays) {
+            const toggle = new Gtk.ToggleButton({
+                label,
+                active: this._settings.get_value('weekend-days').deep_unpack().includes(day),
+            });
+            toggle.connect('toggled', () => {
+                const days = this._settings.get_value('weekend-days').deep_unpack();
+                const index = days.indexOf(day);
+                if (toggle.active && index === -1) {
+                    days.push(day);
+                } else if (!toggle.active && index !== -1) {
+                    days.splice(index, 1);
+                }
+                days.sort((a, b) => a - b);
+                this._settings.set_value('weekend-days', new GLib.Variant('ai', days));
+            });
+            box.append(toggle);
+        }
+
+        row.add_suffix(box);
         return row;
     }
 

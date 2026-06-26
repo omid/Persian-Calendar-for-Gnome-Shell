@@ -62,7 +62,7 @@ _build: clean update-translation
 shexli: zip
 	uv venv --allow-existing
 	uv pip install shexli
-	uv run shexli *.zip
+	uv run shexli "$(_UUID).$(_VERSION).zip"
 
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js
@@ -71,3 +71,6 @@ update-translation:
 
 tailLog:
 	sudo journalctl -f -g $(_UUID)
+
+test: install-local
+	dbus-run-session gnome-shell --devkit --wayland

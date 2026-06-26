@@ -27,8 +27,8 @@ export class Events {
         this._events = '';
         this._isHoliday = false;
 
-        // if it is Friday
-        if (today.getDay() === 5) {
+        // if it is a weekend day
+        if (this._schema.get_value('weekend-days').deep_unpack().includes(today.getDay())) {
             this._isHoliday = true;
         }
 
