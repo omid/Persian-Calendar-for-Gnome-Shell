@@ -83,7 +83,7 @@ const PersianCalendar = GObject.registerClass(
 
             this._today = '';
 
-            const vbox = new St.BoxLayout({ vertical: true });
+            const vbox = new St.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
             const calendar = new PopupMenu.PopupBaseMenuItem({
                 activate: false,
                 hover: false,
@@ -273,7 +273,11 @@ const PersianCalendar = GObject.registerClass(
             this._converterMenu = converterMenu;
 
             this.menu.addMenuItem(converterMenu);
-            this.converterVbox = new St.BoxLayout({ style_class: 'pcalendar-font', vertical: true, x_expand: true });
+            this.converterVbox = new St.BoxLayout({
+                style_class: 'pcalendar-font',
+                orientation: Clutter.Orientation.VERTICAL,
+                x_expand: true,
+            });
             const converterSubMenu = new PopupMenu.PopupBaseMenuItem({
                 reactive: false,
                 can_focus: false,
@@ -375,7 +379,7 @@ const PersianCalendar = GObject.registerClass(
 
             this.converterVbox.add_child(converterHbox);
 
-            this.convertedDatesVbox = new St.BoxLayout({ vertical: true });
+            this.convertedDatesVbox = new St.BoxLayout({ orientation: Clutter.Orientation.VERTICAL });
             this.converterVbox.add_child(this.convertedDatesVbox);
         }
 
@@ -635,4 +639,3 @@ export default class PersianCalendarExtension extends Extension {
         }
     }
 }
-
