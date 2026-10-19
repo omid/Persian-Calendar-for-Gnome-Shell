@@ -39,7 +39,7 @@ zip: _build
 	$(MAKE) clean
 	
 eslint:
-	eslint --fix PersianCalendar@oxygenws.com
+	npx eslint --fix PersianCalendar@oxygenws.com
 
 _version_bump: export _OLD_VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 _version_bump: export _NEW_VERSION=$(shell echo $$((${_OLD_VERSION}+1)))
@@ -59,10 +59,11 @@ _build: clean update-translation
 	done
 	find build -type f -iname '*.pot' -delete
 
+shexli: export _VERSION=$(shell jq '.version' $(_UUID)/metadata.json)
 shexli: zip
 	uv venv --allow-existing
 	uv pip install shexli
-	uv run shexli "$(_UUID).$(_VERSION).zip"
+	uv run --no-project shexli "$(_UUID).$(_VERSION).zip"
 
 update-translation:
 	xgettext --add-comments --keyword='__' --keyword='n__:1,2' --keyword='p__:1c,2' --from-code=UTF-8 -o $(_UUID)/locale/persian-calendar.pot $(_UUID)/utils/*.js $(_UUID)/*.js

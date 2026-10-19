@@ -121,7 +121,7 @@ export class Events {
             // if event is available, set event
             if (eventsList[i].events[this._today[type][1]][this._today[type][2]]) {
                 for (let j = 0; j < eventsList[i].events[this._today[type][1]][this._today[type][2]].length; j++) {
-                    this._events += `\n⚫︎ ${this._str.wordWrap(eventsList[i].events[this._today[type][1]][this._today[type][2]][j][0], 50)}`;
+                    this._events += `\n• ${this._str.wordWrap(eventsList[i].events[this._today[type][1]][this._today[type][2]][j][0], 50)}`;
                 }
             }
         }
